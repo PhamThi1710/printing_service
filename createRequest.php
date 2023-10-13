@@ -77,7 +77,7 @@ if (isset($_POST['send'])) {
                                     $statusMsg = "The file has been uploaded successfully.";
 
                                     $success = true;
-                                    echo '<div>Bạn vừa tải lên:
+                                    echo '<div>Bạn vừa tải lên
                                     <label>Tên file: ' . $fileName . '</label>
                                     Số pages/slides: ' . $totalpage . '</div>';
                                     // Get the printer that is suitable with user
