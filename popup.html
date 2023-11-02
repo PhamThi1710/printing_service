@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style copy.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body style="background-color: rgba(0, 0, 0, 0.184);">
+    <div class="display">
+        <!--POP UP -->
+        <!--End get data task -->
+        <div class="body">
+            <div class="popup" id="sendprint_popup">
+                <img src="image/message.jpg" width="50px" height="50px">
+                <div class="popup_text">
+                    <h4>Gửi yêu cầu in</h4>
+                    <table>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-timer-fill"></i>Thời gian:</th>
+                            </td>
+                            <td>17102003</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-user-fill"></i>Tên người dùng:</th>
+                            </td>
+                            <td>Username</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-file-fill"></i>Tập tin đã chọn:</th>
+                            </td>
+                            <td>Admin</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-file-paper-2-fill"></i>Số mặt in:</th>
+                            </td>
+                            <td>mocnhi2k3@gmail.com</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-file-copy-fill"></i>Số bản copy:</th>
+                            </td>
+                            <td>21:34 23/07/2023</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-file-list-3-fill"></i>Số trang trên một tờ giấy in:</th>
+                            </td>
+                            <td>21:34 23/07/2023</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-file-paper-fill"></i>Khổ giấy:</th>
+                            </td>
+                            <td>21:34 23/07/2023</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-printer-fill"></i>Máy in:</th>
+                            </td>
+                            <td>21:34 23/07/2023</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <th class="title_"><i class="ri-list-check"></i>Số trang muốn in:</th>
+                            </td>
+                            <td>21:34 23/07/2023</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="button-group">
+                    <button onclick="OpenPopup()" class="button" type="button">Open</button>
+                    <button onclick="ClosePopup()" class="button" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+        <td>
+            <!--<div onclick="OpenPopup('sendprint_popup')"></div>-->
+            <a class="button" href="activitylog.php?send_id=<?= $row['id'] ?>">Send</a>
+
+            <!--<div onclick="OpenPopup('DELETE_popup')"></div>-->
+            <a class="button" href="activitylog.php?delete_id=<?= $row['id'] ?>">Delete</a>
+
+        </td>
+        <!--<div class="popup" id="DELETE_popup">
+                <img src="image/message.jpg" width="50px" height="50px">
+                <div class="popup_text">
+                    <h2 style="margin-top:5%; color:var(--main-color)">Message:</h2>
+                    <h4 style="color:var(--text-color)">Bạn có chắc chắn muốn xóa không?</h4>
+                </div>
+                <div class="button-group">
+                    <button onclick="OpenPopup()" class="button" type="button">Thoát</button>
+                    <button onclick="ClosePopup()" class="button" type="button">Xóa</button>
+                </div>
+            </div>-->
+</body>
+
+</html>
