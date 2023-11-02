@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity Log</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="activitylog_style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <!-- ---------------------------------------------------------------------------------------------------------- -->
@@ -302,7 +302,7 @@
     </div>
     <div class="source">Copyright 2007-2022 BKEL - Phát triển dựa trên Moodle</div>
     <!-- ---------------------------------------------------------------------------------------------------------- -->
-    <script src="script.js"></script>
+    <script src="activitylog_script.js"></script>
 </body>
 
 </html>
