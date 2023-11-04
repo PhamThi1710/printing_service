@@ -3,77 +3,68 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity Log</title>
-    <link rel="stylesheet" href="activitylog_style.css">
+
+    <!-- swiper css link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
+    <!-- remix icon link -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- custom css file link -->
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<!-- ---------------------------------------------------------------------------------------------------------- -->
 
 <body>
-    <div class="header">
-        <div class="left">
-            <div class="img">
-                <img src="image/HCMUT.svg" width="50px" height="50px">
-            </div>
-            <div class="left text">
-                <h4>ĐẠI HỌC QUỐC GIA TP.HCM</h4>
-                <h5>TRƯỜNG ĐẠI HỌC BÁCH KHOA</h5>
-            </div>
-        </div>
-        <div class="middle">
-            <a>
-                <h4>TRANG CHỦ</h4>
-            </a>
-            <a>
-                <h4>DỊCH VỤ CỦA TÔI</h4>
-            </a>
-        </div>
-        <div class="right">
-            <div>
-                <i class="ri-notification-2-line"></i>
-            </div>
-            <div>
-                <i class="ri-chat-3-line"></i>
-            </div>
+    <!-- header section starts -->
 
-            <a id="profile" href="#" class="user"><i class="ri-user-fill">Phan Pham Thi</i>
-                <span>
-                    <!--<?php echo $_SESSION['name_set'] ?>-->
-                </span>
+    <section class="header">
+        <div class="logo">
+            <a href="#">
+                <img src="image/logo.png" alt="logo" />
+                <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
             </a>
-            <!--<button id="logout" class="user" onclick="OpenPopup()"><i class="ri-logout-box-r-line"></i>Log out</button>-->
         </div>
-    </div>
-    <!-- ---------------------------------------------------------------------------------------------------------- -->
-    <div class="body">
-        <!--POP UP -->
-        <!-- Send print request POP UP  -->
-        <?php
-        @include 'database.php';
-        if (isset($_GET['send_id'])) {
-            $send_id = $_GET['send_id'];
-            // Get request ID
-            $filter_requestid = mysqli_query($conn, "select * from request_perform_printer where id ='$send_id'");
-            $get_requestid = mysqli_fetch_array($filter_requestid);
-            $requestid_ = $get_requestid["requestid"];
-            // Get file info
-            $popup_dtfile = mysqli_query($conn, "SELECT * FROM file where id in (select fileid from requestprint where id='$requestid_')");
-            $get_file_ = mysqli_fetch_array($popup_dtfile);
-            // Get request info
-            $printerid_ = $get_requestid['printerId'];
-            $popup_dtrequest = mysqli_query($conn, "select * from requestprint where id ='$requestid_'");
-            $get_request_ = mysqli_fetch_array($popup_dtrequest);
-            //Get printer info
-            $popup_dtprinter = mysqli_query($conn, "SELECT * FROM printer where id='$printerid_'");
-            $get_printer_info_ = mysqli_fetch_array($popup_dtprinter);
-            $display_printer_info_ = $get_printer_info_['model'] . ' - Cơ sở ' . $get_printer_info_['Unibranch'] . ' - ' . $get_printer_info_['building'] . ' - ' . $get_printer_info_['room'];
-            //Get user info
-            $popup_dtuser = mysqli_query($conn, "SELECT * FROM user where id in (select userid from requestprint where id='$requestid_')");
-            $get_user = mysqli_fetch_array($popup_dtuser);
 
-            //  <!--End get data task -->
-            echo '<div class="popup" id="sendprint_popup">
+        <a href="login.php" class="login">Đăng nhập</a>
+    </section>
+
+    <!-- header section ends -->
+
+
+
+    <!--POP UP -->
+    <!-- Send print request POP UP  -->
+    <?php
+    @include 'database.php';
+    if (isset($_GET['send_id'])) {
+        $send_id = $_GET['send_id'];
+        // Get request ID
+        $filter_requestid = mysqli_query($conn, "select * from request_perform_printer where id ='$send_id'");
+        $get_requestid = mysqli_fetch_array($filter_requestid);
+        $requestid_ = $get_requestid["requestid"];
+        // Get file info
+        $popup_dtfile = mysqli_query($conn, "SELECT * FROM file where id in (select fileid from requestprint where id='$requestid_')");
+        $get_file_ = mysqli_fetch_array($popup_dtfile);
+        // Get request info
+        $printerid_ = $get_requestid['printerId'];
+        $popup_dtrequest = mysqli_query($conn, "select * from requestprint where id ='$requestid_'");
+        $get_request_ = mysqli_fetch_array($popup_dtrequest);
+        //Get printer info
+        $popup_dtprinter = mysqli_query($conn, "SELECT * FROM printer where id='$printerid_'");
+        $get_printer_info_ = mysqli_fetch_array($popup_dtprinter);
+        $display_printer_info_ = $get_printer_info_['model'] . ' - Cơ sở ' . $get_printer_info_['Unibranch'] . ' - ' . $get_printer_info_['building'] . ' - ' . $get_printer_info_['room'];
+        //Get user info
+        $popup_dtuser = mysqli_query($conn, "SELECT * FROM user where id in (select userid from requestprint where id='$requestid_')");
+        $get_user = mysqli_fetch_array($popup_dtuser);
+        $Now = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+
+        //  <!--End get data task -->
+        echo '<div class="popup" id="sendprint_popup">
             <img src="image/message.jpg" width="50px" height="50px">
             <div class="popup_text">
                 <h3 style="margin-top:5%; color:var(--main-color)">Gửi yêu cầu in</h3>
@@ -83,7 +74,7 @@
                         <th class="title_"><i class="ri-timer-fill"></i>Thời gian:</th>
                         </td>
                         <td>
-                          ' . $get_requestid["starttime"] . '
+                          ' . $Now->format('Y-m-d H:i:s') . '
                         </td>
                     </tr>
                     <tr>
@@ -142,13 +133,13 @@
                            ' . $display_printer_info_ . '
                         </td>
                     </tr>';
-            $popup_dtlistpages = mysqli_query($conn, "select page from listpages where performid='$send_id'");
-            $list = array();
-            while ($list_child = mysqli_fetch_assoc($popup_dtlistpages)) {
-                $list[] = $list_child['page'];
-            }
-            $display = implode(", ", $list);
-            echo '<tr>
+        $popup_dtlistpages = mysqli_query($conn, "select page from listpages where performid='$send_id'");
+        $list = array();
+        while ($list_child = mysqli_fetch_assoc($popup_dtlistpages)) {
+            $list[] = $list_child['page'];
+        }
+        $display = implode(", ", $list);
+        echo '<tr>
                         <td>
                         <th class="title_"><i class="ri-list-check"></i>Số trang muốn in:</th>
                         </td>
@@ -163,14 +154,14 @@
         </div>
         </div>
     </div>';
-        } ?>
-        <!-- END Send print request POP UP  -->
-        <!-- ---------------------------------------------------------------------------------------------------------- -->
-        <!-- Confirm delete request POP UP -->
-        <?php
-        if (isset($_GET['delete_id'])) {
-            $delete_id = $_GET['delete_id'];
-            echo ' <div class="popup" id="DELETE_popup">
+    } ?>
+    <!-- END Send print request POP UP  -->
+    <!-- ---------------------------------------------------------------------------------------------------------- -->
+    <!-- Confirm delete request POP UP -->
+    <?php
+    if (isset($_GET['delete_id'])) {
+        $delete_id = $_GET['delete_id'];
+        echo ' <div class="popup" id="DELETE_popup">
             <img src="image/message.jpg" width="50px" height="50px">
             <div class="popup_text">
                 <h2 style="margin-top:5%; color:var(--main-color)">Message:</h2>
@@ -181,15 +172,17 @@
                 <a class="button" href="delete_activitylog.php?id=' . $delete_id . '">Xóa</a>
             </div>
         </div>';
-        } ?>
-        <!-- END Confirm delete request POP UP  -->
-        <!-- END POP UP -->
-        <h4>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN</h4>
-        <?php
-        $result = mysqli_query($conn, "SELECT * FROM request_perform_printer");
-        $data = $result->fetch_all(MYSQLI_ASSOC);
-        ?>
-        <div class="body">
+    } ?>
+    <!-- END Confirm delete request POP UP  -->
+    <!-- END POP UP -->
+
+    <?php
+    $result = mysqli_query($conn, "SELECT * FROM request_perform_printer");
+    $data = $result->fetch_all(MYSQLI_ASSOC);
+    ?>
+    <div class="body">
+        <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN</h2>
+        <section>
             <table border="1">
                 <tr>
                     <th>Thời gian<br> bắt đầu in</th>
@@ -253,7 +246,7 @@
                         <td>
                             <?php
                             if ($get_request['state'] == '0')
-                                $state = '<a class="payment_link_text">Đã lưu</a>';
+                                $state = '<a  class="payment_link_text">Đã lưu</a>';
                             else if ($get_request['state'] == '1')
                                 $state = 'Đã hoàn thành';
                             else
@@ -277,31 +270,60 @@
                     </tr>
                 <?php endforeach ?>
 
-            </table>
-        </div>
-        <button class="button" id="delete_multi">Xóa nhiều file</button>
+            </table><button class="button" id="delete_multi">Xóa nhiều file</button>
+        </section>
     </div>
-    <!-- ---------------------------------------------------------------------------------------------------------- -->
-    <div class="footer">
-        <div class="left">
-            <h4>STUDENT SMART PRINTING SERVICE</h4>
-            <img src="image/HCMUT.svg" width="50px" height="50px">
-        </div>
-        <div class="middle">
-            <h4>WEBSITE</h4>
-            <h5>HCMUT</h5>
-            <h5>MyBK</h5>
-            <h5>BKSi</h5>
-        </div>
-        <div class="right">
-            <h4>LIÊN HỆ</h4>
-            <h5><i class="ri-map-pin-line"></i>268 Lý Thường Kiệt, P.14, Q.10,TP.HCM</h5>
-            <h5><i class="ri-phone-line"></i>(028) 38 651 670 - (028) 38 647 256 (Ext: 5258, 5234)</h5>
-            <h5><i class="ri-mail-line"></i>elearning@hcmut.edu.vn</h5>
+
+
+    <!-- footer section starts -->
+    <div class="footer-container">
+        <section class="footer">
+            <div class="box-container">
+                <div class="box">
+                    <h3>STUDENT SMART PRINTING SERVICE</h3>
+                    <img src="image/logo.png" alt="logo" />
+                </div>
+
+                <div class="box">
+                    <h3>WEBSITE</h3>
+                    <a href="https://hcmut.edu.vn/" class="hcmut">HCMUT</a>
+                    <a href="https://mybk.hcmut.edu.vn/my/index.action" class="mybk">MyBK</a>
+                    <a href="https://mybk.hcmut.edu.vn/bksi/public/vi/" class="bksi">BKSI</a>
+                </div>
+
+                <div class="box">
+                    <h3>CONTACT</h3>
+                    <a href="#">
+                        <div class="location-icon"></div>268 Ly Thuong Kiet Street Ward 14, District 10, Ho Chi Minh
+                        City, Vietnam
+                    </a>
+                    <a href="#">
+                        <div class="phone-icon"></div>(028) 38 651 670 - (028) 38 647 256 (Ext: 5258, 5234)
+                    </a>
+                    <a href="mailto:elearning@hcmut.edu.vn" class="email">
+                        <div class="email-icon"></div>elearning@hcmut.edu.vn
+                    </a>
+                </div>
+            </div>
+        </section>
+        <div class="copyright">
+            <p>Copyright 2007-2022 BKEL - Phát triển dựa trên Moodle</p>
         </div>
     </div>
-    <div class="source">Copyright 2007-2022 BKEL - Phát triển dựa trên Moodle</div>
-    <!-- ---------------------------------------------------------------------------------------------------------- -->
+    <!-- footer section ends -->
+
+
+
+
+
+
+
+
+
+    <!-- swiper js link -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    <!-- custom js file link -->
     <script src="activitylog_script.js"></script>
 </body>
 
