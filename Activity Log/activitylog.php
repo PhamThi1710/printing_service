@@ -25,7 +25,7 @@
     <section class="header">
         <div class="logo">
             <a href="#">
-                <img src="image/logo.png" alt="logo" />
+                <img src="/printing_service/image/logo.png" alt="logo" />
                 <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
             </a>
         </div>
@@ -65,7 +65,7 @@
 
         //  <!--End get data task -->
         echo '<div class="popup" id="sendprint_popup">
-            <img src="image/message.jpg" width="50px" height="50px">
+            <img src="/printing_service/image/message.jpg" width="50px" height="50px">
             <div class="popup_text">
                 <h3 style="margin-top:5%; color:var(--main-color)">Gửi yêu cầu in</h3>
                 <table>
@@ -162,7 +162,7 @@
     if (isset($_GET['delete_id'])) {
         $delete_id = $_GET['delete_id'];
         echo ' <div class="popup" id="DELETE_popup">
-            <img src="image/message.jpg" width="50px" height="50px">
+            <img src="/printing_service/image/message.jpg" width="50px" height="50px">
             <div class="popup_text">
                 <h2 style="margin-top:5%; color:var(--main-color)">Message:</h2>
                 <h4 style="color:var(--text-color)">Bạn có chắc chắn muốn xóa không?</h4>
@@ -281,7 +281,7 @@
             <div class="box-container">
                 <div class="box">
                     <h3>STUDENT SMART PRINTING SERVICE</h3>
-                    <img src="image/logo.png" alt="logo" />
+                    <img src="/printing_service/image/logo.png" alt="logo" />
                 </div>
 
                 <div class="box">
