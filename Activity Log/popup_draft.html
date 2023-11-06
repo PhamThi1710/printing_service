@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style copy.css">
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 
@@ -14,93 +14,68 @@
         <!--POP UP -->
         <!--End get data task -->
         <div class="body">
-            <div class="popup" id="sendprint_popup">
-                <img src="image/message.jpg" width="50px" height="50px">
+            <div class="popup" id="Success_popup">
+                <img src="/printing_service/image/message.jpg" width="50px" height="50px">
                 <div class="popup_text">
-                    <h4>Gửi yêu cầu in</h4>
-                    <table>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-timer-fill"></i>Thời gian:</th>
-                            </td>
-                            <td>17102003</td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-user-fill"></i>Tên người dùng:</th>
-                            </td>
-                            <td>Username</td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-file-fill"></i>Tập tin đã chọn:</th>
-                            </td>
-                            <td>Admin</td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-file-paper-2-fill"></i>Số mặt in:</th>
-                            </td>
-                            <td>mocnhi2k3@gmail.com</td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-file-copy-fill"></i>Số bản copy:</th>
-                            </td>
-                            <td>21:34 23/07/2023</td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-file-list-3-fill"></i>Số trang trên một tờ giấy in:</th>
-                            </td>
-                            <td>21:34 23/07/2023</td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-file-paper-fill"></i>Khổ giấy:</th>
-                            </td>
-                            <td>21:34 23/07/2023</td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-printer-fill"></i>Máy in:</th>
-                            </td>
-                            <td>21:34 23/07/2023</td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <th class="title_"><i class="ri-list-check"></i>Số trang muốn in:</th>
-                            </td>
-                            <td>21:34 23/07/2023</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="button-group">
-                    <button onclick="OpenPopup()" class="button" type="button">Open</button>
-                    <button onclick="ClosePopup()" class="button" type="button">Close</button>
+                    Successfull!
                 </div>
             </div>
         </div>
-        <script src="script.js"></script>
-        <td>
-            <!--<div onclick="OpenPopup('sendprint_popup')"></div>-->
-            <a class="button" href="activitylog.php?send_id=<?= $row['id'] ?>">Send</a>
+        <!--<div class="delete_range">
+                        <div class="delete_range1">
+                            <p>Xóa theo khoảng thời gian:</p>
+                        </div>
+                        <div class="delete_range1">
+                            <select id="delete_range_select">
+                                <option value="delete_start">Chọn khoảng thời gian</option>
+                                <option value="delete_hour=true">1 giờ trước</option>
+                                <option value="delete_day=true">1 ngày trước</option>
+                                <option value="delete_week=true">1 tuần trước</option>
+                                <option value="delete_month=true">1 tháng trước</option>
+                                <option value="delete_year=true">1 năm trước</option>
+                            </select>
+                        </div>
 
-            <!--<div onclick="OpenPopup('DELETE_popup')"></div>-->
-            <a class="button" href="activitylog.php?delete_id=<?= $row['id'] ?>">Delete</a>
+                    </div>
+                    <a href="delete_activitylog.php?confirm_delete_range=true" class="button" type="button">Xác
+                        nhận
+                        xóa</a>
+                    <div class="delete_range">
+                        <div class="delete_range1">
+                            <p>Chọn một ngày cụ thể:</p>
+                        </div>
+                        <div class="delete_range1"><i class="ri-calendar-2-fill"
+                                onclick="_('calendar').classList.add('display_calendar')"></i></div>
 
-        </td>
-        <!--<div class="popup" id="DELETE_popup">
-                <img src="image/message.jpg" width="50px" height="50px">
-                <div class="popup_text">
-                    <h2 style="margin-top:5%; color:var(--main-color)">Message:</h2>
-                    <h4 style="color:var(--text-color)">Bạn có chắc chắn muốn xóa không?</h4>
-                </div>
-                <div class="button-group">
-                    <button onclick="OpenPopup()" class="button" type="button">Thoát</button>
-                    <button onclick="ClosePopup()" class="button" type="button">Xóa</button>
-                </div>
-            </div>-->
+                    </div>
+                    <a onclick="deleteActiveClass()" href="#" class="button" type="button">Xác
+                        nhận
+                        xóa</a>
+                    <button onclick="ClosePopup('DELETE_multi_popup')" class="button" type="button">Thoát</button>
+                    <div class="wrapper" id="calendar">
+                        <div class="header-calendar">
+                            <p class="current-date"></p>
+                            <div class="icons">
+                                <i id="prev" class="ri-arrow-left-line"></i>
+                                <i id="next" class="ri-arrow-right-line"></i>
+                            </div>
+                        </div>
+                        <div class="calendar">
+                            <ul class="weeks">
+                                <li>Sun</li>
+                                <li>Mon</li>
+                                <li>Tue</li>
+                                <li>Wed</li>
+                                <li>Thu</li>
+                                <li>Fri</li>
+                                <li>Sat</li>
+                            </ul>
+                            <ul class="days"></ul>
+                        </div>
+                    </div>-->
+        <script src="activitylog_script.js"></script>
+        <!--jquery cdn link-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 </body>
 
 </html>

@@ -87,8 +87,8 @@ section {
 /* button design */
 .button {
     border: 2px solid #03023179;
-    background-color: var(--fontColor);
-    color: #ffffff;
+    background-color: rgba(42, 130, 165, 0.662);
+    color: var(--text-color);
     cursor: pointer;
     border-radius: 15px;
     padding: 1%;
@@ -96,7 +96,7 @@ section {
 }
 
 .button:hover {
-    background-color: rgba(42, 130, 165, 0.662);
+    background-color: var(--fontColor);
 }
 
 /* end button design*/
@@ -219,11 +219,168 @@ section {
     cursor: pointer;
 }
 
+/* Design delete multiple request button*/
 #delete_multi {
-    padding: 0.2%;
+    padding: 0.3%;
     float: right;
     right: 0;
     margin-top: 1.5%;
+}
+
+.delete_range {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    padding: 3%;
+    margin: 3%;
+}
+
+.delete_range1 {
+    float: left;
+    width: 50%;
+}
+
+.delete_range::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.delete_range1 p {
+    color: var(--main-color);
+    font-weight: 800;
+    margin-top: 7px;
+}
+
+.delete_range1 i {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#delete_range_select {
+    border-radius: 20px;
+    padding: 1%;
+    margin-top: 3%;
+}
+
+/* Design Calendar */
+.wrapper {
+    width: 250px;
+    background-color: #0c6fa153;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+    text-align: center;
+    transition: all 2s ease;
+    border-radius: 20%;
+    display: none;
+}
+
+.wrapper.display_calendar {
+    display: block;
+}
+
+.wrapper .header-calendar {
+    display: flex;
+    align-items: center;
+    padding: 25px 30px 10px;
+    justify-content: space-between;
+}
+
+.header-calendar .icons {
+    display: flex;
+}
+
+.header-calendar .icons i {
+    height: 38px;
+    width: 38px;
+    margin: 0 1px;
+    cursor: pointer;
+    color: #878787;
+    text-align: center;
+    line-height: 38px;
+    font-size: 1.9rem;
+    user-select: none;
+    border-radius: 50%;
+}
+
+.icons i:last-child {
+    margin-right: -20px;
+}
+
+.header-calendar .icons i:hover {
+    background: #f2f2f2;
+}
+
+.header-calendar .current-date {
+    font-size: 1.45rem;
+    font-weight: 500;
+}
+
+.calendar {
+    padding: 20px;
+}
+
+.calendar ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    text-align: center;
+}
+
+.calendar .days {
+    margin-bottom: 20px;
+}
+
+.calendar li {
+    color: var(--text-color);
+    width: calc(100% / 7);
+    font-size: 1.1rem;
+}
+
+.calendar .weeks li {
+    font-weight: 500;
+    cursor: default;
+}
+
+.calendar .days li {
+    z-index: 1;
+    cursor: pointer;
+    position: relative;
+    margin-top: 20px;
+}
+
+.calendar .days li span {
+    display: none;
+    visibility: hidden;
+}
+
+.days li.inactive {
+    color: #656f74;
+}
+
+.days li.active {
+    color: var(--white);
+}
+
+.days li::before {
+    position: absolute;
+    content: "";
+    left: 50%;
+    top: 50%;
+    height: 25px;
+    width: 25px;
+    z-index: -1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.days li.active::before {
+    background: var(--main-color);
+}
+
+.days li:not(.active):hover::before {
+    background: rgba(75, 93, 125, 0.308);
 }
 
 /* Design dropdown */

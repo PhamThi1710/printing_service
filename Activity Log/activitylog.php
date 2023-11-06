@@ -174,6 +174,83 @@
         </div>';
     } ?>
     <!-- END Confirm delete request POP UP  -->
+    <!-- ---------------------------------------------------------------------------------------------------------- -->
+    <!-- Delete multiple request POP UP -->
+    <?php
+    if (isset($_GET['delete_multi'])) {
+        echo ' <div class="popup" id="DELETE_multi_popup">
+    <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+    <div class="popup_text">
+        <div class="delete_range">
+            <div class="delete_range1">
+                <p>Xóa theo khoảng thời gian:</p>
+            </div>
+            <div class="delete_range1">
+                <select id="delete_range_select">
+                    <option value="delete_start">Chọn khoảng thời gian</option>
+                    <option value="delete_hour=true">1 giờ trước</option>
+                    <option value="delete_day=true">1 ngày trước</option>
+                    <option value="delete_week=true">1 tuần trước</option>
+                    <option value="delete_month=true">1 tháng trước</option>
+                    <option value="delete_year=true">1 năm trước</option>
+                </select>
+            </div>
+
+        </div>
+        <a href="delete_activitylog.php?confirm_delete_range=true" class="button" type="button">Xác
+            nhận
+            xóa</a>
+        <div class="delete_range">
+            <div class="delete_range1">
+                <p>Chọn một ngày cụ thể:</p>
+            </div>
+            <div class="delete_range1"><i class="ri-calendar-2-fill"
+                    onclick="_(\'calendar\').classList.add(\'display_calendar\')"></i></div>
+
+        </div>
+        <div class="button-group">
+            <button onclick="deleteActiveClass()" class="button" type="button">Xác nhận xóa</button>
+            <button onclick="ClosePopup(\'DELETE_multi_popup\')" class="button" type="button">Thoát</button>
+        </div>
+        <div class="wrapper" id="calendar">
+            <div class="header-calendar">
+                <p class="current-date"></p>
+                <div class="icons">
+                    <i id="prev" class="ri-arrow-left-line"></i>
+                    <i id="next" class="ri-arrow-right-line"></i>
+                </div>
+            </div>
+            <div class="calendar">
+                <ul class="weeks">
+                    <li>Sun</li>
+                    <li>Mon</li>
+                    <li>Tue</li>
+                    <li>Wed</li>
+                    <li>Thu</li>
+                    <li>Fri</li>
+                    <li>Sat</li>
+                </ul>
+                <ul class="days"></ul>
+            </div>
+        </div>
+    </div>
+</div>';
+    } ?>
+    <script>
+        function deleteActiveClass() {
+            var listActiveDays = document.querySelectorAll('.active');
+            for (var i = 0; i < listActiveDays.length; i++) {
+                let date = listActiveDays[i].textContent;
+                const splitDate = date.split(" ");
+                $.post("delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] },
+                    function (status) {
+                        if (status == 'Success')
+                            alert("Successfull executed!");
+                    });
+            }
+        }
+    </script>
+    <!-- END Delete multiple request POP UP  -->
     <!-- END POP UP -->
 
     <?php
@@ -270,7 +347,10 @@
                     </tr>
                 <?php endforeach ?>
 
-            </table><button class="button" id="delete_multi">Xóa nhiều file</button>
+            </table>
+            <a href="activitylog.php?delete_multi=true">
+                <button type="button" class="button" id="delete_multi">Xóa nhiều file</button>
+            </a>
         </section>
     </div>
 
@@ -325,6 +405,9 @@
 
     <!-- custom js file link -->
     <script src="activitylog_script.js"></script>
+    <!--jquery cdn link-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
 </body>
 
 </html>
