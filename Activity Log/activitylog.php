@@ -243,7 +243,7 @@
                 let date = listActiveDays[i].textContent;
                 const splitDate = date.split(" ");
                 $.post("delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] },
-                    function (status) {
+                    function (data, status) {
                         if (status == 'Success')
                             alert("Successfull executed!");
                     });
