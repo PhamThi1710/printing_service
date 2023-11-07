@@ -1,3 +1,22 @@
+<?php
+session_start();
+$_SESSION['numrows'] = 0;
+if (isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year'])) {
+    if ($_POST['day'] / 10 == 0)
+        $day = '0' . $_POST['day'];
+    else
+        $day = $_POST['day'];
+    if ($_POST['month'] / 10 == 0)
+        $month = '0' . $_POST['month'];
+    else
+        $month = $_POST['month'];
+    $year = $_POST['year'];
+    $del = " delete request_perform_printer from request_perform_printer join requestprint as R on request_perform_printer.requestid = R.id where YEAR(starttime)=$year and MONTH(starttime)=$month and DAY(starttime)=$day and state=1;";
+    $result = mysqli_query($conn, $del);
+    $num_rows = mysqli_num_rows($result);
+    $_SESSION['numrows'] = $num_rows;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,7 +51,9 @@
 
         <a href="login.php" class="login">Đăng nhập</a>
     </section>
-
+    <script>
+        var numrows = "<?php echo $_SESSION['numrows']; ?>";
+    </script>
     <!-- header section ends -->
 
 
@@ -236,16 +257,24 @@
     </div>
 </div>';
     } ?>
+
     <script>
         function deleteActiveClass() {
             var listActiveDays = document.querySelectorAll('.active');
             for (var i = 0; i < listActiveDays.length; i++) {
                 let date = listActiveDays[i].textContent;
                 const splitDate = date.split(" ");
-                $.post("delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] },
+                $.post("activitylog.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] },
                     function (data, status) {
-                        if (status == 'Success')
-                            alert("Successfull executed!");
+                        if (numrows == 0) {
+                            data = 'Các yêu cầu xóa không ở trạng thái "Đã hoàn thành". Vui lòng chọn lại!';
+                            status = 'Failed';
+                        }
+                        else {
+                            data = 'Successfull executed!';
+                        }
+
+                        alert(data + "\nStatus: " + status);
                     });
             }
         }
@@ -260,19 +289,21 @@
     <div class="body">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN</h2>
         <section>
-            <table border="1">
+            <table border="1" style="   overflow-y:scroll;
+   height:300px;
+   display:block;">
                 <tr>
-                    <th>Thời gian<br> bắt đầu in</th>
-                    <th>Thời gian<br> kết thúc in</th>
+                    <th>Thời gian bắt đầu in</th>
+                    <th>Thời gian kết thúc in</th>
                     <th>Nội dung đăng ký in</th>
-                    <th>Tổng<br> số page</th>
+                    <th>Tổng số page</th>
                     <th>Số mặt</th>
-                    <th>Số<br> bản copy</th>
+                    <th>Số bản copy</th>
                     <th>Số<br>trang<br>trên<br>giấy in</th>
-                    <th>Khổ<br> giấy</th>
+                    <th>Khổ giấy</th>
                     <th>Mã máy in</th>
                     <th>Trạng thái</th>
-                    <th>Tùy<br> chọn</th>
+                    <th>Tùy chọn</th>
                 </tr>
                 <?php foreach ($data as $row): ?>
                     <tr>
