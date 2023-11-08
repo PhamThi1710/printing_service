@@ -2,9 +2,9 @@ function _(id) {
     return document.getElementById(id)
 }
 
-/*function OpenPopup(id) {
+function OpenPopup(id) {
     _(id).classList.add("open-popup");
-}*/
+}
 function ClosePopup(id) {
     _(id).classList.add("close-popup");
 }
@@ -42,7 +42,7 @@ const renderCalendar = () => {
     for (let i = 1; i <= lastDateofcurMonth; i++) { // creating li of all days of current month
         // adding active class to li if the current day, month, and year matched
         let isToday = i === date.getDate() && currMonth === new Date().getMonth()
-            && currYear === new Date().getFullYear() ? "active" : "";
+            && currYear === new Date().getFullYear() ? "today" : "";
         liTag += `<li onclick=" delParticularDay(this)" class="${isToday}">${i}<span> ${currMonth + 1}</span><span> ${currYear}</span></li>`;
     }
     /*Lastly, push days of next month */

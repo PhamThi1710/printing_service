@@ -10,19 +10,34 @@
 </head>
 
 <body style="background-color: rgba(0, 0, 0, 0.184);">
-
     <div class=" display">
-            <!--POP UP -->
-            <!--End get data task -->
-            <div class="body">
-                <div class="popup" id="Success_popup">
-                    <img src="/printing_service/image/message.jpg" width="50px" height="50px">
-                    <div class="popup_text">
-                        Successfull!
-                    </div>
+        <!--POP UP -->
+        <!--End get data task -->
+        <div class="body">
+            <!--<div class="popup" id="">
+                <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+                <div class="popup_text">
+                    <h2 style="margin-top:5%; color:var(--main-color)">Message:</h2>
+                    <h4 style="color:var(--text-color)">Bạn có chắc chắn muốn xóa không?</h4>
+                </div>
+                <div class="button-group">
+                    <button onclick="ClosePopup(\'DELETE_popup\')" class="button" type="button">Thoát</button>
+                    <a class="button" href="delete_activitylog.php?id=' . $delete_id . '">Xóa</a>
                 </div>
             </div>
-            <!--<div class="delete_range">
+        </div>-->
+            <div class="dropdown" style="float:right;">
+                <button type="button" class="button" id="delete_multi"><i class="ri-arrow-down-s-fill dropbtn"></i>Xóa
+                    nhiều file</button>
+                <div class="dropdown-content">
+                    <a type="button" href="activitylog.php?DELETE_range=true">Xóa theo khoảng thời gian</a>
+                    <a type="button" href="activitylog.php?DELETE_particularDay=true">Xóa theo ngày cụ thể</a>
+                </div>
+            </div>
+            <div class="popup" id="DELETE_range" style="display:none">
+                <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+                <div class="popup_text">
+                    <div class="delete_range">
                         <div class="delete_range1">
                             <p>Xóa theo khoảng thời gian:</p>
                         </div>
@@ -38,9 +53,17 @@
                         </div>
 
                     </div>
-                    <a href="delete_activitylog.php?confirm_delete_range=true" class="button" type="button">Xác
-                        nhận
-                        xóa</a>
+                    <div class="button-group">
+                        <a href="delete_activitylog.php?confirm_delete_range=true" class="button" type="button">Xác
+                            nhận
+                            xóa</a>
+                        <button onclick="ClosePopup('DELETE_multi_popup')" class="button" type="button">Thoát</button>
+                    </div>
+                </div>
+            </div>
+            <div class="popup" id="DELETE_particularDay">
+                <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+                <div class="popup_text">
                     <div class="delete_range">
                         <div class="delete_range1">
                             <p>Chọn một ngày cụ thể:</p>
@@ -49,10 +72,11 @@
                                 onclick="_('calendar').classList.add('display_calendar')"></i></div>
 
                     </div>
-                    <a onclick="deleteActiveClass()" href="#" class="button" type="button">Xác
-                        nhận
-                        xóa</a>
-                    <button onclick="ClosePopup('DELETE_multi_popup')" class="button" type="button">Thoát</button>
+                    <p style="font-size:10px">Note: Chỉ có thể xóa các yêu cầu in ở trạng thái "Đã hoàn thành" </p>
+                    <div class="button-group">
+                        <button onclick="deleteActiveClass()" class="button" type="button">Xác nhận xóa</button>
+                        <button onclick="ClosePopup('DELETE_multi_popup')" class="button" type="button">Thoát</button>
+                    </div>
                     <div class="wrapper" id="calendar">
                         <div class="header-calendar">
                             <p class="current-date"></p>
@@ -73,10 +97,14 @@
                             </ul>
                             <ul class="days"></ul>
                         </div>
-                    </div>-->
-            <script src="activitylog_script.js"></script>
-            <!--jquery cdn link-->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    </body>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="activitylog_script.js"></script>
+    <!--jquery cdn link-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</body>
 
-    </html>
+</html>

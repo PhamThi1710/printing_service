@@ -1,21 +1,5 @@
 <?php
-session_start();
-$_SESSION['numrows'] = 0;
-if (isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year'])) {
-    if ($_POST['day'] / 10 == 0)
-        $day = '0' . $_POST['day'];
-    else
-        $day = $_POST['day'];
-    if ($_POST['month'] / 10 == 0)
-        $month = '0' . $_POST['month'];
-    else
-        $month = $_POST['month'];
-    $year = $_POST['year'];
-    $del = " delete request_perform_printer from request_perform_printer join requestprint as R on request_perform_printer.requestid = R.id where YEAR(starttime)=$year and MONTH(starttime)=$month and DAY(starttime)=$day and state=1;";
-    $result = mysqli_query($conn, $del);
-    $num_rows = mysqli_num_rows($result);
-    $_SESSION['numrows'] = $num_rows;
-}
+@include 'database.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,9 +35,6 @@ if (isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year'])) {
 
         <a href="login.php" class="login">Đăng nhập</a>
     </section>
-    <script>
-        var numrows = "<?php echo $_SESSION['numrows']; ?>";
-    </script>
     <!-- header section ends -->
 
 
@@ -61,7 +42,7 @@ if (isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year'])) {
     <!--POP UP -->
     <!-- Send print request POP UP  -->
     <?php
-    @include 'database.php';
+
     if (isset($_GET['send_id'])) {
         $send_id = $_GET['send_id'];
         // Get request ID
@@ -198,85 +179,91 @@ if (isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year'])) {
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <!-- Delete multiple request POP UP -->
     <?php
-    if (isset($_GET['delete_multi'])) {
-        echo ' <div class="popup" id="DELETE_multi_popup">
-    <img src="/printing_service/image/message.jpg" width="50px" height="50px">
-    <div class="popup_text">
-        <div class="delete_range">
-            <div class="delete_range1">
-                <p>Xóa theo khoảng thời gian:</p>
-            </div>
-            <div class="delete_range1">
-                <select id="delete_range_select">
-                    <option value="delete_start">Chọn khoảng thời gian</option>
-                    <option value="delete_hour=true">1 giờ trước</option>
-                    <option value="delete_day=true">1 ngày trước</option>
-                    <option value="delete_week=true">1 tuần trước</option>
-                    <option value="delete_month=true">1 tháng trước</option>
-                    <option value="delete_year=true">1 năm trước</option>
-                </select>
-            </div>
+    if (isset($_GET['DELETE_range'])) {
+        echo ' <div class="popup" id="DELETE_range">
+        <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+        <div class="popup_text">
+            <div class="delete_range">
+                <div class="delete_range1">
+                    <p>Xóa theo khoảng thời gian:</p>
+                </div>
+                <div class="delete_range1">
+                    <select id="delete_range_select">
+                        <option value="delete_start">Chọn khoảng thời gian</option>
+                        <option value="delete_hour=true">1 giờ trước</option>
+                        <option value="delete_day=true">1 ngày trước</option>
+                        <option value="delete_week=true">1 tuần trước</option>
+                        <option value="delete_month=true">1 tháng trước</option>
+                        <option value="delete_year=true">1 năm trước</option>
+                    </select>
+                </div>
 
-        </div>
-        <a href="delete_activitylog.php?confirm_delete_range=true" class="button" type="button">Xác
-            nhận
-            xóa</a>
-        <div class="delete_range">
-            <div class="delete_range1">
-                <p>Chọn một ngày cụ thể:</p>
             </div>
-            <div class="delete_range1"><i class="ri-calendar-2-fill"
-                    onclick="_(\'calendar\').classList.add(\'display_calendar\')"></i></div>
+            <div class="button-group">
+                <a href="delete_activitylog.php?confirm_delete_range=true" class="button" type="button">Xác
+                    nhận
+                    xóa</a>
+                <button onclick="ClosePopup(\'DELETE_range\')" class="button" type="button">Thoát</button>
+            </div>
+        </div>
+    </div>';
+    }
+    ;
+    if (isset($_GET['DELETE_particularDay'])) {
+        echo '<div class="popup" id="DELETE_particularDay">
+        <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+        <div class="popup_text">
+            <div class="delete_range">
+                <div class="delete_range1">
+                    <p>Chọn một ngày cụ thể:</p>
+                </div>
+                <div class="delete_range1"><i class="ri-calendar-2-fill"
+                        onclick="_(\'calendar\').classList.add(\'display_calendar\')"></i></div>
 
-        </div>
-        <div class="button-group">
-            <button onclick="deleteActiveClass()" class="button" type="button">Xác nhận xóa</button>
-            <button onclick="ClosePopup(\'DELETE_multi_popup\')" class="button" type="button">Thoát</button>
-        </div>
-        <div class="wrapper" id="calendar">
-            <div class="header-calendar">
-                <p class="current-date"></p>
-                <div class="icons">
-                    <i id="prev" class="ri-arrow-left-line"></i>
-                    <i id="next" class="ri-arrow-right-line"></i>
+            </div>
+            <div class="button-group">
+                <button onclick="deleteActiveClass()" class="button" type="button">Xác nhận xóa</button>
+                <button onclick="ClosePopup(\'DELETE_particularDay\')" class="button" type="button">Thoát</button>
+            </div>
+            <p style="font-size:10px">Note: Chỉ có thể xóa các yêu cầu in ở trạng thái "Đã hoàn thành" </p>
+            <div class="wrapper" id="calendar">
+                <div class="header-calendar">
+                    <p class="current-date"></p>
+                    <div class="icons">
+                        <i id="prev" class="ri-arrow-left-line"></i>
+                        <i id="next" class="ri-arrow-right-line"></i>
+                    </div>
+                </div>
+                <div class="calendar">
+                    <ul class="weeks">
+                        <li>Sun</li>
+                        <li>Mon</li>
+                        <li>Tue</li>
+                        <li>Wed</li>
+                        <li>Thu</li>
+                        <li>Fri</li>
+                        <li>Sat</li>
+                    </ul>
+                    <ul class="days"></ul>
                 </div>
             </div>
-            <div class="calendar">
-                <ul class="weeks">
-                    <li>Sun</li>
-                    <li>Mon</li>
-                    <li>Tue</li>
-                    <li>Wed</li>
-                    <li>Thu</li>
-                    <li>Fri</li>
-                    <li>Sat</li>
-                </ul>
-                <ul class="days"></ul>
-            </div>
         </div>
-    </div>
-</div>';
+    </div>';
     } ?>
 
     <script>
         function deleteActiveClass() {
             var listActiveDays = document.querySelectorAll('.active');
-            for (var i = 0; i < listActiveDays.length; i++) {
+            for (var i = 0; i < listActiveDays.length; ++i) {
                 let date = listActiveDays[i].textContent;
                 const splitDate = date.split(" ");
-                $.post("activitylog.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] },
+                $.post("delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] },
                     function (data, status) {
-                        if (numrows == 0) {
-                            data = 'Các yêu cầu xóa không ở trạng thái "Đã hoàn thành". Vui lòng chọn lại!';
-                            status = 'Failed';
-                        }
-                        else {
-                            data = 'Successfull executed!';
-                        }
-
-                        alert(data + "\nStatus: " + status);
+                        ClosePopup('DELETE_particularDay');
+                        alert("\nStatus: " + status);
                     });
             }
+
         }
     </script>
     <!-- END Delete multiple request POP UP  -->
@@ -379,9 +366,14 @@ if (isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year'])) {
                 <?php endforeach ?>
 
             </table>
-            <a href="activitylog.php?delete_multi=true">
-                <button type="button" class="button" id="delete_multi">Xóa nhiều file</button>
-            </a>
+            <div class="dropdown" style="float:right;">
+                <button type="button" class="button" id="delete_multi"><i class="ri-arrow-down-s-fill dropbtn"></i>Xóa
+                    nhiều file</button>
+                <div class="dropdown-content">
+                    <a type="button" href="activitylog.php?DELETE_range=true">Xóa theo khoảng thời gian</a>
+                    <a type="button" href="activitylog.php?DELETE_particularDay=true">Xóa theo ngày cụ thể</a>
+                </div>
+            </div>
         </section>
     </div>
 

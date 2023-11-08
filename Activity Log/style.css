@@ -175,6 +175,10 @@ section {
     z-index: -10000000;
 }
 
+.open-popup {
+    display: block;
+}
+
 /* activitylog - body*/
 .body {
     height: 485px;
@@ -199,10 +203,12 @@ section {
     padding: 0.5%;
     color: var(--main-color);
 }
+
 .body section table tr th:last-child {
     width: 1%;
     white-space: nowrap;
 }
+
 .body section table tr td {
     padding: 0.1%;
     width: fit-content;
@@ -226,6 +232,9 @@ section {
     float: right;
     right: 0;
     margin-top: 1.5%;
+    margin-left: 2%;
+    width: max-content;
+    font-size: 15px;
 }
 
 .delete_range {
@@ -362,6 +371,11 @@ section {
 
 .days li.active {
     color: var(--white);
+}
+
+.days li.today {
+    color: rgba(255, 0, 0, 0.321);
+    font-weight: 1000;
 }
 
 .days li::before {
