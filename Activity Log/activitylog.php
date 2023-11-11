@@ -1,5 +1,5 @@
 <?php
-@include 'database.php';
+@include 'c:\xampp\htdocs\printing_service\database.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +46,7 @@
     if (isset($_GET['send_id'])) {
         $send_id = $_GET['send_id'];
         // Get request ID
-        $filter_requestid = mysqli_query($conn, "select * from request_perform_printer where id ='$send_id'");
+        $filter_requestid = mysqli_query($conn, "select * from perform where id ='$send_id'");
         $get_requestid = mysqli_fetch_array($filter_requestid);
         $requestid_ = $get_requestid["requestid"];
         // Get file info
@@ -270,7 +270,12 @@
     <!-- END POP UP -->
 
     <?php
-    $result = mysqli_query($conn, "SELECT * FROM request_perform_printer");
+    $result = mysqli_query($conn, "select perform.id, perform.starttime, perform.endtime,file.name as filename,
+    file.totalpage, requestprint.numbersides, requestprint.numbercopies, requestprint.paper_per_sheet, 
+    requestprint.papersize, printer.model as printer_model,requestprint.state as state_requestprint from perform 
+    join requestprint on perform.requestid = requestprint.id 
+    join printer on perform.printerId = printer.id 
+    join file on requestprint.fileid = file.id;");
     $data = $result->fetch_all(MYSQLI_ASSOC);
     ?>
     <div class="body">
@@ -295,54 +300,37 @@
                 <?php foreach ($data as $row): ?>
                     <tr>
                         <td>
-                            <?php
-                            // Get request ID
-                            $requestid = $row['requestid'];
-                            // Get file info
-                            $filter_file = mysqli_query($conn, "SELECT * FROM file where id in (select fileid from requestprint where id='$requestid')");
-                            $get_file = mysqli_fetch_array($filter_file);
-                            // Get printer ID
-                            $printerid = $row['printerId'];
-                            // Get request info
-                            $filter_request = mysqli_query($conn, "select * from requestprint where id ='$requestid'");
-                            $get_request = mysqli_fetch_array($filter_request);
-                            // Get printer info
-                            $filter_printer = mysqli_query($conn, "SELECT * FROM printer where id='$printerid'");
-                            $get_printer_info = mysqli_fetch_array($filter_printer);
-                            $display_printer_info = $get_printer_info['model'] . ' - Cơ sở ' . $get_printer_info['Unibranch'] . ' - ' . $get_printer_info['building'] . ' - ' . $get_printer_info['room'];
-                            ?>
-
                             <?= $row['starttime'] ?>
                         </td>
                         <td>
                             <?= $row['endtime'] ?>
                         </td>
                         <td>
-                            <?= $get_file['name'] ?>
+                            <?= $row['filename'] ?>
                         </td>
                         <td>
-                            <?= $get_file['totalpage'] ?>
+                            <?= $row['totalpage'] ?>
                         </td>
                         <td>
-                            <?= $get_request["numbersides"] ?>
+                            <?= $row["numbersides"] ?>
                         </td>
                         <td>
-                            <?= $get_request["numbercopies"] ?>
+                            <?= $row["numbercopies"] ?>
                         </td>
                         <td>
-                            <?= $get_request["paper_per_sheet"] ?>
+                            <?= $row["paper_per_sheet"] ?>
                         </td>
                         <td>
-                            <?= $get_request["papersize"] ?>
+                            <?= $row["papersize"] ?>
                         </td>
                         <td>
-                            <?= $display_printer_info ?>
+                            <?= $row['printer_model'] ?>
                         </td>
                         <td>
                             <?php
-                            if ($get_request['state'] == '0')
+                            if ($row['state_requestprint'] == '0')
                                 $state = '<a  class="payment_link_text">Đã lưu</a>';
-                            else if ($get_request['state'] == '1')
+                            else if ($row['state_requestprint'] == '1')
                                 $state = 'Đã hoàn thành';
                             else
                                 $state = 'Đã gửi in';
@@ -355,10 +343,9 @@
                                 <div class="dropdown-content">
                                     <a href="activitylog.php?send_id=<?= $row['id'] ?>">Send</a>
                                     <?php
-                                    if ($get_request['state'] == '0' || $get_request['state'] == '1')
+                                    if ($row['state_requestprint'] == '0' || $row['state_requestprint'] == '1')
                                         echo '<a href="activitylog.php?delete_id=' . $row['id'] . '">Delete</a>';
                                     ?>
-
                                 </div>
                             </div>
                         </td>
@@ -366,7 +353,7 @@
                 <?php endforeach ?>
 
             </table>
-            <div class="dropdown" style="float:right;">
+            <div class="dropdown" style="float:right; margin: 1%; padding:0.3%">
                 <button type="button" class="button" id="delete_multi"><i class="ri-arrow-down-s-fill dropbtn"></i>Xóa
                     nhiều file</button>
                 <div class="dropdown-content">
