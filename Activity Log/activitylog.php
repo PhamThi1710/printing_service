@@ -1,5 +1,5 @@
 <?php
-@include 'c:\xampp\htdocs\printing_service\database.php';
+@include '../local/database.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@
     <!-- remix icon link -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!-- custom css file link -->
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/printing_service/local/style.css">
 </head>
 
 <body>
@@ -403,18 +403,12 @@
     <!-- footer section ends -->
 
 
-
-
-
-
-
-
-
     <!-- swiper js link -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <!-- custom js file link -->
-    <script src="activitylog_script.js"></script>
+    <!--<script src="activitylog_script.js"></script>-->
+    <script src="/printing_service/local/script.js"></script>
     <!--jquery cdn link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../local/style.css">
+    <link rel="stylesheet" href="../SPSO_log/spsolog_style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 
@@ -14,70 +15,51 @@
         <!--POP UP -->
         <!--End get data task -->
         <div class="body">
-            <!--<div class="popup" id="">
-                <img src="/printing_service/image/message.jpg" width="50px" height="50px">
-                <div class="popup_text">
-                    <h2 style="margin-top:5%; color:var(--main-color)">Message:</h2>
-                    <h4 style="color:var(--text-color)">Bạn có chắc chắn muốn xóa không?</h4>
-                </div>
-                <div class="button-group">
-                    <button onclick="ClosePopup(\'DELETE_popup\')" class="button" type="button">Thoát</button>
-                    <a class="button" href="delete_activitylog.php?id=' . $delete_id . '">Xóa</a>
-                </div>
-            </div>
-        </div>-->
-            <div class="dropdown" style="float:right;">
-                <button type="button" class="button" id="delete_multi"><i class="ri-arrow-down-s-fill dropbtn"></i>Xóa
-                    nhiều file</button>
-                <div class="dropdown-content">
-                    <a type="button" href="activitylog.php?DELETE_range=true">Xóa theo khoảng thời gian</a>
-                    <a type="button" href="activitylog.php?DELETE_particularDay=true">Xóa theo ngày cụ thể</a>
-                </div>
-            </div>
-            <div class="popup" id="DELETE_range" style="display:none">
-                <img src="/printing_service/image/message.jpg" width="50px" height="50px">
-                <div class="popup_text">
-                    <div class="delete_range">
-                        <div class="delete_range1">
-                            <p>Xóa theo khoảng thời gian:</p>
+            <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
+            <div style="float:right; width:50%;height:30px; margin-right:5%;">
+                <div class="delete_range"
+                    style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
+                    <div>
+                        <div class="delete_range1" style="float: left;width: 70%;">
+                            <p>Chọn ngày bắt đầu</p>
                         </div>
-                        <div class="delete_range1">
-                            <select id="delete_range_select">
-                                <option value="delete_start">Chọn khoảng thời gian</option>
-                                <option value="delete_hour=true">1 giờ trước</option>
-                                <option value="delete_day=true">1 ngày trước</option>
-                                <option value="delete_week=true">1 tuần trước</option>
-                                <option value="delete_month=true">1 tháng trước</option>
-                                <option value="delete_year=true">1 năm trước</option>
-                            </select>
+                        <div class="delete_range1" style="float: right;width: 30%;"><i class="ri-calendar-2-fill"
+                                onclick="_('calendar-start').classList.add('display_calendar')"></i>
                         </div>
+                    </div>
+                    <div class="wrapper" id="calendar-start">
+                        <div class="header-calendar">
+                            <p class="current-date"></p>
+                            <div class="icons">
+                                <i id="prev" class="ri-arrow-left-line"></i>
+                                <i id="next" class="ri-arrow-right-line"></i>
+                            </div>
+                        </div>
+                        <div class="calendar">
+                            <ul class="weeks">
+                                <li>Sun</li>
+                                <li>Mon</li>
+                                <li>Tue</li>
+                                <li>Wed</li>
+                                <li>Thu</li>
+                                <li>Fri</li>
+                                <li>Sat</li>
+                            </ul>
+                            <ul class="days"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="delete_range"
+                    style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
+                    <div>
+                        <div class="delete_range1" style="float: left;width: 70%;">
+                            <p>Chọn ngày kết thúc</p>
+                        </div>
+                        <div class="delete_range1" style="float: left;width: 30%;"><i class="ri-calendar-2-fill"
+                                onclick="_('calendar-end').classList.add('display_calendar')"></i></div>
 
                     </div>
-                    <div class="button-group">
-                        <a href="delete_activitylog.php?confirm_delete_range=true" class="button" type="button">Xác
-                            nhận
-                            xóa</a>
-                        <button onclick="ClosePopup('DELETE_multi_popup')" class="button" type="button">Thoát</button>
-                    </div>
-                </div>
-            </div>
-            <div class="popup" id="DELETE_particularDay">
-                <img src="/printing_service/image/message.jpg" width="50px" height="50px">
-                <div class="popup_text">
-                    <div class="delete_range">
-                        <div class="delete_range1">
-                            <p>Chọn một ngày cụ thể:</p>
-                        </div>
-                        <div class="delete_range1"><i class="ri-calendar-2-fill"
-                                onclick="_('calendar').classList.add('display_calendar')"></i></div>
-
-                    </div>
-                    <p style="font-size:10px">Note: Chỉ có thể xóa các yêu cầu in ở trạng thái "Đã hoàn thành" </p>
-                    <div class="button-group">
-                        <button onclick="deleteActiveClass()" class="button" type="button">Xác nhận xóa</button>
-                        <button onclick="ClosePopup('DELETE_multi_popup')" class="button" type="button">Thoát</button>
-                    </div>
-                    <div class="wrapper" id="calendar">
+                    <div class="wrapper" id="calendar-end">
                         <div class="header-calendar">
                             <p class="current-date"></p>
                             <div class="icons">
@@ -102,7 +84,7 @@
             </div>
         </div>
     </div>
-    <script src="activitylog_script.js"></script>
+    <script src="../local/script.js"></script>
     <!--jquery cdn link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 </body>

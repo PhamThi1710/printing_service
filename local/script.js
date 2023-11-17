@@ -8,11 +8,6 @@ function OpenPopup(id) {
 function ClosePopup(id) {
     _(id).classList.add("close-popup");
 }
-function getHref() { // Set href to tag a and delete selected option 
-    var a = _('confirm_delete_multi');
-    a.href = 'delete_activitylog.php?confirm_delete_range=true&' + _('delete_range_select').value;
-}
-
 /* Design Calendar */
 const daysTag = document.querySelector(".days"),
     currentDate = document.querySelector(".current-date"),

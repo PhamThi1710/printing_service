@@ -1,0 +1,19 @@
+/* Design Calendar */
+#calendar-start,
+#calendar-end {
+    width: 250px;
+    background-color: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+    text-align: center;
+    transition: all 2s ease;
+    border-radius: 0%;
+    display: none;
+}
+
+#calendar-start .days li.today,
+#calendar-end .days li.today {
+    color: rgba(255, 0, 0, 0.321);
+    font-weight: 1000;
+}

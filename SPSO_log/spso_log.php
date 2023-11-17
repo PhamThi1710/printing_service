@@ -1,5 +1,5 @@
 <?php
-@include 'c:\xampp\htdocs\printing_service\database.php';
+@include '../local/database.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@
     <!-- remix icon link -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!-- custom css file link -->
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="../local/style.css">
 </head>
 
 <body>
@@ -47,6 +47,67 @@
     ?>
     <div class="body">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
+        <div style="float:right; width:500px;height:30px; margin-right:5%;">
+            <div class="delete_range"
+                style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
+                <div class="delete_range1" style="float: left;width: 70%;">
+                    <p>Chọn ngày bắt đầu</p>
+                </div>
+                <div class="delete_range1" style="float: right;width: 30%;"><i class="ri-calendar-2-fill"
+                        onclick="_('calendar-start').classList.add('display_calendar')"></i>
+                </div>
+
+            </div>
+            <div class="wrapper" id="calendar-start">
+                <div class="header-calendar">
+                    <p class="current-date"></p>
+                    <div class="icons">
+                        <i id="prev" class="ri-arrow-left-line"></i>
+                        <i id="next" class="ri-arrow-right-line"></i>
+                    </div>
+                </div>
+                <div class="calendar">
+                    <ul class="weeks">
+                        <li>Sun</li>
+                        <li>Mon</li>
+                        <li>Tue</li>
+                        <li>Wed</li>
+                        <li>Thu</li>
+                        <li>Fri</li>
+                        <li>Sat</li>
+                    </ul>
+                    <ul class="days"></ul>
+                </div>
+            </div>
+            <div class="delete_range" style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
+                <div class="delete_range1" style="float: left;width: 70%;">
+                    <p>Chọn ngày kết thúc</p>
+                </div>
+                <div class="delete_range1" style="float: left;width: 30%;"><i class="ri-calendar-2-fill" onclick="_('calendar-end').classList.add('display_calendar')"></i></div>
+
+            </div>
+            <div class="wrapper" id="calendar-end">
+                <div class="header-calendar">
+                    <p class="current-date"></p>
+                    <div class="icons">
+                        <i id="prev" class="ri-arrow-left-line"></i>
+                        <i id="next" class="ri-arrow-right-line"></i>
+                    </div>
+                </div>
+                <div class="calendar">
+                    <ul class="weeks">
+                        <li>Sun</li>
+                        <li>Mon</li>
+                        <li>Tue</li>
+                        <li>Wed</li>
+                        <li>Thu</li>
+                        <li>Fri</li>
+                        <li>Sat</li>
+                    </ul>
+                    <ul class="days"></ul>
+                </div>
+            </div>
+        </div>
         <section>
             <table border="1" style="overflow-y:scroll;height:300px;display:block;">
                 <tr>
@@ -74,7 +135,7 @@
                         <td>
                             <?= $row['endtime'] ?>
                         </td>
-                        
+
                         <td>
                             <?php
                             if ($row['state_requestprint'] == '0')
@@ -90,6 +151,10 @@
                 <?php endforeach ?>
 
             </table>
+            <div>
+                <button style="float:right; margin: 1%; padding:0.3%" class="button" type="button">Xem nhật ký máy
+                    in</button>
+            </div>
         </section>
     </div>
 
@@ -133,7 +198,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <!-- custom js file link -->
-    <script src="activitylog_script.js"></script>
+    <script src="../local/script.js"></script>
     <!--jquery cdn link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 
