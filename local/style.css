@@ -197,27 +197,27 @@ section {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+    height: 100%;
 }
 
 .body section table tr th {
     padding: 0.5%;
     color: var(--main-color);
+    word-wrap: break-word;
 }
 
 .body section table tr th:last-child {
-    width: 1%;
-    white-space: nowrap;
+    width:5%;
+    word-wrap: break-word;
 }
 
 .body section table tr td {
+    width: auto;
+    color: var(--text-color);
     padding: 0.1%;
     width: fit-content;
-}
 
-.body section table tr td th {
-    color: var(--text-color);
 }
-
 
 .payment_link_text {
     color: red;
@@ -330,6 +330,10 @@ section {
 }
 
 .wrapper.display_calendar {
+    display: block;
+}
+
+.display_calendar {
     display: block;
 }
 

@@ -275,7 +275,7 @@
     requestprint.papersize, printer.model as printer_model,requestprint.state as state_requestprint from perform 
     join requestprint on perform.requestid = requestprint.id 
     join printer on perform.printerId = printer.id 
-    join file on requestprint.fileid = file.id;");
+    join file on requestprint.fileid = file.id order by starttime desc;;");
     $data = $result->fetch_all(MYSQLI_ASSOC);
     ?>
     <div class="body">

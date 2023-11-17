@@ -20,7 +20,6 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!-- custom css file link -->
     <link rel="stylesheet" type="text/css" href="../local/style.css">
-    <link rel="stylesheet" type="text/css" href="../SPSO_log/spsolog_style.css">
 </head>
 
 <body>
@@ -43,7 +42,7 @@
     from perform join requestprint on perform.requestid = requestprint.id 
     join printer on perform.printerId = printer.id 
     join file on requestprint.fileid = file.id 
-    join user on requestprint.userid = user.id order by starttime desc;");
+    join user on requestprint.userid = user.id;");
     $data = $result->fetch_all(MYSQLI_ASSOC);
     ?>
     <div class="body">
@@ -110,7 +109,7 @@
             </div>
         </div>
         <section>
-            <table id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
+            <table border="1" style="overflow-y:scroll;height:300px;display:block;">
                 <tr>
                     <th>Tên sinh viên</th>
                     <th>Nội dung đăng ký in</th>

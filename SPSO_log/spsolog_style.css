@@ -17,3 +17,11 @@
     color: rgba(255, 0, 0, 0.321);
     font-weight: 1000;
 }
+
+#spso_log_table tr td, #spso_log_table tr th{
+    border: 1px solid #aaaaaa;
+}
+
+#spso_log_table tr th:last-child {
+    width: 5%;
+}
