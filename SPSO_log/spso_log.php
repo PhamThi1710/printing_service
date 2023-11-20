@@ -44,7 +44,6 @@
     join printer on perform.printerId = printer.id 
     join file on requestprint.fileid = file.id 
     join user on requestprint.userid = user.id order by starttime desc;");
-    $data = $result->fetch_all(MYSQLI_ASSOC);
     ?>
     <div class="body">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
@@ -52,10 +51,11 @@
             <div class="delete_range"
                 style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
                 <div class="delete_range1" style="float: left;width: 70%;">
-                    <p>Chọn ngày bắt đầu</p>
+                    <p style="font-size:15px">Chọn ngày bắt đầu</p>
                 </div>
                 <div class="delete_range1" style="float: right;width: 30%;"><i class="ri-calendar-2-fill"
                         onclick="_('calendar-start').classList.add('display_calendar')"></i>
+
                 </div>
 
             </div>
@@ -80,11 +80,13 @@
                     <ul class="days"></ul>
                 </div>
             </div>
-            <div class="delete_range" style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
+            <div class="delete_range"
+                style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
                 <div class="delete_range1" style="float: left;width: 70%;">
-                    <p>Chọn ngày kết thúc</p>
+                    <p style="font-size:15px">Chọn ngày kết thúc</p>
                 </div>
-                <div class="delete_range1" style="float: left;width: 30%;"><i class="ri-calendar-2-fill" onclick="_('calendar-end').classList.add('display_calendar')"></i></div>
+                <div class="delete_range1" style="float: left;width: 30%;"><i class="ri-calendar-2-fill"
+                        onclick="_('calendar-end').classList.add('display_calendar')"></i></div>
 
             </div>
             <div class="wrapper" id="calendar-end">
@@ -109,48 +111,66 @@
                 </div>
             </div>
         </div>
+
         <section>
             <table id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
-                <tr>
-                    <th>Tên sinh viên</th>
-                    <th>Nội dung đăng ký in</th>
-                    <th>Số giấy đã trả</th>
-                    <th>Thời gian bắt đầu in</th>
-                    <th>Thời gian kết thúc in</th>
-                    <th>Trạng thái</th>
-                </tr>
-                <?php foreach ($data as $row): ?>
+                <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <style>
+                    #spso_log_table col {
+                        width: calc(100% /6);
+                    }
+                </style>
+                <thead>
                     <tr>
-                        <td>
-                            <?= $row['student_name'] ?>
-                        </td>
-                        <td>
-                            <?= $row['filename'] ?>
-                        </td>
-                        <td>
-                            <?= $row['total_sheet'] ?>
-                        </td>
-                        <td>
-                            <?= $row['starttime'] ?>
-                        </td>
-                        <td>
-                            <?= $row['endtime'] ?>
-                        </td>
-
-                        <td>
-                            <?php
-                            if ($row['state_requestprint'] == '0')
-                                $state = '<a  class="payment_link_text">Đã lưu</a>';
-                            else if ($row['state_requestprint'] == '1')
-                                $state = 'Đã hoàn thành';
-                            else
-                                $state = 'Đã gửi in';
-                            ?>
-                            <?= $state ?>
-                        </td>
+                        <th>Tên sinh viên</th>
+                        <th>Nội dung đăng ký in</th>
+                        <th>Số giấy đã trả</th>
+                        <th>Thời gian bắt đầu in</th>
+                        <th>Thời gian kết thúc in</th>
+                        <th>Trạng thái</th>
                     </tr>
-                <?php endforeach ?>
+                </thead>
+                <?php $data = $result->fetch_all(MYSQLI_ASSOC);
+                foreach ($data as $row): ?>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <?= $row['student_name'] ?>
+                            </td>
+                            <td>
+                                <?= $row['filename'] ?>
+                            </td>
+                            <td>
+                                <?= $row['total_sheet'] ?>
+                            </td>
+                            <td>
+                                <?= $row['starttime'] ?>
+                            </td>
+                            <td>
+                                <?= $row['endtime'] ?>
+                            </td>
 
+                            <td>
+                                <?php
+                                if ($row['state_requestprint'] == '0')
+                                    $state = '<a  class="payment_link_text">Đã lưu</a>';
+                                else if ($row['state_requestprint'] == '1')
+                                    $state = 'Đã hoàn thành';
+                                else
+                                    $state = 'Đã gửi in';
+                                ?>
+                                <?= $state ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
             </table>
             <div>
                 <button style="float:right; margin: 1%; padding:0.3%" class="button" type="button">Xem nhật ký máy
@@ -158,7 +178,27 @@
             </div>
         </section>
     </div>
+    <style>
+        /* Design Calendar */
+        #calendar-start,
+        #calendar-end {
+            width: 250px;
+            background-color: #ffffff;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 15px;
+            text-align: center;
+            transition: all 2s ease;
+            border-radius: 0%;
+            display: none;
+        }
 
+        #calendar-start .days li.today,
+        #calendar-end .days li.today {
+            color: rgba(255, 0, 0, 0.321);
+            font-weight: 1000;
+        }
+    </style>
     <!-- footer section starts -->
     <div class="footer-container">
         <section class="footer">

@@ -45,26 +45,10 @@
 
     if (isset($_GET['send_id'])) {
         $send_id = $_GET['send_id'];
-        // Get request ID
-        $filter_requestid = mysqli_query($conn, "select * from perform where id ='$send_id'");
-        $get_requestid = mysqli_fetch_array($filter_requestid);
-        $requestid_ = $get_requestid["requestid"];
-        // Get file info
-        $popup_dtfile = mysqli_query($conn, "SELECT * FROM file where id in (select fileid from requestprint where id='$requestid_')");
-        $get_file_ = mysqli_fetch_array($popup_dtfile);
-        // Get request info
-        $printerid_ = $get_requestid['printerId'];
-        $popup_dtrequest = mysqli_query($conn, "select * from requestprint where id ='$requestid_'");
-        $get_request_ = mysqli_fetch_array($popup_dtrequest);
-        //Get printer info
-        $popup_dtprinter = mysqli_query($conn, "SELECT * FROM printer where id='$printerid_'");
-        $get_printer_info_ = mysqli_fetch_array($popup_dtprinter);
-        $display_printer_info_ = $get_printer_info_['model'] . ' - Cơ sở ' . $get_printer_info_['Unibranch'] . ' - ' . $get_printer_info_['building'] . ' - ' . $get_printer_info_['room'];
-        //Get user info
-        $popup_dtuser = mysqli_query($conn, "SELECT * FROM user where id in (select userid from requestprint where id='$requestid_')");
-        $get_user = mysqli_fetch_array($popup_dtuser);
+        $getInfoToSend = mysqli_query($conn, "SELECT * FROM `requested_page_number` join requestprint on 
+        requested_page_number.requestid = requestprint.id join user on requestprint.userid = user.id join file on requestprint.fileid = file.id where requestid=$send_id");
+        $getdata = $getInfoToSend->fetch_all(MYSQLI_ASSOC);
         $Now = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-
         //  <!--End get data task -->
         echo '<div class="popup" id="sendprint_popup">
             <img src="/printing_service/image/message.jpg" width="50px" height="50px">
@@ -84,7 +68,7 @@
                         <th class="title_"><i class="ri-user-fill"></i>Tên người dùng:</th>
                         </td>
                         <td>
-                           ' . $get_user["fullname"] . '
+                           ' . $getdata[0]["fullname"] . '
                         </td>
                     </tr>
                     <tr>
@@ -92,7 +76,7 @@
                         <th class="title_"><i class="ri-file-fill"></i>Tập tin đã chọn:</th>
                         </td>
                         <td>
-                           ' . $get_file_["name"] . '
+                           ' . $getdata[0]["name"] . '
                         </td>
                     </tr>
                     <tr>
@@ -100,7 +84,7 @@
                         <th class="title_"><i class="ri-file-paper-2-fill"></i>Số mặt in:</th>
                         </td>
                         <td>
-                            ' . $get_request_["numbersides"] . ' 
+                            ' . $getdata[0]["numbersides"] . ' 
                         </td>
                     </tr>
                     <tr>
@@ -108,7 +92,7 @@
                         <th class="title_"><i class="ri-file-copy-fill"></i>Số bản copy:</th>
                         </td>
                         <td>
-                            ' . $get_request_["numbercopies"] . '
+                            ' . $getdata[0]["numbercopies"] . '
                         </td>
                     </tr>
                     <tr>
@@ -116,7 +100,7 @@
                         <th class="title_"><i class="ri-file-list-3-fill"></i>Số trang trên một tờ giấy in:</th>
                         </td>
                         <td>
-                            ' . $get_request_["paper_per_sheet"] . '
+                            ' . $getdata[0]["paper_per_sheet"] . '
                         </td>
                     </tr>
                     <tr>
@@ -124,34 +108,32 @@
                         <th class="title_"><i class="ri-file-paper-fill"></i>Khổ giấy:</th>
                         </td>
                         <td>
-                            ' . $get_request_["papersize"] . '
+                            ' . $getdata[0]["papersize"] . '
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                        <th class="title_"><i class="ri-printer-fill"></i>Máy in:</th>
-                        </td>
-                        <td>
-                           ' . $display_printer_info_ . '
-                        </td>
-                    </tr>';
-        $popup_dtlistpages = mysqli_query($conn, "select page from listpages where performid='$send_id'");
-        $list = array();
-        while ($list_child = mysqli_fetch_assoc($popup_dtlistpages)) {
-            $list[] = $list_child['page'];
-        }
-        $display = implode(", ", $list);
-        echo '<tr>
+<tr>
                         <td>
                         <th class="title_"><i class="ri-list-check"></i>Số trang muốn in:</th>
                         </td>
-                        <td>
-                           ' . $display . '
+                        <td>';
+        $display = "";
+        for ($i = 0; $i < count($getdata); $i++) {
+            if ($getdata[$i]['startpage'] != $getdata[$i]['endpage']) {
+                $display .= $getdata[$i]['startpage'] . "-" . $getdata[$i]['endpage'];
+            } else {
+                $display .= $getdata[$i]['startpage'];
+            }
+            $display .= ",";
+        }
+        $display = substr($display, 0, -1);
+        echo $display;
+        echo '
                         </td>
                     </tr>
                 </table>
         <div class="button-group">
             <button onclick="ClosePopup(\'sendprint_popup\')" class="button" type="button">Thoát</button>
+            <a href="#" type="button" class="button">Chỉnh sửa</a>
             <a class="button" href="send_activitylog.php?send_confirm_id=' . $send_id . '" type="button">Xác nhận</a>
         </div>
         </div>
@@ -270,88 +252,105 @@
     <!-- END POP UP -->
 
     <?php
-    $result = mysqli_query($conn, "select perform.id, perform.starttime, perform.endtime,file.name as filename,
-    file.totalpage, requestprint.numbersides, requestprint.numbercopies, requestprint.paper_per_sheet, 
-    requestprint.papersize, printer.model as printer_model,requestprint.state as state_requestprint from perform 
-    join requestprint on perform.requestid = requestprint.id 
-    join printer on perform.printerId = printer.id 
-    join file on requestprint.fileid = file.id order by starttime desc;;");
+    $result = mysqli_query($conn, "select perform.requestid as requestid, perform.id, perform.starttime, perform.endtime,file.name as filename, 
+    file.totalpage, requestprint.numbersides, requestprint.numbercopies, requestprint.paper_per_sheet, requestprint.papersize,
+     printer.model as printer_model,requestprint.state as state_requestprint from perform join requestprint on perform.requestid = requestprint.id
+      join printer on perform.printerId = printer.id join file on requestprint.fileid = file.id order by starttime desc;");
     $data = $result->fetch_all(MYSQLI_ASSOC);
     ?>
     <div class="body">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN</h2>
         <section>
-            <table border="1" style="   overflow-y:scroll;
-   height:300px;
-   display:block;">
-                <tr>
-                    <th>Thời gian bắt đầu in</th>
-                    <th>Thời gian kết thúc in</th>
-                    <th>Nội dung đăng ký in</th>
-                    <th>Tổng số page</th>
-                    <th>Số mặt</th>
-                    <th>Số bản copy</th>
-                    <th>Số<br>trang<br>trên<br>giấy in</th>
-                    <th>Khổ giấy</th>
-                    <th>Mã máy in</th>
-                    <th>Trạng thái</th>
-                    <th>Tùy chọn</th>
-                </tr>
-                <?php foreach ($data as $row): ?>
+            <table border="1" id="user_log_table" style="overflow-y:scroll; height:300px;display:block;">
+                <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <style>
+                    #user_log_table col {
+                        width: calc(100% /11);
+                    }
+                </style>
+                <thead>
                     <tr>
-                        <td>
-                            <?= $row['starttime'] ?>
-                        </td>
-                        <td>
-                            <?= $row['endtime'] ?>
-                        </td>
-                        <td>
-                            <?= $row['filename'] ?>
-                        </td>
-                        <td>
-                            <?= $row['totalpage'] ?>
-                        </td>
-                        <td>
-                            <?= $row["numbersides"] ?>
-                        </td>
-                        <td>
-                            <?= $row["numbercopies"] ?>
-                        </td>
-                        <td>
-                            <?= $row["paper_per_sheet"] ?>
-                        </td>
-                        <td>
-                            <?= $row["papersize"] ?>
-                        </td>
-                        <td>
-                            <?= $row['printer_model'] ?>
-                        </td>
-                        <td>
-                            <?php
-                            if ($row['state_requestprint'] == '0')
-                                $state = '<a  class="payment_link_text">Đã lưu</a>';
-                            else if ($row['state_requestprint'] == '1')
-                                $state = 'Đã hoàn thành';
-                            else
-                                $state = 'Đã gửi in';
-                            ?>
-                            <?= $state ?>
-                        </td>
-                        <td>
-                            <div class="dropdown" style="float:right;">
-                                <i style="font-size:25px " class="ri-arrow-down-s-fill dropbtn"></i>
-                                <div class="dropdown-content">
-                                    <a href="activitylog.php?send_id=<?= $row['id'] ?>">Send</a>
-                                    <?php
-                                    if ($row['state_requestprint'] == '0' || $row['state_requestprint'] == '1')
-                                        echo '<a href="activitylog.php?delete_id=' . $row['id'] . '">Delete</a>';
-                                    ?>
-                                </div>
-                            </div>
-                        </td>
+                        <th>Thời gian bắt đầu in</th>
+                        <th>Thời gian kết thúc in</th>
+                        <th>Nội dung đăng ký in</th>
+                        <th>Tổng số page</th>
+                        <th>Số mặt</th>
+                        <th>Số bản copy</th>
+                        <th>Số<br>trang<br>trên<br>giấy in</th>
+                        <th>Khổ giấy</th>
+                        <th>Mã máy in</th>
+                        <th>Trạng thái</th>
+                        <th>Tùy chọn</th>
                     </tr>
-                <?php endforeach ?>
-
+                </thead>
+                <tbody>
+                    <?php foreach ($data as $row): ?>
+                        <tr>
+                            <td>
+                                <?= $row['starttime'] ?>
+                            </td>
+                            <td>
+                                <?= $row['endtime'] ?>
+                            </td>
+                            <td>
+                                <?= $row['filename'] ?>
+                            </td>
+                            <td>
+                                <?= $row['totalpage'] ?>
+                            </td>
+                            <td>
+                                <?= $row["numbersides"] ?>
+                            </td>
+                            <td>
+                                <?= $row["numbercopies"] ?>
+                            </td>
+                            <td>
+                                <?= $row["paper_per_sheet"] ?>
+                            </td>
+                            <td>
+                                <?= $row["papersize"] ?>
+                            </td>
+                            <td>
+                                <?= $row['printer_model'] ?>
+                            </td>
+                            <td>
+                                <?php
+                                if ($row['state_requestprint'] == '0')
+                                    $state = '<a  class="payment_link_text">Đã lưu</a>';
+                                else if ($row['state_requestprint'] == '1')
+                                    $state = 'Đã hoàn thành';
+                                else
+                                    $state = 'Đã gửi in';
+                                ?>
+                                <?= $state ?>
+                            </td>
+                            <td>
+                                <div class="dropdown" style="float:right;">
+                                    <i style="font-size:25px" class="ri-arrow-down-s-fill dropbtn"></i>
+                                    <div class="dropdown-content">
+                                        <a href="activitylog.php?send_id=<?= $row['requestid'] ?>">Send</a>
+                                        <?php
+                                        if ($row['state_requestprint'] == '0' || $row['state_requestprint'] == '1')
+                                            echo '<a href="activitylog.php?delete_id=' . $row['requestid'] . '">Delete</a>';
+                                        ?>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
             </table>
             <div class="dropdown" style="float:right; margin: 1%; padding:0.3%">
                 <button type="button" class="button" id="delete_multi"><i class="ri-arrow-down-s-fill dropbtn"></i>Xóa

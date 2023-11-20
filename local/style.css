@@ -200,23 +200,27 @@ section {
     height: 100%;
 }
 
+
 .body section table tr th {
     padding: 0.5%;
     color: var(--main-color);
-    word-wrap: break-word;
 }
 
+/*
 .body section table tr th:last-child {
     width:5%;
-    word-wrap: break-word;
+}
+*/
+/*Dung lai o check endpage luc insert phai nho hon totalpage*/
+.body section table tr td {
+    padding: 0.1%;
 }
 
-.body section table tr td {
-    width: auto;
-    color: var(--text-color);
-    padding: 0.1%;
-    width: fit-content;
-
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #FFFFFF;
+    z-index: 10;
 }
 
 .payment_link_text {
@@ -330,10 +334,6 @@ section {
 }
 
 .wrapper.display_calendar {
-    display: block;
-}
-
-.display_calendar {
     display: block;
 }
 
