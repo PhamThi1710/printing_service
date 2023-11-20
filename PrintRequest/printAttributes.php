@@ -18,6 +18,7 @@
 </head>
 
 <body>
+    <!-- TODO: choose print attributes and deliver to print request through a database  -->
     <div class="print-attributes-container">
         <div class="chn-thuc-tnh">Chọn thuộc tính in</div>
         <div class="pages-to-print-parent">
