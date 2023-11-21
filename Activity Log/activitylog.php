@@ -57,7 +57,7 @@
                 <table>
                     <tr>
                         <td>
-                        <th class="title_"><i class="ri-timer-fill"></i>Thời gian:</th>
+                        <th class="title_"><i class="ri-timer-fill"></i>Thời gian hiện tại:</th>
                         </td>
                         <td>
                           ' . $Now->format('Y-m-d H:i:s') . '
@@ -111,7 +111,13 @@
                             ' . $getdata[0]["papersize"] . '
                         </td>
                     </tr>
-<tr>
+                        <td>
+                        <th class="title_"><i class="ri-money-dollar-circle-fill"></i>Số page bị trừ vào ví:</th>
+                        </td>
+                        <td>
+                            ' . $getdata[0]["total_sheet"] . '
+                        </td>
+                    <tr>
                         <td>
                         <th class="title_"><i class="ri-list-check"></i>Số trang muốn in:</th>
                         </td>
@@ -171,7 +177,7 @@
                 </div>
                 <div class="delete_range1">
                     <select id="delete_range_select">
-                        <option value="delete_start">Chọn khoảng thời gian</option>
+                        <option value="delete_start=true">Chọn khoảng thời gian</option>
                         <option value="delete_hour=true">1 giờ trước</option>
                         <option value="delete_day=true">1 ngày trước</option>
                         <option value="delete_week=true">1 tuần trước</option>
@@ -182,11 +188,16 @@
 
             </div>
             <div class="button-group">
-                <a href="delete_activitylog.php?confirm_delete_range=true" class="button" type="button">Xác
+                <a onclick="setHref()" id="confirm_delete_button" href="" class="button" type="button">Xác
                     nhận
                     xóa</a>
                 <button onclick="ClosePopup(\'DELETE_range\')" class="button" type="button">Thoát</button>
             </div>
+            <script>
+            function setHref() {
+                _("confirm_delete_button").href =`delete_activitylog.php?confirm_delete_range=true&${_("delete_range_select").value}`;
+            }
+            </script>
         </div>
     </div>';
     }
@@ -245,7 +256,6 @@
                         alert("\nStatus: " + status);
                     });
             }
-
         }
     </script>
     <!-- END Delete multiple request POP UP  -->
@@ -253,7 +263,7 @@
 
     <?php
     $result = mysqli_query($conn, "select perform.requestid as requestid, perform.id, perform.starttime, perform.endtime,file.name as filename, 
-    file.totalpage, requestprint.numbersides, requestprint.numbercopies, requestprint.paper_per_sheet, requestprint.papersize,
+    file.totalpage, requestprint.numbersides, requestprint.numbercopies, requestprint.paper_per_sheet, requestprint.papersize, requestprint.total_sheet,
      printer.model as printer_model,requestprint.state as state_requestprint from perform join requestprint on perform.requestid = requestprint.id
       join printer on perform.printerId = printer.id join file on requestprint.fileid = file.id order by starttime desc;");
     $data = $result->fetch_all(MYSQLI_ASSOC);
@@ -263,21 +273,14 @@
         <section>
             <table border="1" id="user_log_table" style="overflow-y:scroll; height:300px;display:block;">
                 <colgroup>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
+                    <col span="2" style="width: 240px">
+                    <col style="width:200px">
+                    <col span="6" style="width: 100px;">
+                    <col span="3" style="width: 170px">
                 </colgroup>
                 <style>
-                    #user_log_table col {
-                        width: calc(100% /11);
+                    #user_log_table {
+                        table-layout: fixed;
                     }
                 </style>
                 <thead>
@@ -288,68 +291,76 @@
                         <th>Tổng số page</th>
                         <th>Số mặt</th>
                         <th>Số bản copy</th>
-                        <th>Số<br>trang<br>trên<br>giấy in</th>
+                        <th>Số trang trên giấy in</th>
                         <th>Khổ giấy</th>
+                        <th>Số page bị trừ trong ví</th>
                         <th>Mã máy in</th>
                         <th>Trạng thái</th>
                         <th>Tùy chọn</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($data as $row): ?>
-                        <tr>
-                            <td>
-                                <?= $row['starttime'] ?>
-                            </td>
-                            <td>
-                                <?= $row['endtime'] ?>
-                            </td>
-                            <td>
-                                <?= $row['filename'] ?>
-                            </td>
-                            <td>
-                                <?= $row['totalpage'] ?>
-                            </td>
-                            <td>
-                                <?= $row["numbersides"] ?>
-                            </td>
-                            <td>
-                                <?= $row["numbercopies"] ?>
-                            </td>
-                            <td>
-                                <?= $row["paper_per_sheet"] ?>
-                            </td>
-                            <td>
-                                <?= $row["papersize"] ?>
-                            </td>
-                            <td>
-                                <?= $row['printer_model'] ?>
-                            </td>
-                            <td>
-                                <?php
-                                if ($row['state_requestprint'] == '0')
-                                    $state = '<a  class="payment_link_text">Đã lưu</a>';
-                                else if ($row['state_requestprint'] == '1')
-                                    $state = 'Đã hoàn thành';
-                                else
-                                    $state = 'Đã gửi in';
-                                ?>
-                                <?= $state ?>
-                            </td>
-                            <td>
-                                <div class="dropdown" style="float:right;">
-                                    <i style="font-size:25px" class="ri-arrow-down-s-fill dropbtn"></i>
-                                    <div class="dropdown-content">
-                                        <a href="activitylog.php?send_id=<?= $row['requestid'] ?>">Send</a>
-                                        <?php
-                                        if ($row['state_requestprint'] == '0' || $row['state_requestprint'] == '1')
-                                            echo '<a href="activitylog.php?delete_id=' . $row['requestid'] . '">Delete</a>';
-                                        ?>
+                    <?php if (empty($data)) {
+                        echo "<p style='border:None; color:var(--text-color); font-weight:500; font-size:17px;'>Nhật ký của bạn hiện đang trống!</p>";
+                    } else
+                        foreach ($data as $row): ?>
+                            <tr>
+                                <td>
+                                    <?= $row['starttime'] ?>
+                                </td>
+                                <td>
+                                    <?= $row['endtime'] ?>
+                                </td>
+                                <td>
+                                    <?= $row['filename'] ?>
+                                </td>
+                                <td>
+                                    <?= $row['totalpage'] ?>
+                                </td>
+                                <td>
+                                    <?= $row["numbersides"] ?>
+                                </td>
+                                <td>
+                                    <?= $row["numbercopies"] ?>
+                                </td>
+                                <td>
+                                    <?= $row["paper_per_sheet"] ?>
+                                </td>
+                                <td>
+                                    <?= $row["papersize"] ?>
+                                </td>
+                                <td>
+                                    <?= $row["total_sheet"] ?>
+                                </td>
+
+                                <td>
+                                    <?= $row['printer_model'] ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    if ($row['state_requestprint'] == '0')
+                                        $state = '<a  class="payment_link_text">Đã lưu</a>';
+                                    else if ($row['state_requestprint'] == '1')
+                                        $state = 'Đã hoàn thành';
+                                    else
+                                        $state = 'Đã gửi in';
+                                    ?>
+                                    <?= $state ?>
+                                </td>
+                                <td>
+                                    <div class="dropdown" style="float:right;">
+                                        <i style="font-size:25px" class="ri-arrow-down-s-fill dropbtn"></i>
+                                        <div class="dropdown-content">
+                                            <a href="activitylog.php?send_id=<?= $row['requestid'] ?>">Send</a>
+                                            <?php
+                                            if ($row['state_requestprint'] == '0' || $row['state_requestprint'] == '1')
+                                                echo '<a href="activitylog.php?delete_id=' . $row['id'] . '">Delete</a>';
+                                            ?>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
                 </tbody>
             </table>
             <div class="dropdown" style="float:right; margin: 1%; padding:0.3%">

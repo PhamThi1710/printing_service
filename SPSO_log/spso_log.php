@@ -113,18 +113,17 @@
         </div>
 
         <section>
-            <table id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
+            <table border="1" id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
                 <colgroup>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
+                    <col span="6">
                 </colgroup>
                 <style>
+                    #spso_log_table {
+                        table-layout: fixed;
+                    }
+
                     #spso_log_table col {
-                        width: calc(100% /6);
+                        width: 240px;
                     }
                 </style>
                 <thead>

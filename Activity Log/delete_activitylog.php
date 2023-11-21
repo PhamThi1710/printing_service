@@ -1,5 +1,5 @@
 <?php
-@include 'database.php';
+@include '../local/database.php';
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $del = " DELETE FROM perform WHERE id = '$id'; ";
