@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="../style.css" >
     <link rel="stylesheet" type="text/css" href="ConfigureSystem.css" >
 
+    <!-- js file link -->
+    <script src="ConfigureSystem.js"></script>
 </head>
 <body>
     <!-- header section starts -->
@@ -47,15 +49,17 @@
 
     <div class="body">
         <h1 class="title">cấu hình hệ thống</h1>
-        <form>
-            <div class="default-number-of-pages">
+        <form id="configure-system-form" onsubmit="validateInputs()">
+            <div class="default-number-of-pages input-control">
                 <label for="number-of-pages">Số trang in mặc định:</label>
-                <input type="number" id="number-of-pages" placeholder="Số lượng trang (Khổ A4)" min="0">
+                <input type="number" id="number-of-pages" name="number-of-pages" placeholder="Số lượng trang (Khổ A4)" min="0">
+                <div class="error"></div>
             </div>
 
-            <div class="refill-date-container">
+            <div class="refill-date-container input-control">
                 <label for="refill-date">Ngày cung cấp trang in:</label>
-                <input type="datetime-local" id="refill-date">
+                <input type="datetime-local" id="refill-date" name="refill-date">
+                <div class="error"></div>
             </div>
 
             <div class="accepted-file-type-container">

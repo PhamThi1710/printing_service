@@ -57,6 +57,9 @@
     <link rel="stylesheet" type="text/css" href="../style.css" >
     <link rel="stylesheet" type="text/css" href="BuyPrintingPages.css" >
 
+    <!-- js file link -->
+    <script src="BuyPrintingPages.js"></script>
+
 </head>
 <body>
     <!-- header section starts -->
@@ -99,13 +102,13 @@
             ?>
         </div>
 
-        <form method="POST" action="" class="registration">
+        <form method="POST" action="" class="registration" onsubmit="return validateInputs()">
             <label for="quantity">Số lượng trang in mua thêm:</label>
             <input type="number" id="quantity" name="quantity" placeholder="Số lượng trang (Khổ A4)" min="1">
             <button type="submit" id="submit-order" name='submit-order' class="submit-order">Đăng ký</button>
         </form>
         
-        <!-- Popup to confirm order -->
+        <!-- Popup to confirm order starts-->
         <div class="popup" id="popup">
             <div class="overlay"></div>
             <div class="popup-content">
@@ -123,6 +126,7 @@
                 </form>
             </div>
         </div>
+        <!-- Popup to confirm order ends-->
 
         <?php
             echo "<p class='info-about-price'>(Lệ phí: $price VNĐ/trang in khổ  A4)</p>";
@@ -171,7 +175,7 @@
                                 <td class='payment-status $status'>
                                     <a href='UpdateBalance.php?Owner_ID=".$row['Order_ID']."' class='pay-btn  payment-btn'>".$payment_status."</a>
                                     <span>/ </span>
-                                    <a href='DeleteAnOrder.php?Order_ID=".$row['Order_ID']."' class='delete-btn payment-btn'>Xóa</a>
+                                    <a href='DeleteAnOrder.php?Order_ID=".$row['Order_ID']."' class='delete-btn payment-btn' onclick='return confirmDelete()'>Xóa</a>
                                 </td>
                             </tr>";
                         }

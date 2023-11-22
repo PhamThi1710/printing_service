@@ -141,3 +141,7 @@
 .body form .save-btn {
     margin-top: 27px;
 }
+
+.body form input:focus {
+    background-color: #676c7029;
+}
