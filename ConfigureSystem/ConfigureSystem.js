@@ -7,12 +7,12 @@ function validateInputs(){
 
     if (numberOfPages.length == 0){
         window.alert("Vui lòng nhập số trang in mặc định!");
-        return;
+        return false;
     }
 
     if (refillDate.length == 0){
         window.alert("Vui lòng nhập ngày cung cấp trang in!");
-        return;
+        return false;
     }
 
     window.alert("Cập nhật thành công");
