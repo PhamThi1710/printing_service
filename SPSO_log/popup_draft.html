@@ -15,55 +15,45 @@
         <!--POP UP -->
         <!--End get data task -->
         <div class="body">
-            <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
-            <div class="wrapper">
-                <div class="header-calendar">
-                    <p class="current-date"></p>
-                    <div class="icons">
-                        <i id="prev" class="ri-arrow-left-line"></i>
-                        <i id="next" class="ri-arrow-right-line"></i>
-                    </div>
-                </div>
-                <div class="calendar">
-                    <ul class="weeks">
-                        <li>Sun</li>
-                        <li>Mon</li>
-                        <li>Tue</li>
-                        <li>Wed</li>
-                        <li>Thu</li>
-                        <li>Fri</li>
-                        <li>Sat</li>
-                    </ul>
-                    <ul class="days"></ul>
-                </div>
-            </div>
-            <div class="popup_text">
-                <div class="wrapper">
-                    <div class="header-calendar">
-                        <p class="current-date"></p>
-                        <div class="icons">
-                            <i id="prev" class="ri-arrow-left-line"></i>
-                            <i id="next" class="ri-arrow-right-line"></i>
+            <!--
+                <div class="delete_range1" style="float: right;width: 30%;"><a
+                        href="spso_log.php?popup_calendar=true"><i class="ri-calendar-2-fill"></i></a>
+                </div>-->
+                <?php
+                /*if (isset($_GET['popup_calendar'])) {
+                    echo '<div class="popup" id="popup_calendar-start">
+                    <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+                    <div class="popup_text">
+                        <div class="wrapper" id="calendar-start">
+                            <div class="header-calendar">
+                                <p class="current-date"></p>
+                                <div class="icons">
+                                    <i id="prev" class="ri-arrow-left-line"></i>
+                                    <i id="next" class="ri-arrow-right-line"></i>
+                                </div>
+                            </div>
+                            <div class="calendar">
+                                <ul class="weeks">
+                                    <li>Sun</li>
+                                    <li>Mon</li>
+                                    <li>Tue</li>
+                                    <li>Wed</li>
+                                    <li>Thu</li>
+                                    <li>Fri</li>
+                                    <li>Sat</li>
+                                </ul>
+                                <ul class="days"></ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="calendar">
-                        <ul class="weeks">
-                            <li>Sun</li>
-                            <li>Mon</li>
-                            <li>Tue</li>
-                            <li>Wed</li>
-                            <li>Thu</li>
-                            <li>Fri</li>
-                            <li>Sat</li>
-                        </ul>
-                        <ul class="days"></ul>
+                    <div class="button-group">
+                        <button onclick="ClosePopup(\'popup_calendar-start\');" class="button" type="button">Thoát</button>
+                        <a class="button" onclick="DisplayActiveDay()" href="">Xác nhận</a>
                     </div>
-                </div>
-            </div>
-            <div class="button-group">
-                <button onclick="ClosePopup('calendar-start')" class="button" type="button">Thoát</button>
-                <a class="button" href="delete_activitylog.php?id=' . $delete_id . '">Xóa</a>
-            </div>
+                </div>'
+                    ;
+                }*/
+                ?>
         </div>
     </div>
     <script src="../local/script.js"></script>

@@ -1,5 +1,6 @@
 <?php
 @include '../local/database.php';
+@include '../SPSO_log/displayDate.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,89 +37,50 @@
         <a href="login.php" class="login">Đăng nhập</a>
     </section>
     <!-- header section ends -->
-    <?php
-    $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
-    requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
-    from perform join requestprint on perform.requestid = requestprint.id 
-    join printer on perform.printerId = printer.id 
-    join file on requestprint.fileid = file.id 
-    join user on requestprint.userid = user.id order by starttime desc;");
-    ?>
+
     <div class="body">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
-        <div style="width:500px;height:30px; float:right; margin-right:5%">
+        <div style="width:800px;height:30px; ">
             <div class="delete_range"
                 style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
                 <div class="delete_range1" style="float: left;width: 70%;">
                     <p style="font-size:15px">Chọn ngày muốn xem:</p>
                 </div>
-                <div class="delete_range1" style="float: right;width: 30%;"><a
-                        href="spso_log.php?popup_calendar=true"><i class="ri-calendar-2-fill"></i></a>
-                </div>
-                <?php
-                if (isset($_GET['popup_calendar'])) {
-                    echo '<div class="popup" id="popup_calendar-start">
-                    <img src="/printing_service/image/message.jpg" width="50px" height="50px">
-                    <div class="popup_text">
-                        <div class="wrapper" id="calendar-start">
-                            <div class="header-calendar">
-                                <p class="current-date"></p>
-                                <div class="icons">
-                                    <i id="prev" class="ri-arrow-left-line"></i>
-                                    <i id="next" class="ri-arrow-right-line"></i>
-                                </div>
-                            </div>
-                            <div class="calendar">
-                                <ul class="weeks">
-                                    <li>Sun</li>
-                                    <li>Mon</li>
-                                    <li>Tue</li>
-                                    <li>Wed</li>
-                                    <li>Thu</li>
-                                    <li>Fri</li>
-                                    <li>Sat</li>
-                                </ul>
-                                <ul class="days"></ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="button-group">
-                        <button onclick="ClosePopup(\'popup_calendar-start\')" class="button" type="button">Thoát</button>
-                        <a class="button" onclick="DisplayActiveDay()" href="">Xác nhận</a>
-                    </div>
-                </div>'
-                    ;
-                }
-                ?>
-
+                    <input type="date"  max="2023-11-23" />
             </div>
         </div>
         <script>
-            function openCalendar(id) {
-                _(id).classList.toggle('display_calendar')
-            }
-            function DisplayActiveDay(){
-                
-            }
+            const date_value = document.getElementById("selectedDate");
+            date_value.addEventListener('change', function () {
+                var date = date_value.value;
+                const splitDate = date.split("-");
+                $.post("spso_log.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] });
+                auto_reload("../SPSO_log/spso_log.php")
+            })
         </script>
         <section>
+            <style>
+                #spso_log_table {
+                    table-layout: fixed;
+                }
+
+                #spso_log_table col {
+                    width: 240px;
+                }
+
+                #spso_log_table thead th {
+                    padding: 10px;
+                }
+
+                #spso_log_table tbody tr td {
+                    padding: 10px;
+                }
+            </style>
             <table border="1" id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
                 <colgroup>
                     <col span="6">
                 </colgroup>
-                <style>
-                    #spso_log_table {
-                        table-layout: fixed;
-                    }
 
-                    #spso_log_table col {
-                        width: 240px;
-                    }
-
-                    #spso_log_table tbody tr td {
-                        padding: 10px;
-                    }
-                </style>
                 <thead>
                     <tr>
                         <th>Tên sinh viên</th>
@@ -148,7 +110,6 @@
                             <td>
                                 <?= $row['endtime'] ?>
                             </td>
-
                             <td>
                                 <?php
                                 if ($row['state_requestprint'] == '0')
@@ -164,10 +125,6 @@
                     <?php endforeach ?>
                 </tbody>
             </table>
-            <div>
-                <button style="float:right; margin: 1%; padding:0.3%" class="button" type="button">Xem nhật ký máy
-                    in</button>
-            </div>
         </section>
     </div>
     <style>

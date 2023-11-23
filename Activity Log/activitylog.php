@@ -22,7 +22,7 @@
     <link rel="stylesheet" type="text/css" href="/printing_service/local/style.css">
 </head>
 
-<body > <!--onload="timer = setTimeout('auto_reload()',10000);">
+<body ><!--onload="timer = setTimeout('auto_reload()',10000);">
     <!- header section starts -->
 
     <section class="header">
@@ -68,7 +68,7 @@
                         <th class="title_"><i class="ri-user-fill"></i>Tên người dùng:</th>
                         </td>
                         <td>
-                           ' . $getdata[0]["fullname"] . '
+                           ' . $getdata[0]['fullname'] . '
                         </td>
                     </tr>
                     <tr>
@@ -245,18 +245,15 @@
     } ?>
     <script>
         function deleteActiveClass() {
-            var listActiveDays = document.querySelectorAll('.active'); for (var i = 0; i <
-                listActiveDays.length; ++i) {
-                let date = listActiveDays[i].textContent; const splitDate = date.split(" ");
+            var listActiveDays = document.querySelectorAll('.active'); 
+            for (var i = 0; i < listActiveDays.length; ++i) {
+                let date = listActiveDays[i].textContent; 
+                const splitDate = date.split(" ");
                 $.post(" delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] });
             }
             ClosePopup('DELETE_particularDay');
-            auto_reload();
+            auto_reload('../Activity Log/activitylog.php');
         }
-        var timer = null;
-        function auto_reload() {
-            window.location = '../Activity Log/activitylog.php';
-        } 
     </script>
     <!-- END Delete multiple request POP UP  -->
     <!-- END POP UP -->
