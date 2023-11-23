@@ -22,8 +22,8 @@
     <link rel="stylesheet" type="text/css" href="/printing_service/local/style.css">
 </head>
 
-<body>
-    <!-- header section starts -->
+<body > <!--onload="timer = setTimeout('auto_reload()',10000);">
+    <!- header section starts -->
 
     <section class="header">
         <div class="logo">
@@ -211,7 +211,7 @@
                     <p>Chọn một ngày cụ thể:</p>
                 </div>
                 <div class="delete_range1"><i class="ri-calendar-2-fill"
-                        onclick="_(\'calendar\').classList.add(\'display_calendar\')"></i></div>
+                        onclick="_(\'calendar\').classList.toggle(\'display_calendar\')"></i></div>
 
             </div>
             <div class="button-group">
@@ -243,20 +243,20 @@
         </div>
     </div>';
     } ?>
-
     <script>
         function deleteActiveClass() {
-            var listActiveDays = document.querySelectorAll('.active');
-            for (var i = 0; i < listActiveDays.length; ++i) {
-                let date = listActiveDays[i].textContent;
-                const splitDate = date.split(" ");
-                $.post("delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] },
-                    function (data, status) {
-                        ClosePopup('DELETE_particularDay');
-                        alert("\nStatus: " + status);
-                    });
+            var listActiveDays = document.querySelectorAll('.active'); for (var i = 0; i <
+                listActiveDays.length; ++i) {
+                let date = listActiveDays[i].textContent; const splitDate = date.split(" ");
+                $.post(" delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] });
             }
+            ClosePopup('DELETE_particularDay');
+            auto_reload();
         }
+        var timer = null;
+        function auto_reload() {
+            window.location = '../Activity Log/activitylog.php';
+        } 
     </script>
     <!-- END Delete multiple request POP UP  -->
     <!-- END POP UP -->

@@ -20,7 +20,6 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!-- custom css file link -->
     <link rel="stylesheet" type="text/css" href="../local/style.css">
-    <link rel="stylesheet" type="text/css" href="../SPSO_log/spsolog_style.css">
 </head>
 
 <body>
@@ -47,71 +46,61 @@
     ?>
     <div class="body">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
-        <div style="float:right; width:500px;height:30px; margin-right:5%;">
+        <div style="width:500px;height:30px; float:right; margin-right:5%">
             <div class="delete_range"
                 style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
                 <div class="delete_range1" style="float: left;width: 70%;">
-                    <p style="font-size:15px">Chọn ngày bắt đầu</p>
+                    <p style="font-size:15px">Chọn ngày muốn xem:</p>
                 </div>
-                <div class="delete_range1" style="float: right;width: 30%;"><i class="ri-calendar-2-fill"
-                        onclick="_('calendar-start').classList.add('display_calendar')"></i>
-
+                <div class="delete_range1" style="float: right;width: 30%;"><a
+                        href="spso_log.php?popup_calendar=true"><i class="ri-calendar-2-fill"></i></a>
                 </div>
-
-            </div>
-            <div class="wrapper" id="calendar-start">
-                <div class="header-calendar">
-                    <p class="current-date"></p>
-                    <div class="icons">
-                        <i id="prev" class="ri-arrow-left-line"></i>
-                        <i id="next" class="ri-arrow-right-line"></i>
+                <?php
+                if (isset($_GET['popup_calendar'])) {
+                    echo '<div class="popup" id="popup_calendar-start">
+                    <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+                    <div class="popup_text">
+                        <div class="wrapper" id="calendar-start">
+                            <div class="header-calendar">
+                                <p class="current-date"></p>
+                                <div class="icons">
+                                    <i id="prev" class="ri-arrow-left-line"></i>
+                                    <i id="next" class="ri-arrow-right-line"></i>
+                                </div>
+                            </div>
+                            <div class="calendar">
+                                <ul class="weeks">
+                                    <li>Sun</li>
+                                    <li>Mon</li>
+                                    <li>Tue</li>
+                                    <li>Wed</li>
+                                    <li>Thu</li>
+                                    <li>Fri</li>
+                                    <li>Sat</li>
+                                </ul>
+                                <ul class="days"></ul>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="calendar">
-                    <ul class="weeks">
-                        <li>Sun</li>
-                        <li>Mon</li>
-                        <li>Tue</li>
-                        <li>Wed</li>
-                        <li>Thu</li>
-                        <li>Fri</li>
-                        <li>Sat</li>
-                    </ul>
-                    <ul class="days"></ul>
-                </div>
-            </div>
-            <div class="delete_range"
-                style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
-                <div class="delete_range1" style="float: left;width: 70%;">
-                    <p style="font-size:15px">Chọn ngày kết thúc</p>
-                </div>
-                <div class="delete_range1" style="float: left;width: 30%;"><i class="ri-calendar-2-fill"
-                        onclick="_('calendar-end').classList.add('display_calendar')"></i></div>
-
-            </div>
-            <div class="wrapper" id="calendar-end">
-                <div class="header-calendar">
-                    <p class="current-date"></p>
-                    <div class="icons">
-                        <i id="prev" class="ri-arrow-left-line"></i>
-                        <i id="next" class="ri-arrow-right-line"></i>
+                    <div class="button-group">
+                        <button onclick="ClosePopup(\'popup_calendar-start\')" class="button" type="button">Thoát</button>
+                        <a class="button" onclick="DisplayActiveDay()" href="">Xác nhận</a>
                     </div>
-                </div>
-                <div class="calendar">
-                    <ul class="weeks">
-                        <li>Sun</li>
-                        <li>Mon</li>
-                        <li>Tue</li>
-                        <li>Wed</li>
-                        <li>Thu</li>
-                        <li>Fri</li>
-                        <li>Sat</li>
-                    </ul>
-                    <ul class="days"></ul>
-                </div>
+                </div>'
+                    ;
+                }
+                ?>
+
             </div>
         </div>
-
+        <script>
+            function openCalendar(id) {
+                _(id).classList.toggle('display_calendar')
+            }
+            function DisplayActiveDay(){
+                
+            }
+        </script>
         <section>
             <table border="1" id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
                 <colgroup>
@@ -124,6 +113,10 @@
 
                     #spso_log_table col {
                         width: 240px;
+                    }
+
+                    #spso_log_table tbody tr td {
+                        padding: 10px;
                     }
                 </style>
                 <thead>
@@ -179,17 +172,12 @@
     </div>
     <style>
         /* Design Calendar */
-        #calendar-start,
-        #calendar-end {
-            width: 250px;
+        #calendar-start {
             background-color: #ffffff;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 15px;
             text-align: center;
-            transition: all 2s ease;
             border-radius: 0%;
-            display: none;
+            z-index: 100000;
+            display: block;
         }
 
         #calendar-start .days li.today,

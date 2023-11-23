@@ -10,8 +10,8 @@ if (isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year'])) {
     else
         $month = $_POST['month'];
     $year = $_POST['year'];
-    $sql = "delete request_perform_printer from request_perform_printer join requestprint as R 
-        on request_perform_printer.requestid = R.id 
+    $sql = "delete perform from perform join requestprint as R 
+        on perform.requestid = R.id 
         where YEAR(starttime)=$year and MONTH(starttime)=$month and DAY(starttime)=$day and state=1;";
     $res = mysqli_query($conn, $sql);
 }
