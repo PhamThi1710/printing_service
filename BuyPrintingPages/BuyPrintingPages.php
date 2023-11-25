@@ -1,50 +1,3 @@
-<?php
-    @include_once("../ConnectDB.php");
-
-    // Get Balance
-    $sql = "SELECT Balance 
-        FROM Student
-        WHERE Student_ID = 1
-        ";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $balance = $row['Balance'];
-    }
-
-    // Get Paper_Price
-    $sql = "SELECT Paper_Price 
-    FROM Configuration
-    WHERE Role = 'Student'
-    ";
-    $result = $conn->query($sql);
-
-    $price = 0;
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $price = $row['Paper_Price'];
-    }
-
-    // Save the new order to DB
-    if(isset($_POST['submit-order'])) {
-        // Get Quantity
-        $quantity = $_POST['quantity'];
-
-        // Get the current date and time
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-        $date = date("Y/m/d H:i:s");
-
-        // INSERT into DB
-        $sql = "INSERT INTO BPP_Order (Order_ID, Order_Creation_Date, Quantity, Payment_Status, Owner_ID)
-                VALUES (NULL, '$date', '$quantity', '0', '1')
-            ";
-
-        $conn->query($sql) or die("". $conn->error);
-    }
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,11 +51,25 @@
         <div class="balance-container">
             <p>Số trang in hiện tại:</p>
             <?php
+                @include_once("../ConnectDB.php");
+
+                // Get Balance
+                $sql = "SELECT Balance 
+                    FROM Student
+                    WHERE Student_ID = 1
+                    ";
+                $result = $conn->query($sql);
+            
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $balance = $row['Balance'];
+                }
+
                 echo "<p class='balance'>$balance trang (Khổ A4)</p>";
             ?>
         </div>
 
-        <form method="POST" action="" class="registration" onsubmit="return validateInputs()">
+        <form method="POST" action="RegisterAnOrder.php" class="registration" onsubmit="return validateInputs()">
             <label for="quantity">Số lượng trang in mua thêm:</label>
             <input type="number" id="quantity" name="quantity" placeholder="Số lượng trang (Khổ A4)" min="1">
             <button type="submit" id="submit-order" name='submit-order' class="submit-order">Đăng ký</button>
@@ -129,6 +96,19 @@
         <!-- Popup to confirm order ends-->
 
         <?php
+            // Get Paper_Price
+            $sql = "SELECT Paper_Price 
+            FROM Configuration
+            WHERE Role = 'Student'
+            ";
+            $result = $conn->query($sql);
+
+            $price = 0;
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $price = $row['Paper_Price'];
+            }
+
             echo "<p class='info-about-price'>(Lệ phí: $price VNĐ/trang in khổ  A4)</p>";
         ?>
 
@@ -173,7 +153,7 @@
                                 <td>".$row["Quantity"]."</td>
                                 <td class='total-price'>".$total_price."</td>
                                 <td class='payment-status $status'>
-                                    <a href='UpdateBalance.php?Owner_ID=".$row['Order_ID']."' class='pay-btn  payment-btn'>".$payment_status."</a>
+                                    <a href='UpdateBalance.php?Owner_ID=".$row['Order_ID']."' class='pay-btn  payment-btn $status' onclick='return confirmPay()'>".$payment_status."</a>
                                     <span>/ </span>
                                     <a href='DeleteAnOrder.php?Order_ID=".$row['Order_ID']."' class='delete-btn payment-btn' onclick='return confirmDelete()'>Xóa</a>
                                 </td>

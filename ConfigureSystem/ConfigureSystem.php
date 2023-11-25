@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dịch vụ sinh viên</title>
+    <title>Cấu hình hệ thống</title>
 
     <!-- custom css file link -->
     <link rel="stylesheet" type="text/css" href="../style.css" >
     <link rel="stylesheet" type="text/css" href="ConfigureSystem.css" >
 
     <!-- js file link -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="ConfigureSystem.js"></script>
 </head>
 <body>
@@ -49,65 +50,52 @@
 
     <div class="body">
         <h1 class="title">cấu hình hệ thống</h1>
-        <form id="configure-system-form" onsubmit="validateInputs()">
+        <form method="POST" action="UpdateConfiguration.php" id="configure-system-form" onsubmit="return validateInputs()">
             <div class="default-number-of-pages input-control">
                 <label for="number-of-pages">Số trang in mặc định:</label>
                 <input type="number" id="number-of-pages" name="number-of-pages" placeholder="Số lượng trang (Khổ A4)" min="0">
-                <div class="error"></div>
+            </div>
+
+            <div class="paper-price-container input-control">
+                <label for="paper-price">Giá một trang in:</label>
+                <input type="number" id="paper-price" name="paper-price" placeholder="Giá một trang (Khổ A4)" min="0">
             </div>
 
             <div class="refill-date-container input-control">
                 <label for="refill-date">Ngày cung cấp trang in:</label>
-                <input type="datetime-local" id="refill-date" name="refill-date">
-                <div class="error"></div>
+                <input type="datetime-local" step="1" id="refill-date" name="refill-date">
             </div>
 
             <div class="accepted-file-type-container">
                 <label for="file-type">Định dạng tập tin cho phép:</label>
                 <input type="text" id="file-type" placeholder="Định dạng tập tin">
-                <button type="button">Thêm</button>
+                <button type="button" class="add-file-type">Thêm</button>
             </div>
 
             <div class="accepted-file-type-list">
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.pdf</p>
-                </div>
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.docx</p>
-                </div>
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.png</p>
-                </div>
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.jpeg</p>
-                </div>
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.jpeg</p>
-                </div>
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.jpeg</p>
-                </div>
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.jpeg</p>
-                </div>
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.jpeg</p>
-                </div>
-                <div class="file-type-item">
-                    <button class="delete-btn">&times;</button>
-                    <p>.jpeg</p>
-                </div>
+                <?php
+                @include_once("../ConnectDB.php");
+
+                $sql = "SELECT File_Type
+                        FROM Accepted_File_Types
+                        ";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "
+                        <div class='file-type-item'>
+                            <button type='button' class='delete-btn delete-file-type' value='".$row["File_Type"]."'>&times;</button>
+                            <p>".$row['File_Type']."</p>
+                        </div>
+                        ";
+                    }
+                }
+                ?>
+                
             </div>
 
-            <button type="submit" class="save-btn">Lưu</button>
+            <button type="submit" name="submit-configuration" class="save-btn">Lưu</button>
         </form>
     </div>
 
