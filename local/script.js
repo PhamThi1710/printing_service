@@ -1,7 +1,12 @@
+
 function _(id) {
     return document.getElementById(id)
 }
 
+var timer = null;
+function auto_reload(path) {
+    window.location = path;
+}
 function OpenPopup(id) {
     _(id).classList.add("open-popup");
 }

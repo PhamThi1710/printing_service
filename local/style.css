@@ -212,8 +212,9 @@ section {
 }
 */
 /*Dung lai o check endpage luc insert phai nho hon totalpage*/
-.body section table tr td {
+.body section table tbody tr td {
     padding: 0.1%;
+    table-layout: fixed;
 }
 
 thead th {
@@ -221,6 +222,7 @@ thead th {
     top: 0;
     background-color: #FFFFFF;
     z-index: 10;
+    table-layout: fixed;
 }
 
 .payment_link_text {

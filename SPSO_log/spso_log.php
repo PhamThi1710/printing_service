@@ -1,5 +1,6 @@
 <?php
 @include '../local/database.php';
+@include '../SPSO_log/displayDate.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +21,6 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!-- custom css file link -->
     <link rel="stylesheet" type="text/css" href="../local/style.css">
-    <link rel="stylesheet" type="text/css" href="../SPSO_log/spsolog_style.css">
 </head>
 
 <body>
@@ -37,96 +37,50 @@
         <a href="login.php" class="login">Đăng nhập</a>
     </section>
     <!-- header section ends -->
-    <?php
-    $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
-    requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
-    from perform join requestprint on perform.requestid = requestprint.id 
-    join printer on perform.printerId = printer.id 
-    join file on requestprint.fileid = file.id 
-    join user on requestprint.userid = user.id order by starttime desc;");
-    ?>
+
     <div class="body">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
-        <div style="float:right; width:500px;height:30px; margin-right:5%;">
+        <div style="width:800px;height:30px; ">
             <div class="delete_range"
                 style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
                 <div class="delete_range1" style="float: left;width: 70%;">
-                    <p style="font-size:15px">Chọn ngày bắt đầu</p>
+                    <p style="font-size:15px">Chọn ngày muốn xem:</p>
                 </div>
-                <div class="delete_range1" style="float: right;width: 30%;"><i class="ri-calendar-2-fill"
-                        onclick="_('calendar-start').classList.add('display_calendar')"></i>
-
-                </div>
-
-            </div>
-            <div class="wrapper" id="calendar-start">
-                <div class="header-calendar">
-                    <p class="current-date"></p>
-                    <div class="icons">
-                        <i id="prev" class="ri-arrow-left-line"></i>
-                        <i id="next" class="ri-arrow-right-line"></i>
-                    </div>
-                </div>
-                <div class="calendar">
-                    <ul class="weeks">
-                        <li>Sun</li>
-                        <li>Mon</li>
-                        <li>Tue</li>
-                        <li>Wed</li>
-                        <li>Thu</li>
-                        <li>Fri</li>
-                        <li>Sat</li>
-                    </ul>
-                    <ul class="days"></ul>
-                </div>
-            </div>
-            <div class="delete_range"
-                style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
-                <div class="delete_range1" style="float: left;width: 70%;">
-                    <p style="font-size:15px">Chọn ngày kết thúc</p>
-                </div>
-                <div class="delete_range1" style="float: left;width: 30%;"><i class="ri-calendar-2-fill"
-                        onclick="_('calendar-end').classList.add('display_calendar')"></i></div>
-
-            </div>
-            <div class="wrapper" id="calendar-end">
-                <div class="header-calendar">
-                    <p class="current-date"></p>
-                    <div class="icons">
-                        <i id="prev" class="ri-arrow-left-line"></i>
-                        <i id="next" class="ri-arrow-right-line"></i>
-                    </div>
-                </div>
-                <div class="calendar">
-                    <ul class="weeks">
-                        <li>Sun</li>
-                        <li>Mon</li>
-                        <li>Tue</li>
-                        <li>Wed</li>
-                        <li>Thu</li>
-                        <li>Fri</li>
-                        <li>Sat</li>
-                    </ul>
-                    <ul class="days"></ul>
-                </div>
+                    <input type="date"  max="2023-11-23" />
             </div>
         </div>
-
+        <script>
+            const date_value = document.getElementById("selectedDate");
+            date_value.addEventListener('change', function () {
+                var date = date_value.value;
+                const splitDate = date.split("-");
+                $.post("spso_log.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] });
+                auto_reload("../SPSO_log/spso_log.php")
+            })
+        </script>
         <section>
-            <table id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
+            <style>
+                #spso_log_table {
+                    table-layout: fixed;
+                }
+
+                #spso_log_table col {
+                    width: 240px;
+                }
+
+                #spso_log_table thead th {
+                    padding: 10px;
+                }
+
+                #spso_log_table tbody tr td {
+                    padding: 10px;
+                }
+            </style>
+            <table border="1" id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
                 <colgroup>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
+                    <col span="6">
                 </colgroup>
-                <style>
-                    #spso_log_table col {
-                        width: calc(100% /6);
-                    }
-                </style>
+
                 <thead>
                     <tr>
                         <th>Tên sinh viên</th>
@@ -156,7 +110,6 @@
                             <td>
                                 <?= $row['endtime'] ?>
                             </td>
-
                             <td>
                                 <?php
                                 if ($row['state_requestprint'] == '0')
@@ -172,25 +125,16 @@
                     <?php endforeach ?>
                 </tbody>
             </table>
-            <div>
-                <button style="float:right; margin: 1%; padding:0.3%" class="button" type="button">Xem nhật ký máy
-                    in</button>
-            </div>
         </section>
     </div>
     <style>
         /* Design Calendar */
-        #calendar-start,
-        #calendar-end {
-            width: 250px;
+        #calendar-start {
             background-color: #ffffff;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 15px;
             text-align: center;
-            transition: all 2s ease;
             border-radius: 0%;
-            display: none;
+            z-index: 100000;
+            display: block;
         }
 
         #calendar-start .days li.today,
