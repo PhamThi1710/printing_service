@@ -177,6 +177,8 @@
             });
         });
 
+
+
         $(document).ready(function () {
 
             // Event handler for the "Xác nhận" button
@@ -185,33 +187,50 @@
                 var duplexOption = $('.duplex-yes').hasClass('button-selected') ? 'Yes' : 'No';
                 var orientationOption = $('.group-parent .button-selected').text();
                 var pageLayoutOption = $('.page-layout .size-selected').text();
-                var pagesToPrintOption = $('#pages-input').val();
                 var numOfCopiesOption = $('#copy-input').val();
-                var printerId = $('#printer-select').val(); 
+                var printerId = $('#printer-select').val();
 
-                // Send the print attributes to the server-side script
-                $.ajax({
-                    url: 'sendPrintAttributes.php',
-                    method: 'POST',
-                    data: {
-                        duplexOption: duplexOption,
-                        orientationOption: orientationOption,
-                        pageLayoutOption: pageLayoutOption,
-                        pagesToPrintOption: pagesToPrintOption,
-                        numOfCopiesOption: numOfCopiesOption,
-                        printerId:printerId
-                    },
-                    success: function (response) {
-                        // Handle the response from the server
-                        console.log(response);
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle any errors
-                        console.error(error);
+                // Decode the entered pages
+                var pagesToPrintOption = $('#pages-input').val();
+                var pagesArray = pagesToPrintOption.split(',');
+                var pagesQueryArray = [];
+
+                for (var i = 0; i < pagesArray.length; i++) {
+                    var pageRange = pagesArray[i].trim().split('-');
+                    if (pageRange.length === 1) {
+                        pagesQueryArray.push('page ' + pageRange[0]);
+                    } else if (pageRange.length === 2) {
+                        pagesQueryArray.push('page ' + pageRange[0] + ' to ' + pageRange[1]);
                     }
-                });
+                }
+
+                // Send each page query as a separate request
+                for (var j = 0; j < pagesQueryArray.length; j++) {
+                    var pageQuery = pagesQueryArray[j];
+
+                    // Send the print attributes to the server-side script
+                    $.ajax({
+                        url: 'sendPrintAttributes.php',
+                        method: 'POST',
+                        data: {
+                            duplexOption: duplexOption,
+                            orientationOption: orientationOption,
+                            pageLayoutOption: pageLayoutOption,
+                            pagesToPrintOption: pageQuery,
+                            numOfCopiesOption: numOfCopiesOption,
+                            printerId: printerId
+                        },
+                        success: function (response) {
+                            // Handle the response from the server
+                            console.log(response);
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle any errors
+                            console.error(error);
+                        }
+                    });
+                }
             });
-        });
 
     </script>
 </body>
