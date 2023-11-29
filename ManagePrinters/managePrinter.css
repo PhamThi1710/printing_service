@@ -677,6 +677,7 @@ section {
 .update-state-button {
   background-color: #fff;
   color: #106bbf;
+  cursor: pointer;
 }
 
 .update-state-button:hover {

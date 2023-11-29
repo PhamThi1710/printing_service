@@ -59,10 +59,15 @@ if (isset($_POST['campus'])) {
 
                 <div class="campus">
                     <label class="choose-campus" name="campus">Chọn cơ sở</label>
-                    <button class="campus-button campus-container" id="campus1" onclick="updateBuilding(1)">Cơ sở
-                        1</button>
-                    <button class=" campus-button campus-container" id="campus2" onclick="updateBuilding(2)">Cơ sở
-                        2</button>
+                    <button class="campus-button" id="campus1"
+                        style="display:flex; align-items:center; background-color: white" onclick="updateBuilding(1)">
+                        <div class="campus-button-text">Cơ sở 1</div>
+                    </button>
+                    <button class=" campus-button campus-container"
+                        style="display:flex; align-items:center; background-color: white" id="campus2"
+                        onclick="updateBuilding(2)">
+                        <div class="campus-button-text">Cơ sở 2</div>
+                    </button>
                 </div>
                 <div class=" flex">
                     <div class="building">
@@ -153,69 +158,9 @@ if (isset($_POST['campus'])) {
                                 echo "Error executing the query: " . $conn->error;
                             }
                             ?>
-                        </select>
-                    </div>
-                </div>
 
             </div> -->
-            <!-- <div class="add-printer">
-                <div class="menu">
-                    <b class="input-text">ID</b>
-                    <div class="input">
-                        <input type="text" name="printerId" required>
-                    </div>
-                </div>
-                <div class="menu">
-                    <b class="input-text">Name</b>
-                    <div class="input">
-                        <input type="text" name="printerName" required>
-                    </div>
-                </div>
-                <div class="menu">
-                    <b class="input-text">Description</b>
-                    <div class="input">
-                        <input type="text" name="printerDesc" required>
-                    </div>
-                </div>
-                <button type="submit" class="confirm-button">
-                    <p>Xác nhận thêm máy in</p>
-                </button>
-            </div> -->
 
-            <!-- <div class="add-printer">
-                <div class="menu">
-                    <b class="input-text">ID</b>
-                    <div class="input">
-                        <div class="input-text1" contenteditable="true">ID</div>
-                    </div>
-                    <button class="check-button"
-                        onclick="clearTextID(document.querySelector('.input-text1'))">Check</button>
-                    <span id="idExistsText" class="id-check-text"></span>
-                </div>
-                <div class="menu">
-                    <b class="input-text">Name</b>
-                    <div class="input">
-                        <div class="input-text1" contenteditable="true" oninput="clearText(this)">Name</div>
-                    </div>
-                </div> -->
-            <!-- <div class="menu">
-                    <b class="input-text">Brand</b>
-                    <div class="input">
-                        <div class="input-text1" contenteditable="true" oninput="clearText(this)">Brand</div>
-                    </div>
-                </div> -->
-            <!-- <div class="menu">
-                    <b class="input-text">Description</b>
-                    <div class="input">
-                        <div class="input-text1" contenteditable="true" oninput="clearText(this)">Description
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <!-- <button class="confirm-button">
-                <p>Xác nhận thêm máy in</p>
-                <a href="sendRequest/php"></a>
-            </button> -->
     </section>
 
     <!-- footer section starts -->
@@ -344,7 +289,7 @@ if (isset($_POST['campus'])) {
             });
         }
         function clearTextID() {
-            
+
             var inputElement = $('.input-text1');
             var inputValue = inputElement.val();
 
@@ -374,12 +319,20 @@ if (isset($_POST['campus'])) {
                 }
             });
         }
-        // document.getElementById("addPrinterForm").onsubmit = function () {
-        //     var idExistsText = document.getElementById("idExistsText").textContent;
-        //     if (idExistsText === "ID already exists") {
-        //         return false; // Prevent form submission
-        //     }
-        // };
+        var buttons = document.querySelectorAll('.campus-button');
+
+        // Add click event listener to each button
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Remove 'active' class from all buttons
+                buttons.forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
+
+                // Add 'active' class to the clicked button
+                this.classList.add('active');
+            });
+        });
     </script>
 </body>
 

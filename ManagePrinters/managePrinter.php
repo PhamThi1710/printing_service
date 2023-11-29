@@ -108,13 +108,19 @@ if (isset($_POST['campus'])) {
                         <div class="printer-id">
                             <span>
                                 <span>ID: </span>
-                                <span class="printer-info-text">1H11011</span>
+                                <span class="printer-info-text"></span>
                             </span>
                         </div>
                         <div class="printer-id">
                             <span>
                                 <span>Mã: </span>
-                                <span class="printer-info-text">Canon 1</span>
+                                <span class="printer-info-text"></span>
+                            </span>
+                        </div>
+                        <div class="printer-id">
+                            <span>
+                                <span>Phòng: </span>
+                                <span class="printer-info-text"></span>
                             </span>
                         </div>
                         <div class="">
@@ -227,13 +233,15 @@ if (isset($_POST['campus'])) {
                     var printer = JSON.parse(response);
                     $('.printer-info-text').eq(0).text(printer.PRINTERS_ID);
                     $('.printer-info-text').eq(1).text(printer.PRINTERS_NAME);
-                    $('.printer-info-text').eq(2).text(printer.PRINTERS_AVAI == 'Y' ? 'Đang hoạt động' : 'Không hoạt động');
+                    $('.printer-info-text').eq(2).text(printer.PRINTERS_ROOM);
+                    $('.printer-info-text').eq(3).text(printer.PRINTERS_AVAI == 'Y' ? 'Đang hoạt động' : 'Không hoạt động');
                 });
             });
         });
 
         function openUpdatePrinterState() {
-            window.open("updatePrinterState.php", "_blank", "width=500,height=500");
+            // window.open("updatePrinterState.php", "_blank", "width=530,height=420");
+            window.open("updatePrinterState.php", "_blank", "width=720,height=400");
         }
     </script>
 </body>
