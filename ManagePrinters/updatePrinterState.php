@@ -69,64 +69,6 @@
     </div>
 </body>
 <script>
-    // turn clicked button black
-    //     var buttons = document.querySelectorAll('.choose-button');
-
-    //     buttons.forEach(function (button) {
-    //         button.addEventListener('click', function () {
-    //             buttons.forEach(function (btn) {
-    //                 btn.classList.remove('active-button');
-    //             });
-
-    //             this.classList.add('active-button');
-    //         });
-    //     });
-    //     var selectedState = '';
-
-    //     function executeQuery() {
-    //         var printerID = document.querySelector('input[name="printerID"]').value;
-
-    //         if (printerID.trim() === '') {
-    //             $('#idExistsText').text("ID is NULL").css('display', 'inline');
-    //             return;
-    //         }
-
-    //         // Store the selected printer ID
-    //         var selectedPrinterID = printerID;
-
-    //         var confirmButton = document.getElementById('confirm');
-    //         if (!confirmButton.classList.contains('clicked')) {
-    //             confirmButton.classList.add('clicked');
-    //             return;
-    //         }
-
-    //         // Execute the query only when the "Tiếp tục" button is clicked
-    //         if (selectedState === 'Bật' || selectedState === 'Tắt') {
-    //             $.ajax({
-    //                 type: "POST",
-    //                 url: "changeState.php",
-    //                 data: { printerID: selectedPrinterID, selection: selectedState },
-    //                 success: function (response) {
-    //                     // Display the response message
-    //                     console.log(response);
-    //                 },
-    //                 error: function (xhr, status, error) {
-    //                     // Display the error message
-    //                     console.log(error);
-    //                 }
-    //             });
-    //         }
-    //     }
-
-    //     // Function to set the selected state when the Bật or Tắt button is clicked
-    //     function setPrinterState(state) {
-    //     selectedState = state;
-    //     if (state === 'Bật') {
-    //         upcomingPrinterState = 'Y';
-    //     } else if (state === 'Tắt') {
-    //         upcomingPrinterState = 'N';
-    //     }
-    // }
 
     // turn clicked button black
     var buttons = document.querySelectorAll('.choose-button');
