@@ -40,15 +40,15 @@
 
                 </div>
             </div>
-
+            <!-- TODO: press confirm THEN send the request, not press the button -->
             <div class="change-printer-state">
                 <div class="c-s-1-group">
                     <div class="c-s-12">
-                        <button class="choose-button" name="selection" onclick="setPrinterState('ON')"></button>
+                        <button class="choose-button" name="selection" onclick="setPrinterState('Bật')"></button>
                         <div class="bt">Bật</div>
                     </div>
                     <div class="c-s-12">
-                        <button class="choose-button" name="selection" onclick="setPrinterState('OFF')"></button>
+                        <button class="choose-button" name="selection" onclick="setPrinterState('Tắt')"></button>
                         <div class="bt">Tắt</div>
                     </div>
                 </div>
@@ -70,6 +70,65 @@
 </body>
 <script>
     // turn clicked button black
+    //     var buttons = document.querySelectorAll('.choose-button');
+
+    //     buttons.forEach(function (button) {
+    //         button.addEventListener('click', function () {
+    //             buttons.forEach(function (btn) {
+    //                 btn.classList.remove('active-button');
+    //             });
+
+    //             this.classList.add('active-button');
+    //         });
+    //     });
+    //     var selectedState = '';
+
+    //     function executeQuery() {
+    //         var printerID = document.querySelector('input[name="printerID"]').value;
+
+    //         if (printerID.trim() === '') {
+    //             $('#idExistsText').text("ID is NULL").css('display', 'inline');
+    //             return;
+    //         }
+
+    //         // Store the selected printer ID
+    //         var selectedPrinterID = printerID;
+
+    //         var confirmButton = document.getElementById('confirm');
+    //         if (!confirmButton.classList.contains('clicked')) {
+    //             confirmButton.classList.add('clicked');
+    //             return;
+    //         }
+
+    //         // Execute the query only when the "Tiếp tục" button is clicked
+    //         if (selectedState === 'Bật' || selectedState === 'Tắt') {
+    //             $.ajax({
+    //                 type: "POST",
+    //                 url: "changeState.php",
+    //                 data: { printerID: selectedPrinterID, selection: selectedState },
+    //                 success: function (response) {
+    //                     // Display the response message
+    //                     console.log(response);
+    //                 },
+    //                 error: function (xhr, status, error) {
+    //                     // Display the error message
+    //                     console.log(error);
+    //                 }
+    //             });
+    //         }
+    //     }
+
+    //     // Function to set the selected state when the Bật or Tắt button is clicked
+    //     function setPrinterState(state) {
+    //     selectedState = state;
+    //     if (state === 'Bật') {
+    //         upcomingPrinterState = 'Y';
+    //     } else if (state === 'Tắt') {
+    //         upcomingPrinterState = 'N';
+    //     }
+    // }
+
+    // turn clicked button black
     var buttons = document.querySelectorAll('.choose-button');
 
     buttons.forEach(function (button) {
@@ -79,9 +138,15 @@
             });
 
             this.classList.add('active-button');
+            setPrinterState(this.textContent.trim()); // Set the printer state based on the button text
         });
     });
-    var selectedState = '';
+
+    var upcomingPrinterState = ''; // Variable to store the upcoming printer state
+
+    function setPrinterState(state) {
+        upcomingPrinterState = state === 'Bật' ? 'Y' : state === 'Tắt' ? 'N' : '';
+    }
 
     function executeQuery() {
         var printerID = document.querySelector('input[name="printerID"]').value;
@@ -94,18 +159,12 @@
         // Store the selected printer ID
         var selectedPrinterID = printerID;
 
-        var confirmButton = document.getElementById('confirm');
-        if (!confirmButton.classList.contains('clicked')) {
-            confirmButton.classList.add('clicked');
-            return;
-        }
-
         // Execute the query only when the "Tiếp tục" button is clicked
-        if (selectedState === 'Bật' || selectedState === 'Tắt') {
+        if (upcomingPrinterState === 'Y' || upcomingPrinterState === 'N') {
             $.ajax({
                 type: "POST",
                 url: "changeState.php",
-                data: { printerID: selectedPrinterID, selection: selectedState },
+                data: { printerID: selectedPrinterID, selection: upcomingPrinterState },
                 success: function (response) {
                     // Display the response message
                     console.log(response);
@@ -117,43 +176,6 @@
             });
         }
     }
-
-    // Function to set the selected state when the Bật or Tắt button is clicked
-    function setPrinterState(state) {
-        selectedState = state;
-    }
-    // function clearTextID() {
-
-    //     var inputElement = $('.input-text1');
-    //     var inputValue = inputElement.val();
-
-    //     if (inputValue.trim() === '') {
-    //         $('#idExistsText').text("ID is NULL").css('display', 'inline');
-    //         return;
-    //     }
-
-    //     inputElement.css('color', 'black');
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "checkID.php",
-    //         data: { name="printerID" },
-    //         success: function (response) {
-    //             // If the ID exists, change the color to red
-    //             if (response == 'exists') {
-    //                 inputElement.css('color', 'red');
-    //                 inputElement.css('font-weight', 'bold');
-    //                 $('#idExistsText').text("ID already exists").css('display', 'inline');
-    //             }
-    //             // If the ID does not exist, change the color to green
-    //             else {
-    //                 inputElement.css('color', 'green');
-    //                 inputElement.css('font-weight', 'bold');
-    //                 $('#idExistsText').text("This ID is valid").css('display', 'inline');
-    //             }
-    //         }
-    //     });
-    // }
-
 </script>
 
 </html>

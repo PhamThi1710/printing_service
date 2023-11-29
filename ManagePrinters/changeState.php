@@ -5,9 +5,9 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $printerID = $_POST['printerID'];
     $selection = $_POST['selection'];
-    if ($selection == 'ON') {
+    if ($selection == 'ON' or $selection == 'Bật') {
         $query = "UPDATE PRINTERS_LIST SET PRINTERS_AVAI = 'Y' WHERE PRINTERS_ID = '$printerID'";
-    } elseif ($selection == 'OFF') {
+    } elseif ($selection == 'OFF' or $selection == 'Tắt') {
         $query = "UPDATE PRINTERS_LIST SET PRINTERS_AVAI = 'N' WHERE PRINTERS_ID = '$printerID'";
     }
     if (!empty($query)) {
