@@ -219,7 +219,7 @@
 }
 .orientation {
   position: absolute;
-  top: 255px;
+  top: 252px;
   left: 53px;
   width: 424px;
   height: 100px;
@@ -416,6 +416,7 @@
   top: calc(50% - 15.45px);
   left: 0px;
   font-weight: 200;
+  font-size: large;
 }
 .ellipse-div,
 .rectangle-parent4 {
@@ -512,7 +513,7 @@
 }
 .pages-to-print-parent {
   position: absolute;
-  top: 101px;
+  top: 75px;
   left: 57px;
   width: 423px;
   height: 106.5px;
@@ -526,3 +527,29 @@
   line-height: 26.67px;
 }
 
+.copy-num {
+  position: absolute;
+  top: 172px;
+  left: 57px;
+  width: 423px;
+  height: 50px;
+}
+
+.input-text {
+  position: absolute;
+  top: calc(50% - 15.45px);
+  left: 0px;
+  font-weight: 200;
+}
+
+.input-copy{
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  left: 245px;
+  height: 20px;
+  width: 122px;
+  border: 2px solid #000;
+  border-radius: 4%;
+  font-size: large;
+}
