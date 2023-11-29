@@ -1,6 +1,5 @@
 <?php
 
-
 @include 'database.php';
 // prevent campus not chosen brick the html
 if (isset($_POST['campus'])) {

@@ -683,3 +683,38 @@ section {
 .update-state-button:hover {
   font-weight: bold;
 }
+
+.campus-button::before {
+  content: "";
+  display: flex;
+  height: 15px;
+  width: 15px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.campus-button-text {
+  letter-spacing: 0.02em;
+  line-height: 26.67px;
+  font-weight: 500;
+  display: inline-block; /* or display: inline-block; */
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.campus-button.active::before {
+  background-color: black;
+  /* Other styles for the circle when the button is active */
+}
+
+.campus-button:active {
+  background-color: #000;
+  color: #fff;
+}

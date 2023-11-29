@@ -37,7 +37,7 @@ if (isset($_POST['campus'])) {
     <section class="header">
         <div class="logo">
             <a href="#">
-                <img src="/image/logo.png" alt="logo" />
+                <img src="/images/logo.png" alt="logo" />
                 <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
             </a>
         </div>
@@ -54,8 +54,15 @@ if (isset($_POST['campus'])) {
             </div>
             <div class="campus">
                 <label class="choose-campus" name="campus">Chọn cơ sở</label>
-                <button class="campus-button campus-container" id="campus1">Cơ sở 1</button>
-                <button class="campus-button campus-container" id="campus2">Cơ sở 2</button>
+                <button class="campus-button" id="campus1"
+                    style="display:flex; align-items:center; background-color: white" onclick="updateBuilding(1)">
+                    <div class="campus-button-text">Cơ sở 1</div>
+                </button>
+                <button class=" campus-button campus-container"
+                    style="display:flex; align-items:center; background-color: white" id="campus2"
+                    onclick="updateBuilding(2)">
+                    <div class="campus-button-text">Cơ sở 2</div>
+                </button>
             </div>
             <div class="flex">
                 <div class="building">
@@ -101,7 +108,7 @@ if (isset($_POST['campus'])) {
             <div class="printer-state">
                 <div class="printer-state-box">
                     <div class="printer-short-desc">
-                        <img class="print-icon" alt="" src="/image/printer-icon.svg" />
+                        <img class="print-icon" alt="" src="/images/printer-icon.svg" />
                         <p>Máy in số 1 - H6 - 101</p>
                     </div>
                     <div class="printer-desc">
@@ -143,7 +150,7 @@ if (isset($_POST['campus'])) {
             <div class="box-container">
                 <div class="box">
                     <h3>student smart printing service</h3>
-                    <img src="/image/logo.png" alt="logo" />
+                    <img src="/images/logo.png" alt="logo" />
                 </div>
 
                 <div class="box">
@@ -243,6 +250,19 @@ if (isset($_POST['campus'])) {
             // window.open("updatePrinterState.php", "_blank", "width=530,height=420");
             window.open("updatePrinterState.php", "_blank", "width=720,height=400");
         }
+
+        // Add click event listener to each button
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Remove 'active' class from all buttons
+                buttons.forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
+
+                // Add 'active' class to the clicked button
+                this.classList.add('active');
+            });
+        });
     </script>
 </body>
 
