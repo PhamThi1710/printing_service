@@ -46,6 +46,6 @@ if (isset($_GET['code'])) {
     exit();
 }
 
-// Retrieve the user ID from the database based on the logged-in user's email
+
 
 ?>
