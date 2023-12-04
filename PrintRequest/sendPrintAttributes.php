@@ -1,4 +1,7 @@
 <?php
+// Retrieve the user ID from the session
+session_start();
+$userId = $_SESSION['userId'];
 
 // Retrieve the print attributes from the AJAX request
 $numOfCopies = $_POST['numOfCopies'];
