@@ -248,7 +248,7 @@ if (isset($_POST['campus'])) {
 
         function openUpdatePrinterState() {
             // window.open("updatePrinterState.php", "_blank", "width=530,height=420");
-            window.open("updatePrinterState.php", "_blank", "width=720,height=400");
+            window.open("updatePrinterState.php", "_blank", "width=575,height=400");
         }
 
         // Add click event listener to each button
