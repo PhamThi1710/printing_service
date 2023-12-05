@@ -27,35 +27,37 @@
                     <div class="input-text">Nhập ID máy in</div>
                     <div class="input">
                         <input type="text" name="printerID" class="ID-text .input-text1" required
-                            oninput="checkPrinterID(this.value)"></input>
+                            onchange="checkPrinterID(this.value)"></input>
                     </div>
                     <!-- <span id="idExistsText" class="id-check-text"></span> -->
                 </div>
                 <div class="menu">
                     <div class="input-text">Xác nhận ID máy in</div>
                     <div class="input">
-                        <input type="text" name="validatePrinterID" class="ID-text" required></input>
+                        <input type="text" name="validatePrinterID" class="ID-text" required
+                            onchange="checkPrinterID(this.value)"></input>
                     </div>
                     <!-- <button class="check-button" onclick="clearTextID()">Check</button> -->
 
                 </div>
             </div>
             <!-- TODO: press confirm THEN send the request, not press the button -->
-            <div class="change-printer-state">
-                <div class="c-s-1-group">
-                    <div class="c-s-12">
-                        <button class="choose-button" name="selection" onclick="setPrinterState('Bật')"></button>
-                        <div class="bt">Bật</div>
-                    </div>
-                    <div class="c-s-12">
-                        <button class="choose-button" name="selection" onclick="setPrinterState('Tắt')"></button>
-                        <div class="bt">Tắt</div>
-                    </div>
+            <div class="c-s-1-group">
+                <div class="c-s-12">
+                    <button type="button" class="choose-button" name="selection"
+                        onclick="setPrinterState('Bật')"></button>
+                    <div class="bt">Bật</div>
+                </div>
+                <div class="c-s-12">
+                    <button type="button" class="choose-button" name="selection"
+                        onclick="setPrinterState('Tắt')"></button>
+                    <div class="bt">Tắt</div>
                 </div>
             </div>
 
+
             <div class="confirm-change">
-                <button class="button" id="back">
+                <button class="button" id="back"onclick="closeUpdatePrinterState()">
                     <div class="tip-tc">Quay lại</div>
                 </button>
                 <button class="button1" id="confirm" onclick="executeQuery()">
@@ -83,6 +85,36 @@
             setPrinterState(this.textContent.trim()); // Set the printer state based on the button text
         });
     });
+
+    function closeUpdatePrinterState() {
+        window.close(); // Close the pop-up window
+        window.opener.location.reload(); // Refresh the parent window (managePrinter.php)
+    }
+
+    function checkPrinterID(value) {
+        var validatePrinterID = document.querySelector('input[name="validatePrinterID"]').value;
+        if (value !== validatePrinterID) {
+            document.getElementById('idExistsText').textContent = "ID does not match";
+            document.getElementById('idExistsText').style.display = 'inline';
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "checkID.php",
+                data: { printerID: value },
+                success: function (response) {
+                    if (response === "ID not found") {
+                        document.getElementById('idExistsText').textContent = "ID not found";
+                        document.getElementById('idExistsText').style.display = 'inline';
+                    } else {
+                        document.getElementById('idExistsText').style.display = 'none';
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    }
 
     var upcomingPrinterState = ''; // Variable to store the upcoming printer state
 
