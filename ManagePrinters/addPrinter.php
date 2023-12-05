@@ -36,7 +36,7 @@ if (isset($_POST['campus'])) {
     <section class="header">
         <div class="logo">
             <a href="#">
-                <img src="/image/logo.png" alt="logo" />
+                <img src="/images/logo.png" alt="logo" />
                 <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
             </a>
         </div>
@@ -168,7 +168,7 @@ if (isset($_POST['campus'])) {
             <div class="box-container">
                 <div class="box">
                     <h3>student smart printing service</h3>
-                    <img src="/image/logo.png" alt="logo" />
+                    <img src="/images/logo.png" alt="logo" />
                 </div>
 
                 <div class="box">
