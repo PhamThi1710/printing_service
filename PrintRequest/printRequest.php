@@ -18,84 +18,90 @@ function convert_upload_file_array($upload_files)
 $success = false;
 if (isset($_POST['send'])) {
 
-    $allowTypes = array('.docx', '.docm', '.dotx', '.dotm', '.xlsx', '.pptx', 'jpg', 'png', 'jpeg', 'pdf');
+    $allowTypes = array('.docx', '.docm', '.dotx', '.dotm', '.pptx', 'jpg', 'png', 'jpeg', 'pdf');
     if (isset($_FILES['fileupload'])) {
-        $file_child = convert_upload_file_array($_FILES['fileupload']);
+        if (!in_array($fileType, $allowTypes)) {
+            $errorMessage = 'Error: Invalid file type. Only .docx, .docm, .dotx, .dotm, .xlsx, .pptx, .jpg, .png, .jpeg, .pdf files are allowed.';
+            echo "<script>document.getElementById('uploadedFileName').textContent = '$errorMessage';</script>"; //TODO fix upload non approved file
+        } else {
+            $file_child = convert_upload_file_array($_FILES['fileupload']);
 
-        foreach ($file_child as $key => $child) {
-            $targetDir = 'upload/';
-            $fileName = basename($child['name']);
-            $targetFilePath = $targetDir . $fileName;
-            $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-            if (!empty($child['name'])) {
+            foreach ($file_child as $key => $child) {
+                $targetDir = 'upload/';
+                $fileName = basename($child['name']);
+                $targetFilePath = $targetDir . $fileName;
+                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+                if (!empty($child['name'])) {
 
-                if (
-                    (
-                        ($child["type"] == "application/pdf")
-                        || ($child["type"] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-                        || ($child["type"] == "application/vnd.openxmlformats-officedocument.presentationml.presentation")
-                        || ($child["type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                        || ($child["type"] == "image/gif")
-                        || ($child["type"] == "image/jpeg")
-                        || ($child["type"] == "image/jpg")
-                        || ($child["type"] == "application/msword")
-                        || ($child["type"] == "image/pjpeg")
-                        || ($child["type"] == "image/x-png")
-                        || ($child["type"] == "image/png")
-                        && ($child["size"] < 20000000)
-                        && in_array($fileType, $allowTypes)
-                    )
-                ) {
-                    if ($child["error"] > 0) {
-                        echo "Return Code: " . $child["error"] . "<br>";
-                    } else {
-                        if (file_exists("upload/" . $child["name"])) {
-                            echo $child["name"] . " already exists. ";
+                    if (
+                        (
+                            ($child["type"] == "application/pdf")
+                            || ($child["type"] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                            || ($child["type"] == "application/vnd.openxmlformats-officedocument.presentationml.presentation")
+                            || ($child["type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                            || ($child["type"] == "image/gif")
+                            || ($child["type"] == "image/jpeg")
+                            || ($child["type"] == "image/jpg")
+                            || ($child["type"] == "application/msword")
+                            || ($child["type"] == "image/pjpeg")
+                            || ($child["type"] == "image/x-png")
+                            || ($child["type"] == "image/png")
+                            && ($child["size"] < 20000000)
+                            && in_array($fileType, $allowTypes)
+                        )
+                    ) {
+                        if ($child["error"] > 0) {
+                            echo "Return Code: " . $child["error"] . "<br>";
                         } else {
-                            $totalpage = 0;
-                            // Upload file to server
-                            if (move_uploaded_file($child['tmp_name'], $targetFilePath)) {
-                                if (($child["type"] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
-                                    $wdStatisticPages = 2; // Value that corresponds to the Page count in the Statistics
-                                    $namefile = "C:\\xampp\htdocs\printing_service\upload\\$fileName";
-                                    $word = new COM("word.application") or die("Could not initialise MS Word object.");
-                                    print "Loaded Word, version {$word->Version}\n";
-                                    $word->Documents->Open($namefile);
-                                    $totalpage = $word->ActiveDocument->ComputeStatistics($wdStatisticPages);
-                                    /*#$word->ActiveDocument->PrintOut();*/
-                                    $word->ActiveDocument->Close();
-                                    $word->Quit();
-                                } else if (($child["type"] == "application/pdf")) {
-                                    $totalpage = count_pdf_pages($targetFilePath);
-                                } else if (($child["type"] == "application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
-                                    $totalpage = PageCount_PPTX($targetFilePath);
-                                } else {
-                                    $totalpage = 0;
-                                }
-                                $insert = $conn->query("INSERT into file (userid,name,createddate,state,totalpage,filepath) VALUES ('1','$fileName',NOW(),'Mới tải lên','" . $totalpage . "','" . $targetFilePath . "')");
-                                if ($insert) {
-                                    $statusMsg = "The file has been uploaded successfully.";
-                                    ?>
-                                    <div>
-                                        <label>Tên file: <span id="uploadedFileName">
-                                                <?php echo $fileName; ?>
-                                            </span></label>
-                                    </div>
-                                    <?php
-                                    $success = true;
-                                } else
-                                    $statusMsg = "File upload failed, please try again.";
+                            if (file_exists("upload/" . $child["name"])) {
+                                echo $child["name"] . " already exists. ";
                             } else {
-                                $statusMsg = "Sorry, there was an error uploading your file.";
+                                $totalpage = 0;
+                                // Upload file to server
+                                if (move_uploaded_file($child['tmp_name'], $targetFilePath)) {
+                                    if (($child["type"] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
+                                        $wdStatisticPages = 2; // Value that corresponds to the Page count in the Statistics
+                                        $namefile = "C:\\xampp\htdocs\printing_service\upload\\$fileName";
+                                        $word = new COM("word.application") or die("Could not initialise MS Word object.");
+                                        print "Loaded Word, version {$word->Version}\n";
+                                        $word->Documents->Open($namefile);
+                                        $totalpage = $word->ActiveDocument->ComputeStatistics($wdStatisticPages);
+                                        /*#$word->ActiveDocument->PrintOut();*/
+                                        $word->ActiveDocument->Close();
+                                        $word->Quit();
+                                    } else if (($child["type"] == "application/pdf")) {
+                                        $totalpage = count_pdf_pages($targetFilePath);
+                                    } else if (($child["type"] == "application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
+                                        $totalpage = PageCount_PPTX($targetFilePath);
+                                    } else {
+                                        $totalpage = 0;
+                                    }
+                                    $insert = $conn->query("INSERT into file (userid,name,createddate,state,totalpage,filepath) VALUES ('1','$fileName',NOW(),'Mới tải lên','" . $totalpage . "','" . $targetFilePath . "')");
+                                    if ($insert) {
+                                        $statusMsg = "The file has been uploaded successfully.";
+                                        ?>
+                                        <div>
+                                            <label>Tên file: <span id="uploadedFileName">
+                                                    <?php echo $fileName; ?>
+                                                </span></label>
+                                        </div>
+                                        <?php
+                                        $success = true;
+                                    } else
+                                        $statusMsg = "File upload failed, please try again.";
+                                } else {
+                                    $statusMsg = "Sorry, there was an error uploading your file.";
+                                }
+                                # $statusMsg = 'Sorry, only valid type files are allowed to upload.';
                             }
-                            # $statusMsg = 'Sorry, only valid type files are allowed to upload.';
                         }
+                    } else {
+                        echo 'Invalid file';
                     }
-                } else {
-                    echo 'Invalid file';
                 }
             }
         }
+
     }
 }
 
@@ -104,30 +110,6 @@ if (isset($_POST['campus'])) {
     $selectedCampus = $_POST['campus'];
 } else {
     $selectedCampus = null;
-}
-function PageCount_PPTX($file)
-{
-    $pageCount = 0;
-
-    $zip = new ZipArchive();
-
-    if ($zip->open($file) === true) {
-        if (($index = $zip->locateName('docProps/app.xml')) !== false) {
-            $data = $zip->getFromIndex($index);
-            $zip->close();
-            $xml = new SimpleXMLElement($data);
-            $pageCount = $xml->Slides;
-        }
-    }
-
-    return $pageCount;
-}
-function count_pdf_pages($pdfname)
-{
-    $pdftext = file_get_contents($pdfname);
-    $num = preg_match_all("/\/Page\W/", $pdftext, $dummy);
-
-    return $num;
 }
 
 ?>
@@ -150,6 +132,10 @@ function count_pdf_pages($pdfname)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth.js/1.4.0/mammoth.browser.min.js"></script>
 </head>
 
 <body>
@@ -178,8 +164,14 @@ function count_pdf_pages($pdfname)
             </div>
             <div class="campus">
                 <label class="choose-campus" name="campus">Chọn cơ sở</label>
-                <button class="campus-button campus-container" id="campus1">Cơ sở 1</button>
-                <button class="campus-button campus-container" id="campus2">Cơ sở 2</button>
+                <button class="campus-button" id="campus1"
+                    style="display:flex; align-items:center; background-color: white">
+                    <div class="campus-button-text">Cơ sở 1</div>
+                </button>
+                <button class="campus-button" id="campus2"
+                    style="display:flex; align-items:center; background-color: white">
+                    <div class="campus-button-text">Cơ sở 2</div>
+                </button>
             </div>
             <div class="flex">
                 <div class="building">
@@ -213,7 +205,7 @@ function count_pdf_pages($pdfname)
                 <div class="printer">
                     <label class="choose-printer">Chọn máy in:</label>
                     <div>
-                        <select class="dropdown-menu" name="printer">
+                        <select class="dropdown-menu" name="printer" id="printer-select">
                             <option class="embed" value="id1">Choose Printers</option>
                         </select>
                     </div>
@@ -289,9 +281,25 @@ function count_pdf_pages($pdfname)
         function openFileInput() {
             document.getElementById("fileInput").click();
         }
+        // document.getElementById("fileInput").addEventListener("change", function () {
+        //     var fileName = this.files[0].name;
+        //     document.getElementById("uploadedFileName").textContent = fileName;
+        // });
         document.getElementById("fileInput").addEventListener("change", function () {
-            var fileName = this.files[0].name;
-            document.getElementById("uploadedFileName").textContent = fileName;
+            var fileInput = this;
+            if (fileInput.files.length > 0) {
+                var fileType = fileInput.files[0].type;
+                var allowedTypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'image/jpeg', 'image/png', 'application/pdf'];
+
+                if (!allowedTypes.includes(fileType)) {
+                    document.getElementById("uploadedFileName").textContent = 'Error: Invalid file type. Only .docx, .docm, .dotx, .dotm, .xlsx, .pptx, .jpg, .png, .jpeg, .pdf files are allowed.';
+                    // Clear the file input to prevent uploading the invalid file
+                    fileInput.value = '';
+                } else {
+                    var fileName = fileInput.files[0].name;
+                    document.getElementById("uploadedFileName").textContent = fileName;
+                }
+            }
         });
         function openAttributesForm() {
             window.open("printAttributes.php", "_blank", "width=1050,height=800");
@@ -344,6 +352,94 @@ function count_pdf_pages($pdfname)
                 });
             });
         });
+        var buttons = document.querySelectorAll('.campus-button');
+
+        // Add click event listener to each button
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Remove 'active' class from all buttons
+                buttons.forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
+
+                // Add 'active' class to the clicked button
+                this.classList.add('active');
+            });
+        });
+
+        document.getElementById("fileInput").addEventListener("change", function () {
+            var fileInput = this;
+            if (fileInput.files.length > 0) {
+                var fileType = fileInput.files[0].type;
+                var allowedTypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'image/jpeg', 'image/png', 'application/pdf'];
+
+                if (!allowedTypes.includes(fileType)) {
+                    document.getElementById("uploadedFileName").textContent = 'Error: Invalid file type. Only .docx, .docm, .dotx, .dotm, .xlsx, .pptx, .jpg, .png, .jpeg, .pdf files are allowed.';
+                    // Clear the file input to prevent uploading the invalid file
+                    fileInput.value = '';
+                } else {
+                    var fileName = fileInput.files[0].name;
+                    document.getElementById("uploadedFileName").textContent = fileName;
+
+                    // Get the number of pages for PDF and PPTX files
+                    if (fileType === 'application/pdf') {
+                        countPdfPages(fileInput.files[0]);
+                    } else if (fileType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+                        countPptxPages(fileInput.files[0]);
+                    } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                        countDocxPages(fileInput.files[0]);
+                    }
+                }
+            }
+        });
+
+        function countPdfPages(file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var pdfData = new Uint8Array(e.target.result);
+                var loadingTask = pdfjsLib.getDocument({ data: pdfData });
+                loadingTask.promise.then(function (pdf) {
+                    var numPages = pdf.numPages;
+                    document.getElementById("uploadedFileName").textContent += ' (' + numPages + ' pages)';
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function countPptxPages(file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var zip = new JSZip();
+                zip.loadAsync(e.target.result).then(function (zip) {
+                    zip.file('ppt/presentation.xml').async('string').then(function (xml) {
+                        var parser = new DOMParser();
+                        var xmlDoc = parser.parseFromString(xml, 'text/xml');
+                        var numSlides = xmlDoc.getElementsByTagName('p:sldId').length;
+                        document.getElementById("uploadedFileName").textContent += ' (' + numSlides + ' slides)';
+                    });
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // TODO: countDocxPages
+        // function countDocxPages(file) {
+        //     var reader = new FileReader();
+        //     reader.onload = function (e) {
+        //         var arrayBuffer = e.target.result;
+        //         var docxFile = new Uint8Array(arrayBuffer);
+        //         var options = { arrayBuffer: docxFile };
+
+        //         mammoth.extractRawText(options)
+        //             .then(function (result) {
+        //                 var text = result.value;
+        //                 var numPages = Math.ceil(text.length / 1800); // need to assume 
+        //                 document.getElementById("uploadedFileName").textContent += ' (' + numPages + ' pages)';
+        //             })
+        //             .done();
+        //     };
+        //     reader.readAsArrayBuffer(file);
+        // }
     </script>
 </body>
 

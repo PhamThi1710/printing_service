@@ -1,5 +1,5 @@
 <?php
-@include '../local/database.php';
+@include '../ConnectDB.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,21 +19,35 @@
     <!-- remix icon link -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!-- custom css file link -->
-    <link rel="stylesheet" type="text/css" href="/printing_service/local/style.css">
+    <link rel="stylesheet" type="text/css" href="../ActivityLog/actstyle.css">
+    <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 
-<body>
-    <!-- header section starts -->
+<body><!--onload="timer = setTimeout('auto_reload()',10000);">
+    <!- header section starts -->
 
     <section class="header">
-        <div class="logo">
-            <a href="#">
-                <img src="/printing_service/image/logo.png" alt="logo" />
-                <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
-            </a>
+        <div class="left-side">
+            <div class="logo">
+                <a href="#">
+                    <img src="../images/logo.png" alt="logo" />
+                    <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
+                </a>
+            </div>
+
+            <div class="menu-bar">
+                <div class="first-option"><a href="">trang chủ</a></div>
+                <div class="second-option"><a href="">dịch vụ của tôi</a></div>
+            </div>
         </div>
 
-        <a href="login.php" class="login">Đăng nhập</a>
+        <div class="right-side">
+            <div class="username">Username</div>
+            <div class="seperator">|</div>
+            <div>
+                <a href="login.php" class="login">Đăng xuất</a>
+            </div>
+        </div>
     </section>
     <!-- header section ends -->
 
@@ -43,15 +57,15 @@
     <!-- Send print request POP UP  -->
     <?php
 
-    if (isset($_GET['send_id'])) {
+    if(isset($_GET['send_id'])) {
         $send_id = $_GET['send_id'];
-        $getInfoToSend = mysqli_query($conn, "SELECT * FROM `requested_page_number` join requestprint on 
-        requested_page_number.requestid = requestprint.id join user on requestprint.userid = user.id join file on requestprint.fileid = file.id where requestid=$send_id");
+        $getInfoToSend = mysqli_query($conn, "SELECT * FROM `requested_page_numbers` join print_request on 
+        requested_page_numbers.Request_ID = print_request.id join file on print_request.File_ID = file.id join users on file.User_ID = users.ID where Request_ID=$send_id;");
         $getdata = $getInfoToSend->fetch_all(MYSQLI_ASSOC);
         $Now = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
         //  <!--End get data task -->
         echo '<div class="popup" id="sendprint_popup">
-            <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+            <img src="../images/message.jpg" width="50px" height="50px">
             <div class="popup_text">
                 <h3 style="margin-top:5%; color:var(--main-color)">Gửi yêu cầu in</h3>
                 <table>
@@ -60,7 +74,7 @@
                         <th class="title_"><i class="ri-timer-fill"></i>Thời gian hiện tại:</th>
                         </td>
                         <td>
-                          ' . $Now->format('Y-m-d H:i:s') . '
+                          '.$Now->format('Y-m-d H:i:s').'
                         </td>
                     </tr>
                     <tr>
@@ -68,7 +82,7 @@
                         <th class="title_"><i class="ri-user-fill"></i>Tên người dùng:</th>
                         </td>
                         <td>
-                           ' . $getdata[0]["fullname"] . '
+                           '.$getdata[0]['Lname'].$getdata[0]['Fname'].'
                         </td>
                     </tr>
                     <tr>
@@ -76,7 +90,7 @@
                         <th class="title_"><i class="ri-file-fill"></i>Tập tin đã chọn:</th>
                         </td>
                         <td>
-                           ' . $getdata[0]["name"] . '
+                           '.$getdata[0]["Name"].'
                         </td>
                     </tr>
                     <tr>
@@ -84,7 +98,7 @@
                         <th class="title_"><i class="ri-file-paper-2-fill"></i>Số mặt in:</th>
                         </td>
                         <td>
-                            ' . $getdata[0]["numbersides"] . ' 
+                            '.$getdata[0]["One/Doubled_Sided"].' 
                         </td>
                     </tr>
                     <tr>
@@ -92,7 +106,7 @@
                         <th class="title_"><i class="ri-file-copy-fill"></i>Số bản copy:</th>
                         </td>
                         <td>
-                            ' . $getdata[0]["numbercopies"] . '
+                            '.$getdata[0]["Number_Of_Copies"].'
                         </td>
                     </tr>
                     <tr>
@@ -100,7 +114,7 @@
                         <th class="title_"><i class="ri-file-list-3-fill"></i>Số trang trên một tờ giấy in:</th>
                         </td>
                         <td>
-                            ' . $getdata[0]["paper_per_sheet"] . '
+                            '.$getdata[0]["Pages_Per_Sheet"].'
                         </td>
                     </tr>
                     <tr>
@@ -108,14 +122,14 @@
                         <th class="title_"><i class="ri-file-paper-fill"></i>Khổ giấy:</th>
                         </td>
                         <td>
-                            ' . $getdata[0]["papersize"] . '
+                            '.$getdata[0]["Page_Size"].'
                         </td>
                     </tr>
                         <td>
                         <th class="title_"><i class="ri-money-dollar-circle-fill"></i>Số page bị trừ vào ví:</th>
                         </td>
                         <td>
-                            ' . $getdata[0]["total_sheet"] . '
+                            '.$getdata[0]["Total_Sheet"].'
                         </td>
                     <tr>
                         <td>
@@ -123,11 +137,11 @@
                         </td>
                         <td>';
         $display = "";
-        for ($i = 0; $i < count($getdata); $i++) {
-            if ($getdata[$i]['startpage'] != $getdata[$i]['endpage']) {
-                $display .= $getdata[$i]['startpage'] . "-" . $getdata[$i]['endpage'];
+        for($i = 0; $i < count($getdata); $i++) {
+            if($getdata[$i]['Start_Page'] != $getdata[$i]['End_Page']) {
+                $display .= $getdata[$i]['Start_Page']."-".$getdata[$i]['End_Page'];
             } else {
-                $display .= $getdata[$i]['startpage'];
+                $display .= $getdata[$i]['Start_Page'];
             }
             $display .= ",";
         }
@@ -138,9 +152,9 @@
                     </tr>
                 </table>
         <div class="button-group">
-            <button onclick="ClosePopup(\'sendprint_popup\')" class="button" type="button">Thoát</button>
+            <button onclick="ClosePopup(\'sendprint_popup\', \'activitylog.php\')" class="button" type="button">Thoát</button>
             <a href="#" type="button" class="button">Chỉnh sửa</a>
-            <a class="button" href="send_activitylog.php?send_confirm_id=' . $send_id . '" type="button">Xác nhận</a>
+            <a class="button" href="send_activitylog.php?send_confirm_id='.$send_id.'" type="button">Xác nhận</a>
         </div>
         </div>
     </div>';
@@ -149,17 +163,17 @@
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <!-- Confirm delete request POP UP -->
     <?php
-    if (isset($_GET['delete_id'])) {
+    if(isset($_GET['delete_id'])) {
         $delete_id = $_GET['delete_id'];
         echo ' <div class="popup" id="DELETE_popup">
-            <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+            <img src="../images/message.jpg" width="50px" height="50px">
             <div class="popup_text">
                 <h2 style="margin-top:5%; color:var(--main-color)">Message:</h2>
                 <h4 style="color:var(--text-color)">Bạn có chắc chắn muốn xóa không?</h4>
             </div>
             <div class="button-group">
-                <button onclick="ClosePopup(\'DELETE_popup\')" class="button" type="button">Thoát</button>
-                <a class="button" href="delete_activitylog.php?id=' . $delete_id . '">Xóa</a>
+                <button onclick="ClosePopup(\'DELETE_popup\',\'activitylog.php\')" class="button" type="button">Thoát</button>
+                <a class="button" href="delete_activitylog.php?id='.$delete_id.'">Xóa</a>
             </div>
         </div>';
     } ?>
@@ -167,7 +181,7 @@
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <!-- Delete multiple request POP UP -->
     <?php
-    if (isset($_GET['DELETE_range'])) {
+    if(isset($_GET['DELETE_range'])) {
         echo ' <div class="popup" id="DELETE_range">
         <img src="/printing_service/image/message.jpg" width="50px" height="50px">
         <div class="popup_text">
@@ -202,21 +216,21 @@
     </div>';
     }
     ;
-    if (isset($_GET['DELETE_particularDay'])) {
+    if(isset($_GET['DELETE_particularDay'])) {
         echo '<div class="popup" id="DELETE_particularDay">
-        <img src="/printing_service/image/message.jpg" width="50px" height="50px">
+        <img src="../images/message.jpg" width="50px" height="50px">
         <div class="popup_text">
             <div class="delete_range">
                 <div class="delete_range1">
                     <p>Chọn một ngày cụ thể:</p>
                 </div>
                 <div class="delete_range1"><i class="ri-calendar-2-fill"
-                        onclick="_(\'calendar\').classList.add(\'display_calendar\')"></i></div>
+                        onclick="_(\'calendar\').classList.toggle(\'display_calendar\')"></i></div>
 
             </div>
             <div class="button-group">
                 <button onclick="deleteActiveClass()" class="button" type="button">Xác nhận xóa</button>
-                <button onclick="ClosePopup(\'DELETE_particularDay\')" class="button" type="button">Thoát</button>
+                <button onclick="ClosePopup(\'DELETE_particularDay\',\'activitylog.php\')" class="button" type="button">Thoát</button>
             </div>
             <p style="font-size:10px">Note: Chỉ có thể xóa các yêu cầu in ở trạng thái "Đã hoàn thành" </p>
             <div class="wrapper" id="calendar">
@@ -243,46 +257,35 @@
         </div>
     </div>';
     } ?>
-
     <script>
         function deleteActiveClass() {
             var listActiveDays = document.querySelectorAll('.active');
             for (var i = 0; i < listActiveDays.length; ++i) {
                 let date = listActiveDays[i].textContent;
                 const splitDate = date.split(" ");
-                $.post("delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] },
-                    function (data, status) {
-                        ClosePopup('DELETE_particularDay');
-                        alert("\nStatus: " + status);
-                    });
+                $.post(" delSelectDay.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] });
             }
+            ClosePopup('DELETE_particularDay');
+            auto_reload('../ActivityLog/activitylog.php');
         }
     </script>
     <!-- END Delete multiple request POP UP  -->
     <!-- END POP UP -->
 
     <?php
-    $result = mysqli_query($conn, "select perform.requestid as requestid, perform.id, perform.starttime, perform.endtime,file.name as filename, 
-    file.totalpage, requestprint.numbersides, requestprint.numbercopies, requestprint.paper_per_sheet, requestprint.papersize, requestprint.total_sheet,
-     printer.model as printer_model,requestprint.state as state_requestprint from perform join requestprint on perform.requestid = requestprint.id
-      join printer on perform.printerId = printer.id join file on requestprint.fileid = file.id order by starttime desc;");
+    $result = mysqli_query($conn, "CALL displayLog('1');");
     $data = $result->fetch_all(MYSQLI_ASSOC);
     ?>
-    <div class="body">
-        <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN</h2>
+    <div class="body-side">
+        <h1>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN</h1>
         <section>
-            <table border="1" id="user_log_table" style="overflow-y:scroll; height:300px;display:block;">
+            <input type="text" id="searchInput" onkeyup="search()" placeholder="Search for file name..">
+            <table border="1" id="user_table">
                 <colgroup>
-                    <col span="2" style="width: 240px">
-                    <col style="width:200px">
-                    <col span="6" style="width: 100px;">
-                    <col span="3" style="width: 170px">
+                    <col span="3" style="width: 280px">
+                    <col span="6" style="width: 120px;">
+                    <col span="3" style="width: 150px">
                 </colgroup>
-                <style>
-                    #user_log_table {
-                        table-layout: fixed;
-                    }
-                </style>
                 <thead>
                     <tr>
                         <th>Thời gian bắt đầu in</th>
@@ -300,10 +303,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (empty($data)) {
+                    <?php if(empty($data)) {
                         echo "<p style='border:None; color:var(--text-color); font-weight:500; font-size:17px;'>Nhật ký của bạn hiện đang trống!</p>";
                     } else
-                        foreach ($data as $row): ?>
+                        foreach($data as $row): ?>
                             <tr>
                                 <td>
                                     <?= $row['starttime'] ?>
@@ -338,12 +341,14 @@
                                 </td>
                                 <td>
                                     <?php
-                                    if ($row['state_requestprint'] == '0')
+                                    if($row['state_requestprint'] == '0')
                                         $state = '<a  class="payment_link_text">Đã lưu</a>';
-                                    else if ($row['state_requestprint'] == '1')
+                                    else if($row['state_requestprint'] == '2')
                                         $state = 'Đã hoàn thành';
-                                    else
+                                    else if($row['state_requestprint'] == '1')
                                         $state = 'Đã gửi in';
+                                    else
+                                        $state = 'Lỗi';
                                     ?>
                                     <?= $state ?>
                                 </td>
@@ -353,8 +358,8 @@
                                         <div class="dropdown-content">
                                             <a href="activitylog.php?send_id=<?= $row['requestid'] ?>">Send</a>
                                             <?php
-                                            if ($row['state_requestprint'] == '0' || $row['state_requestprint'] == '1')
-                                                echo '<a href="activitylog.php?delete_id=' . $row['id'] . '">Delete</a>';
+                                            if($row['state_requestprint'] == '0' || $row['state_requestprint'] == '1')
+                                                echo '<a href="activitylog.php?delete_id='.$row['requestid'].'">Delete</a>';
                                             ?>
                                         </div>
                                     </div>
@@ -363,7 +368,7 @@
                         <?php endforeach ?>
                 </tbody>
             </table>
-            <div class="dropdown" style="float:right; margin: 1%; padding:0.3%">
+            <div class="dropdown" style="float:right; margin: 1%; padding:0.3%; display:none;">
                 <button type="button" class="button" id="delete_multi"><i class="ri-arrow-down-s-fill dropbtn"></i>Xóa
                     nhiều file</button>
                 <div class="dropdown-content">
@@ -377,11 +382,11 @@
 
     <!-- footer section starts -->
     <div class="footer-container">
-        <section class="footer">
+        <section class="footer" style="background: url(../images/footer-bg.jpg);">
             <div class="box-container">
                 <div class="box">
                     <h3>STUDENT SMART PRINTING SERVICE</h3>
-                    <img src="/printing_service/image/logo.png" alt="logo" />
+                    <img src="../images/logo.png" alt="logo" />
                 </div>
 
                 <div class="box">
@@ -417,8 +422,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <!-- custom js file link -->
-    <!--<script src="activitylog_script.js"></script>-->
-    <script src="/printing_service/local/script.js"></script>
+    <script src="../ActivityLog/script.js"></script>
     <!--jquery cdn link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 

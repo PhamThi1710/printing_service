@@ -20,7 +20,6 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!-- custom css file link -->
     <link rel="stylesheet" type="text/css" href="../local/style.css">
-    <link rel="stylesheet" type="text/css" href="../SPSO_log/spsolog_style.css">
 </head>
 
 <body>
@@ -37,95 +36,61 @@
         <a href="login.php" class="login">Đăng nhập</a>
     </section>
     <!-- header section ends -->
-    <?php
-    $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
-    requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
-    from perform join requestprint on perform.requestid = requestprint.id 
-    join printer on perform.printerId = printer.id 
-    join file on requestprint.fileid = file.id 
-    join user on requestprint.userid = user.id order by starttime desc;");
-    ?>
-    <div class="body">
+
+    <div class="body-side">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
-        <div style="float:right; width:500px;height:30px; margin-right:5%;">
-            <div class="delete_range"
-                style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
-                <div class="delete_range1" style="float: left;width: 70%;">
-                    <p style="font-size:15px">Chọn ngày bắt đầu</p>
-                </div>
-                <div class="delete_range1" style="float: right;width: 30%;"><i class="ri-calendar-2-fill"
-                        onclick="_('calendar-start').classList.add('display_calendar')"></i>
-
-                </div>
-
-            </div>
-            <div class="wrapper" id="calendar-start">
-                <div class="header-calendar">
-                    <p class="current-date"></p>
-                    <div class="icons">
-                        <i id="prev" class="ri-arrow-left-line"></i>
-                        <i id="next" class="ri-arrow-right-line"></i>
-                    </div>
-                </div>
-                <div class="calendar">
-                    <ul class="weeks">
-                        <li>Sun</li>
-                        <li>Mon</li>
-                        <li>Tue</li>
-                        <li>Wed</li>
-                        <li>Thu</li>
-                        <li>Fri</li>
-                        <li>Sat</li>
-                    </ul>
-                    <ul class="days"></ul>
-                </div>
-            </div>
-            <div class="delete_range"
-                style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
-                <div class="delete_range1" style="float: left;width: 70%;">
-                    <p style="font-size:15px">Chọn ngày kết thúc</p>
-                </div>
-                <div class="delete_range1" style="float: left;width: 30%;"><i class="ri-calendar-2-fill"
-                        onclick="_('calendar-end').classList.add('display_calendar')"></i></div>
-
-            </div>
-            <div class="wrapper" id="calendar-end">
-                <div class="header-calendar">
-                    <p class="current-date"></p>
-                    <div class="icons">
-                        <i id="prev" class="ri-arrow-left-line"></i>
-                        <i id="next" class="ri-arrow-right-line"></i>
-                    </div>
-                </div>
-                <div class="calendar">
-                    <ul class="weeks">
-                        <li>Sun</li>
-                        <li>Mon</li>
-                        <li>Tue</li>
-                        <li>Wed</li>
-                        <li>Thu</li>
-                        <li>Fri</li>
-                        <li>Sat</li>
-                    </ul>
-                    <ul class="days"></ul>
-                </div>
+        <div style="width:800px;height:30px; ">
+            <div>
+                <form id="wrapper-selectDate" action="../SPSO_log/spso_log.php" method="post">
+                    <p style="font-size:15px">Chọn ngày bắt đầu:</p>
+                    <input type="date" id="selectedDate" name="startday" />
+                    <p style="font-size:15px">Chọn ngày kết thúc:</p>
+                    <input type="date" id="selectedDate" name="endday" />
+                    <p><button class="button" type="submit">Submit</button></p>
+                </form>
+                <form action="../SPSO_log/spso_log.php" method="post">
+                    <input class="button" type="submit" name="all" value="Xem tất cả" />
+                </form>
             </div>
         </div>
+        <style>
+            #spso_log_table {
+                table-layout: fixed;
+            }
 
+            #spso_log_table col {
+                width: 240px;
+            }
+
+            #spso_log_table thead th {
+                padding: 10px;
+            }
+
+            #spso_log_table tbody tr td {
+                padding: 10px;
+            }
+
+            #wrapper-selectDate {
+                display: flex;
+            }
+
+            #wrapper-selectDate p,
+            #wrapper-selectDate input {
+                margin-right: 1%;
+            }
+
+            #wrapper-selectDate p {
+                color: var(--main-color);
+                font-weight: 600;
+            }
+        </style>
         <section>
+
             <table border="1" id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
                 <colgroup>
                     <col span="6">
                 </colgroup>
-                <style>
-                    #spso_log_table {
-                        table-layout: fixed;
-                    }
 
-                    #spso_log_table col {
-                        width: 240px;
-                    }
-                </style>
                 <thead>
                     <tr>
                         <th>Tên sinh viên</th>
@@ -136,60 +101,88 @@
                         <th>Trạng thái</th>
                     </tr>
                 </thead>
-                <?php $data = $result->fetch_all(MYSQLI_ASSOC);
-                foreach ($data as $row): ?>
-                    <tbody>
+                <tbody>
+                    <?php
+                    function changeNumForm($date)
+                    {
+                        if ($date / 10 == 0)
+                            $res = '0' . $date;
+                        else
+                            $res = $date;
+                        return $res;
+                    }
+                    function handle_date($date)
+                    {
+                        $date = explode("-", $date);
+                        $getDay = changeNumForm($date[2]);
+                        $getMonth = changeNumForm($date[1]);
+                        $getYear = $date[0];
+                        return array($getYear, $getMonth, $getDay);
+
+                    }
+                    if (isset($_POST['startday']) && isset($_POST['endday'])) {
+                        list($start_Year, $start_Month, $start_Day) = handle_date($_POST['startday']);
+                        list($end_Year, $end_Month, $end_Day) = handle_date($_POST['endday']);
+                        $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
+                            requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
+                            from perform join requestprint on perform.requestid = requestprint.id 
+                            join printer on perform.printerId = printer.id 
+                            join file on requestprint.fileid = file.id 
+                            join user on requestprint.userid = user.id
+                                where starttime between '$start_Year-$start_Month-$start_Day 00:00:00' and '$end_Year-$end_Month-$end_Day 23:59:00' order by starttime desc;");
+                    } else {
+                        $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
+                        requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
+                        from perform join requestprint on perform.requestid = requestprint.id 
+                        join printer on perform.printerId = printer.id 
+                        join file on requestprint.fileid = file.id 
+                        join user on requestprint.userid = user.id order by starttime desc;");
+                    }
+                    $data = $result->fetch_all(MYSQLI_ASSOC);
+                    foreach ($data as $row) {
+                        echo '
                         <tr>
                             <td>
-                                <?= $row['student_name'] ?>
+                                ' . $row["student_name"] . '
                             </td>
                             <td>
-                                <?= $row['filename'] ?>
+                                ' . $row['filename'] . '
                             </td>
                             <td>
-                                <?= $row['total_sheet'] ?>
+                                ' . $row['total_sheet'] . '
                             </td>
                             <td>
-                                <?= $row['starttime'] ?>
+                                ' . $row['starttime'] . '
                             </td>
                             <td>
-                                <?= $row['endtime'] ?>
+                                ' . $row['endtime'] . '
                             </td>
-
-                            <td>
-                                <?php
-                                if ($row['state_requestprint'] == '0')
-                                    $state = '<a  class="payment_link_text">Đã lưu</a>';
-                                else if ($row['state_requestprint'] == '1')
-                                    $state = 'Đã hoàn thành';
-                                else
-                                    $state = 'Đã gửi in';
-                                ?>
-                                <?= $state ?>
+                            <td> ';
+                        if ($row['state_requestprint'] == '0')
+                            $state = '<a  class="payment_link_text">Đã lưu</a>';
+                        else if ($row['state_requestprint'] == '1')
+                            $state = 'Đã hoàn thành';
+                        else
+                            $state = 'Đã gửi in';
+                        echo $state;
+                        echo '
                             </td>
-                        </tr>
-                    <?php endforeach ?>
+                        </tr> 
+                 ';
+                    }
+                    ?>
                 </tbody>
             </table>
-            <div>
-                <button style="float:right; margin: 1%; padding:0.3%" class="button" type="button">Xem nhật ký máy
-                    in</button>
-            </div>
         </section>
     </div>
     <style>
         /* Design Calendar */
-        #calendar-start,
-        #calendar-end {
-            width: 250px;
+        #calendar-start {
             background-color: #ffffff;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 15px;
             text-align: center;
-            transition: all 2s ease;
             border-radius: 0%;
-            display: none;
+            z-index: 100000;
+            display: block;
         }
 
         #calendar-start .days li.today,

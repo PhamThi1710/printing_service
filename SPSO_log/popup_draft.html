@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../local/style.css">
-    <link rel="stylesheet" href="../SPSO_log/spsolog_style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 
@@ -15,74 +14,31 @@
         <!--POP UP -->
         <!--End get data task -->
         <div class="body">
-            <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
-            <div style="float:right; width:50%;height:30px; margin-right:5%;">
-                <div class="delete_range"
-                    style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
-                    <div>
-                        <div class="delete_range1" style="float: left;width: 70%;">
-                            <p>Chọn ngày bắt đầu</p>
-                        </div>
-                        <div class="delete_range1" style="float: right;width: 30%;"><i class="ri-calendar-2-fill"
-                                onclick="_('calendar-start').classList.add('display_calendar')"></i>
-                        </div>
-                    </div>
-                    <div class="wrapper" id="calendar-start">
-                        <div class="header-calendar">
-                            <p class="current-date"></p>
-                            <div class="icons">
-                                <i id="prev" class="ri-arrow-left-line"></i>
-                                <i id="next" class="ri-arrow-right-line"></i>
-                            </div>
-                        </div>
-                        <div class="calendar">
-                            <ul class="weeks">
-                                <li>Sun</li>
-                                <li>Mon</li>
-                                <li>Tue</li>
-                                <li>Wed</li>
-                                <li>Thu</li>
-                                <li>Fri</li>
-                                <li>Sat</li>
-                            </ul>
-                            <ul class="days"></ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="delete_range"
-                    style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
-                    <div>
-                        <div class="delete_range1" style="float: left;width: 70%;">
-                            <p>Chọn ngày kết thúc</p>
-                        </div>
-                        <div class="delete_range1" style="float: left;width: 30%;"><i class="ri-calendar-2-fill"
-                                onclick="_('calendar-end').classList.add('display_calendar')"></i></div>
-
-                    </div>
-                    <div class="wrapper" id="calendar-end">
-                        <div class="header-calendar">
-                            <p class="current-date"></p>
-                            <div class="icons">
-                                <i id="prev" class="ri-arrow-left-line"></i>
-                                <i id="next" class="ri-arrow-right-line"></i>
-                            </div>
-                        </div>
-                        <div class="calendar">
-                            <ul class="weeks">
-                                <li>Sun</li>
-                                <li>Mon</li>
-                                <li>Tue</li>
-                                <li>Wed</li>
-                                <li>Thu</li>
-                                <li>Fri</li>
-                                <li>Sat</li>
-                            </ul>
-                            <ul class="days"></ul>
-                        </div>
-                    </div>
+            <div style="width:800px;height:30px; ">
+                <div>
+                    <form id="wrapper-selectDate" action="../SPSO_log/spso_log.php" method="post">
+                        <p style="font-size:15px">Chọn ngày bắt đầu:</p>
+                        <input type="date" id="selectedDate" name="startday" />
+                        <p style="font-size:15px">Chọn ngày kết thúc:</p>
+                        <input type="date" id="selectedDate" name="endday" />
+                        <p><button class="button" type="submit">Submit</button></p>
+                    </form>
+                    <form action="../SPSO_log/spso_log.php" method="post">
+                        <input class="button" type="submit" name="all" value="Xem tất cả" />
+                    </form>
                 </div>
             </div>
         </div>
+        <style>
+            #wrapper-selectDate {
+                display: flex;
+            }
+
+            #wrapper-selectDate p,
+            #wrapper-selectDate input {
+                margin-right: 1%;
+            }
+        </style>
     </div>
     <script src="../local/script.js"></script>
     <!--jquery cdn link-->

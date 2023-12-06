@@ -82,7 +82,7 @@ section {
 }
 
 .footer {
-  background: url(/image/footer-bg.jpg) no-repeat;
+  background: url(/images/footer-bg.jpg) no-repeat;
   background-size: cover;
   background-position: center;
 }
@@ -131,7 +131,7 @@ section {
 }
 
 .location-icon {
-  background: url("/image/211854_location_icon.svg") no-repeat;
+  background: url("/images/211854_location_icon.svg") no-repeat;
   display: block;
   width: 26px;
   height: 26px;
@@ -139,7 +139,7 @@ section {
 }
 
 .phone-icon {
-  background: url("/image/1608790_phone_icon.svg") no-repeat;
+  background: url("/images/1608790_phone_icon.svg") no-repeat;
   display: block;
   width: 16px;
   height: 16px;
@@ -147,7 +147,7 @@ section {
 }
 
 .email-icon {
-  background: url("/image/8665305_envelope_email_icon.svg") no-repeat;
+  background: url("/images/8665305_envelope_email_icon.svg") no-repeat;
   display: block;
   width: 16px;
   height: 16px;
@@ -213,17 +213,6 @@ section {
   color: var(--color-dimgray);
 }
 
-.campus-button::before {
-  content: "";
-  display: flex;
-  height: 10px;
-  width: 10px;
-  margin-right: 5px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: 1px solid #000;
-  color: var(--color-dimgray);
-}
 
 .campus-button:active {
   background-color: #000;
@@ -472,26 +461,6 @@ section {
   width: 109px;
   font-size: var(--font-size-base);
   color: var(--color-dimgray);
-}
-
-.campus-button::before {
-  content: "";
-  display: flex;
-  height: 10px;
-  width: 10px;
-  margin-right: 5px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: 1px solid #000;
-  color: var(--color-dimgray);
-}
-
-.campus-button:active {
-  background-color: #000;
-  color: #fff;
-}
-.campus-button.selected {
-  color: #000;
 }
 
 .campus-container {
@@ -776,4 +745,34 @@ section {
   display: none;
   color:#095195;
   font-weight: bold;
+}
+
+.campus-button::before {
+  content: "";
+  display: flex;
+  height: 15px;
+  width: 15px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.campus-button-text {
+  letter-spacing: 0.02em;
+  line-height: 26.67px;
+  font-weight: 500;
+  display: inline-block; /* or display: inline-block; */
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.campus-button.active::before {
+  background-color: black;
+  /* Other styles for the circle when the button is active */
 }

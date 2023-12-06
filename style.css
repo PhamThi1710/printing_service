@@ -1,6 +1,6 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 :root {
     --fontColor: #676c70;
     --main-color: #676c70;
@@ -8,14 +8,14 @@
     --white: #fff;
     --light-black: #777;
     --light-white: #fff9;
-    --dark-bg: rgba(0,0,0,.7);
+    --dark-bg: rgba(0, 0, 0, .7);
     --light-bg: #eee;
     --border: .1rem solid var(--black);
-    --box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
-    --text-shadow: 0 1.5rem 3rem rgba(0,0,0,.3);
+    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+    --text-shadow: 0 1.5rem 3rem rgba(0, 0, 0, .3);
     --button-background: #428ACA;
     --blue: #156CC0;
-    --red: #E61313; 
+    --red: #E61313;
     --line-color: rgba(103, 108, 112, 0.5);
 }
 
@@ -41,7 +41,9 @@ section {
 
 .header {
     position: sticky;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
     background-color: var(--white);
     display: flex;
@@ -58,33 +60,33 @@ section {
     align-items: center;
 }
 
-.header .left-side .logo a{
+.header .left-side .logo a {
     display: flex;
     align-items: center;
 }
 
-.header .left-side .logo p{
+.header .left-side .logo p {
     font-size: 16px;
     font-weight: bold;
     color: var(--fontColor);
     margin-left: 16px;
 }
 
-.header .left-side .logo img{
+.header .left-side .logo img {
     width: 55px;
 }
 
-.header .right-side .login{
+.header .right-side .login {
     font-size: 16px;
     color: #106BBF;
 }
 
-.header .right-side .login:hover{
+.header .right-side .login:hover {
     color: #095195;
     text-decoration: underline;
 }
 
-.header .right-side{
+.header .right-side {
     display: flex;
     flex-flow: wrap;
     align-items: center;
@@ -92,7 +94,8 @@ section {
     justify-content: space-around;
 }
 
-.header .right-side .username, .header .right-side .seperator{
+.header .right-side .username,
+.header .right-side .seperator {
     font-size: 16px;
 }
 
@@ -133,7 +136,7 @@ section {
     min-height: 582px;
 }
 
-.body h1 {
+/*.body h1 {
     font-size: 26px;
     color: var(--fontColor);
     text-transform: uppercase;
@@ -161,7 +164,7 @@ section {
 
 .body .service-list .last-service {
     border-bottom: 1px solid var(--line-color);
-}
+}*/
 
 
 
@@ -181,7 +184,7 @@ section {
 
 
 
-  
+
 .footer {
     background: url(images/footer-bg.jpg) no-repeat;
     background-size: cover;
@@ -215,7 +218,10 @@ section {
     height: 100px;
 }
 
-.hcmut:hover, .mybk:hover, .bksi:hover, .email:hover {
+.hcmut:hover,
+.mybk:hover,
+.bksi:hover,
+.email:hover {
     text-decoration: underline;
 }
 
@@ -271,6 +277,7 @@ section {
     html {
         font-size: 55%;
     }
+
     section {
         padding: 3rem 2rem;
     }
@@ -289,7 +296,9 @@ section {
 
     .header .navbar {
         position: absolute;
-        top: 99%; left: 0; right: 0;
+        top: 99%;
+        left: 0;
+        right: 0;
         background-color: var(--white);
         border-top: var(--border);
         padding: 2rem;
