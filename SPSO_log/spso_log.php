@@ -1,6 +1,5 @@
 <?php
 @include '../local/database.php';
-@include '../SPSO_log/displayDate.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,44 +37,55 @@
     </section>
     <!-- header section ends -->
 
-    <div class="body">
+    <div class="body-side">
         <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
         <div style="width:800px;height:30px; ">
-            <div class="delete_range"
-                style="width: 50%;align-items: left;text-align: left; padding: 0;margin: 0;float:left">
-                <div class="delete_range1" style="float: left;width: 70%;">
-                    <p style="font-size:15px">Chọn ngày muốn xem:</p>
-                </div>
-                    <input type="date"  max="2023-11-23" />
+            <div>
+                <form id="wrapper-selectDate" action="../SPSO_log/spso_log.php" method="post">
+                    <p style="font-size:15px">Chọn ngày bắt đầu:</p>
+                    <input type="date" id="selectedDate" name="startday" />
+                    <p style="font-size:15px">Chọn ngày kết thúc:</p>
+                    <input type="date" id="selectedDate" name="endday" />
+                    <p><button class="button" type="submit">Submit</button></p>
+                </form>
+                <form action="../SPSO_log/spso_log.php" method="post">
+                    <input class="button" type="submit" name="all" value="Xem tất cả" />
+                </form>
             </div>
         </div>
-        <script>
-            const date_value = document.getElementById("selectedDate");
-            date_value.addEventListener('change', function () {
-                var date = date_value.value;
-                const splitDate = date.split("-");
-                $.post("spso_log.php", { day: splitDate[0], month: splitDate[1], year: splitDate[2] });
-                auto_reload("../SPSO_log/spso_log.php")
-            })
-        </script>
+        <style>
+            #spso_log_table {
+                table-layout: fixed;
+            }
+
+            #spso_log_table col {
+                width: 240px;
+            }
+
+            #spso_log_table thead th {
+                padding: 10px;
+            }
+
+            #spso_log_table tbody tr td {
+                padding: 10px;
+            }
+
+            #wrapper-selectDate {
+                display: flex;
+            }
+
+            #wrapper-selectDate p,
+            #wrapper-selectDate input {
+                margin-right: 1%;
+            }
+
+            #wrapper-selectDate p {
+                color: var(--main-color);
+                font-weight: 600;
+            }
+        </style>
         <section>
-            <style>
-                #spso_log_table {
-                    table-layout: fixed;
-                }
 
-                #spso_log_table col {
-                    width: 240px;
-                }
-
-                #spso_log_table thead th {
-                    padding: 10px;
-                }
-
-                #spso_log_table tbody tr td {
-                    padding: 10px;
-                }
-            </style>
             <table border="1" id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
                 <colgroup>
                     <col span="6">
@@ -91,38 +101,76 @@
                         <th>Trạng thái</th>
                     </tr>
                 </thead>
-                <?php $data = $result->fetch_all(MYSQLI_ASSOC);
-                foreach ($data as $row): ?>
-                    <tbody>
+                <tbody>
+                    <?php
+                    function changeNumForm($date)
+                    {
+                        if ($date / 10 == 0)
+                            $res = '0' . $date;
+                        else
+                            $res = $date;
+                        return $res;
+                    }
+                    function handle_date($date)
+                    {
+                        $date = explode("-", $date);
+                        $getDay = changeNumForm($date[2]);
+                        $getMonth = changeNumForm($date[1]);
+                        $getYear = $date[0];
+                        return array($getYear, $getMonth, $getDay);
+
+                    }
+                    if (isset($_POST['startday']) && isset($_POST['endday'])) {
+                        list($start_Year, $start_Month, $start_Day) = handle_date($_POST['startday']);
+                        list($end_Year, $end_Month, $end_Day) = handle_date($_POST['endday']);
+                        $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
+                            requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
+                            from perform join requestprint on perform.requestid = requestprint.id 
+                            join printer on perform.printerId = printer.id 
+                            join file on requestprint.fileid = file.id 
+                            join user on requestprint.userid = user.id
+                                where starttime between '$start_Year-$start_Month-$start_Day 00:00:00' and '$end_Year-$end_Month-$end_Day 23:59:00' order by starttime desc;");
+                    } else {
+                        $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
+                        requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
+                        from perform join requestprint on perform.requestid = requestprint.id 
+                        join printer on perform.printerId = printer.id 
+                        join file on requestprint.fileid = file.id 
+                        join user on requestprint.userid = user.id order by starttime desc;");
+                    }
+                    $data = $result->fetch_all(MYSQLI_ASSOC);
+                    foreach ($data as $row) {
+                        echo '
                         <tr>
                             <td>
-                                <?= $row['student_name'] ?>
+                                ' . $row["student_name"] . '
                             </td>
                             <td>
-                                <?= $row['filename'] ?>
+                                ' . $row['filename'] . '
                             </td>
                             <td>
-                                <?= $row['total_sheet'] ?>
+                                ' . $row['total_sheet'] . '
                             </td>
                             <td>
-                                <?= $row['starttime'] ?>
+                                ' . $row['starttime'] . '
                             </td>
                             <td>
-                                <?= $row['endtime'] ?>
+                                ' . $row['endtime'] . '
                             </td>
-                            <td>
-                                <?php
-                                if ($row['state_requestprint'] == '0')
-                                    $state = '<a  class="payment_link_text">Đã lưu</a>';
-                                else if ($row['state_requestprint'] == '1')
-                                    $state = 'Đã hoàn thành';
-                                else
-                                    $state = 'Đã gửi in';
-                                ?>
-                                <?= $state ?>
+                            <td> ';
+                        if ($row['state_requestprint'] == '0')
+                            $state = '<a  class="payment_link_text">Đã lưu</a>';
+                        else if ($row['state_requestprint'] == '1')
+                            $state = 'Đã hoàn thành';
+                        else
+                            $state = 'Đã gửi in';
+                        echo $state;
+                        echo '
                             </td>
-                        </tr>
-                    <?php endforeach ?>
+                        </tr> 
+                 ';
+                    }
+                    ?>
                 </tbody>
             </table>
         </section>

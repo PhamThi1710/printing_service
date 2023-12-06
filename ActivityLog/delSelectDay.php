@@ -1,5 +1,5 @@
 <?php
-@include '../local/database.php';
+@include '../ConnectDB.php';
 if (isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year'])) {
     if ($_POST['day'] / 10 == 0)
         $day = '0' . $_POST['day'];
