@@ -232,10 +232,10 @@ if (isset($_POST['campus'])) {
                     </div>
                 </div>
             </div>
-            <button class="printer-short-desc confirm-button">
+            <!-- <button class="printer-short-desc confirm-button">
                 <p>Xac nhan</p>
                 <a href="sendRequest/php"></a>
-            </button>
+            </button> -->
         </div>
     </section>
     <!-- main section ends -->

@@ -178,7 +178,6 @@
         });
 
 
-
         $(document).ready(function () {
 
             // Event handler for the "Xác nhận" button
@@ -189,6 +188,9 @@
                 var pageLayoutOption = $('.page-layout .size-selected').text();
                 var numOfCopiesOption = $('#copy-input').val();
                 var printerId = $('#printer-select').val();
+                var pagesToPrintOption = $('#pages-input').val();
+
+                var fileId = btoa(uploadedFileName);
 
                 // Decode the entered pages
                 var pagesToPrintOption = $('#pages-input').val();
@@ -213,10 +215,11 @@
                         url: 'sendPrintAttributes.php',
                         method: 'POST',
                         data: {
+                            fileId: fileId,
                             duplexOption: duplexOption,
                             orientationOption: orientationOption,
                             pageLayoutOption: pageLayoutOption,
-                            pagesToPrintOption: pageQuery,
+                            pagesToPrintOption: pagesToPrintOption,
                             numOfCopiesOption: numOfCopiesOption,
                             printerId: printerId
                         },
@@ -231,7 +234,7 @@
                     });
                 }
             });
-
+        });
     </script>
 </body>
 
