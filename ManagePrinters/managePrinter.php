@@ -109,7 +109,8 @@ if (isset($_POST['campus'])) {
                 <div class="printer-state-box">
                     <div class="printer-short-desc">
                         <img class="print-icon" alt="" src="/images/printer-icon.svg" />
-                        <p>Máy in số 1 - H6 - 101</p>
+                        <!-- <p>Máy in số 1 - H6 - 101</p> -->
+                        <p id="printer-info"></p>
                     </div>
                     <div class="printer-desc">
                         <div class="printer-id">
@@ -233,6 +234,23 @@ if (isset($_POST['campus'])) {
                 });
             });
         });
+
+        $(document).ready(function () {
+            $('select[name="printer"]').change(function () {
+                var selectedPrinter = $(this).val();
+                var printerId = selectedPrinter.substring(1); // Ignore the first character
+                var building = printerId.substring(0, 2); // Next two will be the building
+                var room = printerId.substring(2, 5); // Next three will be the room
+                var printerNumber = printerId.substring(5); // The remaining will be printer number
+
+                // Update the printer information in the HTML
+                $('#printer-info').text('Máy In Số ' + printerNumber + ' - ' + building + ' - ' + room);
+            });
+        });
+
+
+
+
         $(document).ready(function () {
             $('select[name="printer"]').change(function () {
                 var selectedPrinter = $(this).val();
