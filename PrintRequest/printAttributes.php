@@ -25,7 +25,7 @@
             <div class="pages-to-print">
                 <div class="group-container">
                     <div class="rectangle-parent4">
-                        <div class="input" id="pages-input">input</div>
+                        <div class="input" id="pages-input">pages</div>
                     </div>
                     <button class="pages-button choose-option button-unselected" id="button-pages">
                         <div class="pages">Pages</div>
@@ -36,6 +36,13 @@
                 </button>
             </div>
             <div class="pages-to-print1">Pages to Print</div>
+        </div>
+        <div class="copy-num">
+            <div class="rectangle-parent4">
+                <div class="input-text">Num. of copies:</div>
+                <input type="text" id="copy-input" class="input-copy">
+
+            </div>
         </div>
         <div class="duplex">
             <div class="duplex-printing">Duplex Printing</div>
@@ -152,6 +159,79 @@
                 $(this).removeClass('size-unselected').addClass('size-selected');
             });
         });
+
+        // Allow only integer input for copy-input field
+        document.getElementById("copy-input").addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, "");
+        });
+
+        //TODO: test regex (despair), need to sort out pages sent to print and such
+        $(document).ready(function () {
+            $('#pages-input').on('keypress', function (e) {
+                var key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                var regex = /^(\d+(-[0-9]+)?)(,\s*\d+(-[0-9]+)?)*$/;
+                var input = $(this).val() + key;
+                if (key !== ',' && key !== '-' && key !== ' ' && !regex.test(input)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+
+
+        $(document).ready(function () {
+
+            // Event handler for the "Xác nhận" button
+            $('.duplex-text').click(function () {
+                // Retrieve the selected options
+                var duplexOption = $('.duplex-yes').hasClass('button-selected') ? 'Yes' : 'No';
+                var orientationOption = $('.group-parent .button-selected').text();
+                var pageLayoutOption = $('.page-layout .size-selected').text();
+                var numOfCopiesOption = $('#copy-input').val();
+                var printerId = $('#printer-select').val();
+
+                // Decode the entered pages
+                var pagesToPrintOption = $('#pages-input').val();
+                var pagesArray = pagesToPrintOption.split(',');
+                var pagesQueryArray = [];
+
+                for (var i = 0; i < pagesArray.length; i++) {
+                    var pageRange = pagesArray[i].trim().split('-');
+                    if (pageRange.length === 1) {
+                        pagesQueryArray.push('page ' + pageRange[0]);
+                    } else if (pageRange.length === 2) {
+                        pagesQueryArray.push('page ' + pageRange[0] + ' to ' + pageRange[1]);
+                    }
+                }
+
+                // Send each page query as a separate request
+                for (var j = 0; j < pagesQueryArray.length; j++) {
+                    var pageQuery = pagesQueryArray[j];
+
+                    // Send the print attributes to the server-side script
+                    $.ajax({
+                        url: 'sendPrintAttributes.php',
+                        method: 'POST',
+                        data: {
+                            duplexOption: duplexOption,
+                            orientationOption: orientationOption,
+                            pageLayoutOption: pageLayoutOption,
+                            pagesToPrintOption: pageQuery,
+                            numOfCopiesOption: numOfCopiesOption,
+                            printerId: printerId
+                        },
+                        success: function (response) {
+                            // Handle the response from the server
+                            console.log(response);
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle any errors
+                            console.error(error);
+                        }
+                    });
+                }
+            });
+
     </script>
 </body>
 
