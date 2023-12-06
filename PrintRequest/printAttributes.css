@@ -40,6 +40,7 @@
   letter-spacing: 0.02em;
   line-height: 26.67px;
 }
+.orientation-box,
 .duplex-box,
 .rectangle-group {
   position: absolute;
@@ -48,6 +49,7 @@
   width: 150px;
   height: 44px;
 }
+.orientation-box,
 .duplex-box {
   position: absolute;
   /* top: 563px;
@@ -77,6 +79,18 @@
   position: absolute;
 }
 .duplex-text {
+  position: relative;
+  text-align: center;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  letter-spacing: 0.02em;
+  line-height: 26.67px;
+  color: #000;
+}
+
+.duplex-text-confirm{
   position: relative;
   text-align: center;
   justify-content: center;

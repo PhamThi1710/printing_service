@@ -60,15 +60,15 @@
                 <div class="orientation1">Orientation</div>
                 <div class="group-parent">
                     <div class="rectangle-parent1 choose-option">
-                        <button class="duplex-box button-unselected" id="button-landscape"></button>
+                        <button class="orientation-box button-unselected" id="button-landscape"></button>
                         <div class="duplex-text">Landscape</div>
                     </div>
                     <div class="rectangle-parent2 choose-option">
-                        <button class="duplex-box button-unselected" id="button-portrait"></button>
+                        <button class="orientation-box button-unselected" id="button-portrait"></button>
                         <div class="duplex-text">Portrait</div>
                     </div>
                     <div class="rectangle-parent3 choose-option">
-                        <button class="duplex-box button-unselected" id="button-all"></button>
+                        <button class="orientation-box button-unselected" id="button-all"></button>
                         <div class="duplex-text">All</div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
         </div>
         <div class="rectangle-group">
             <button class="duplex-box"></button>
-            <div class="duplex-text">Xác nhận</div>
+            <div class="duplex-text-confirm">Xác nhận</div>
         </div>
         <div class="page-layout-parent">
             <div class="page-layout">
@@ -123,9 +123,10 @@
                 $('#button-duplex-yes').removeClass('button-selected').addClass('button-unselected');
             });
         });
+
         $(document).ready(function () {
             $('.choose-option').click(function () {
-                $('.choose-option button').removeClass('button-selected').addClass('button-unselected');
+                $(this).siblings().find('button').removeClass('button-selected').addClass('button-unselected');
                 $(this).find('button').removeClass('button-unselected').addClass('button-selected');
             });
         });
@@ -181,7 +182,7 @@
         $(document).ready(function () {
 
             // Event handler for the "Xác nhận" button
-            $('.duplex-text').click(function () {
+            $('.duplex-text-confirm').click(function () {
                 // Retrieve the selected options
                 var duplexOption = $('.duplex-yes').hasClass('button-selected') ? 'Yes' : 'No';
                 var orientationOption = $('.group-parent .button-selected').text();
