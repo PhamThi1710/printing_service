@@ -13,8 +13,8 @@ $paperSize = $_POST['paperSize'];
 $requestId = uniqid();
 
 // Insert the print attributes into the REQUEST_PRINT table
-$sql = "INSERT INTO REQUEST_PRINT (REQUEST_ID, USER_ID, FILE_ID, NUMS_OF_COPY, ORIENTATION, DUPLEX, PAPER_SIZE, CREATED_DATE)
-        VALUES (:requestId, :userId, :fileId, :numOfCopies, :orientation, :duplex, :paperSize, NOW())";
+$sql = "INSERT INTO print_request (ID, Creation_Date, Pages_Per_Sheet, Number_Of_Copies, Page_Size, `One/Doubled_Sided`, `Status`, File_ID)
+        VALUES (:requestId, NOW(), '1', :numOfCopies, :paperSize, :duplex, '0', :fileId)";
 
 // Prepare the SQL statement
 $stmt = $pdo->prepare($sql);

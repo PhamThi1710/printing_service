@@ -3,13 +3,13 @@
 
 if(isset($_POST['building'])) {
     $selectedBuilding = $_POST['building'];
-    $query = "SELECT * FROM PRINTERS_LIST WHERE PRINTERS_BUILDINGLOC = '$selectedBuilding'";
+    $query = "SELECT * FROM `printer_list` WHERE `printer_buildingloc` = '$selectedBuilding'";
     $result = $conn->query($query);
 
     if ($result) {
         $printers = array();
         while ($row = $result->fetch_assoc()) {
-            $printers[] = $row['PRINTERS_ID'];
+            $printers[] = $row['printer_id'];
         }
         echo json_encode($printers);
     } else {
