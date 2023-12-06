@@ -74,14 +74,14 @@ if (isset($_POST['campus'])) {
                             $selectedCampus = $_POST['campus'];
 
                             if ($selectedCampus != null) {
-                                $query = "SELECT * FROM PRINTERS_LIST WHERE PRINTERS_CAMPUSLOC = '$selectedCampus'";
+                                $query = "SELECT * FROM printer_list WHERE printer_campusloc = '$selectedCampus'";
                                 $result = $conn->query($query);
                             }
                             if ($result) {
                                 // Process the query result
                                 while ($row = $result->fetch_assoc()) {
                                     // Access the data from the row
-                                    $columnValue = $row['PRINTERS_BUILDINGLOC'];
+                                    $columnValue = $row['printer_buildingloc'];
                                     // Generate the HTML code for each building option
                                     echo '<option class="embed" value="' . $columnValue . '">' . $columnValue . '</option>';
                                 }
@@ -238,10 +238,10 @@ if (isset($_POST['campus'])) {
                 var selectedPrinter = $(this).val();
                 $.post('getPrinterDetails.php', { printerId: selectedPrinter }, function (response) {
                     var printer = JSON.parse(response);
-                    $('.printer-info-text').eq(0).text(printer.PRINTERS_ID);
-                    $('.printer-info-text').eq(1).text(printer.PRINTERS_NAME);
-                    $('.printer-info-text').eq(2).text(printer.PRINTERS_ROOM);
-                    $('.printer-info-text').eq(3).text(printer.PRINTERS_AVAI == 'Y' ? 'Đang hoạt động' : 'Không hoạt động');
+                    $('.printer-info-text').eq(0).text(printer.printer_id);
+                    $('.printer-info-text').eq(1).text(printer.printer_name);
+                    $('.printer-info-text').eq(2).text(printer.printer_room);
+                    $('.printer-info-text').eq(3).text(printer.printer_avai == 'Y' ? 'Đang hoạt động' : 'Không hoạt động');
                 });
             });
         });

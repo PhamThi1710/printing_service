@@ -6,8 +6,7 @@ $password = 'BQH14020031!';
 $database = 'printservice';
 
 // Create connection
-$conn = new mysqli($server, $username, $password, $database, 3306) or die("Can not 
-        connect to database!");
+$conn = new mysqli($server, $username, $password, $database, 3306) or die("Can not connect to database!");
 
 $conn->select_db("printservice");
 
@@ -17,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $selection = $_POST['selection'];
 
     // Update query
-    $sql = "UPDATE PRINTERS_LIST SET PRINTERS_AVAI = 'Y' WHERE PRINTERS_ID = '$printerID'";
+    $sql = "UPDATE printer_list SET printer_avai = 'Y' WHERE printer_id = '$printerID'";
 
     if ($conn->query($sql) === TRUE) {
         echo "Record updated successfully";
