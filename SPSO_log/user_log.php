@@ -59,7 +59,7 @@
                 placeholder="Search for student name..">
             <table border="1" id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
                 <colgroup>
-                    <col span="6">
+                    <col span="5">
                 </colgroup>
 
                 <thead>
@@ -67,7 +67,6 @@
                         <th>Họ sinh viên</th>
                         <th>Tên sinh viên</th>
                         <th>Email</th>
-                        <th>Giới tính</th>
                         <th>Ngày sinh</th>
                         <th>Số dư page</th>
                     </tr>
@@ -89,9 +88,6 @@
                             </td>
                             <td>
                                 '.$row['Email'].'
-                            </td>
-                            <td>
-                                '.$row['Sex'].'
                             </td>
                             <td>
                                 '.$row['Date_Of_Birth'].'
