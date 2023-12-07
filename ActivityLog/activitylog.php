@@ -303,9 +303,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if(empty($data)) {
+                    <?php /*if(empty($data)) {
                         echo "<p style='border:None; color:var(--text-color); font-weight:500; font-size:17px;'>Nhật ký của bạn hiện đang trống!</p>";
-                    } else
+                    } else*/
                         foreach($data as $row): ?>
                             <tr>
                                 <td>

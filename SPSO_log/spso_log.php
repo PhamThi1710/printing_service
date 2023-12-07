@@ -1,5 +1,6 @@
 <?php
 @include '../ConnectDB.php';
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,10 +76,11 @@
 
         <section>
             <?php
-            if(isset($_GET['nameStudent'])) {
-                $getName = $_GET['nameStudent'];
-                echo '<h2 class="displayName">'.$getName.'</h2>';
+            if (isset($_GET['nameStudent'])) {
+                $_SESSION['getName'] = $_GET['nameStudent'];
+
             }
+            echo '<h2 class="displayName">' . $_SESSION['getName'] . '</h2>';
             ?>
             <table border="1" id="spso_log_table">
                 <colgroup>
@@ -98,14 +100,17 @@
                 </thead>
                 <tbody>
                     <?php
-                    function changeNumForm($date) {
-                        if($date / 10 == 0)
-                            $res = '0'.$date;
+                    $student_id = "";
+                    function changeNumForm($date)
+                    {
+                        if ($date / 10 == 0)
+                            $res = '0' . $date;
                         else
                             $res = $date;
                         return $res;
                     }
-                    function handle_date($date) {
+                    function handle_date($date)
+                    {
                         $date = explode("-", $date);
                         $getDay = changeNumForm($date[2]);
                         $getMonth = changeNumForm($date[1]);
@@ -113,47 +118,49 @@
                         return array($getYear, $getMonth, $getDay);
 
                     }
-                    if(isset($_GET['id'])) {
-                        $student_id = $_GET['id'];
-                        if(isset($_POST['startday']) && isset($_POST['endday'])) {
-                            list($start_Year, $start_Month, $start_Day) = handle_date($_POST['startday']);
-                            list($end_Year, $end_Month, $end_Day) = handle_date($_POST['endday']);
-                            $result = mysqli_query($conn, "select perform.End_Time as endtime, print_request.Status as state_requestprint, 
-                        print_request.Total_Sheet, file.Name as filename, users.Fname as student_name, printer_list.printer_name as printer_model, print_request.Total_Sheet as total_sheet
-                        from perform join print_request on perform.Request_ID = print_request.ID
-                        join printer_list on perform.Printer_ID = printer_list.printer_id 
-                        join file on print_request.File_ID = file.ID 
-                        join users on file.User_ID = users.ID
-                                where perform.End_Time between '$start_Year-$start_Month-$start_Day 00:00:00' and '$end_Year-$end_Month-$end_Day 23:59:00' and print_request.Status = '2' and users.ID = '$student_id' order by perform.End_Time desc;");
-                        } else {
-                            $result = mysqli_query($conn, "select perform.End_Time as endtime, print_request.Status as state_requestprint, 
-                        print_request.Total_Sheet, file.Name as filename, users.Fname as student_name, printer_list.printer_name as printer_model, print_request.Total_Sheet as total_sheet
-                        from perform join print_request on perform.Request_ID = print_request.ID
-                        join printer_list on perform.Printer_ID = printer_list.printer_id 
-                        join file on print_request.File_ID = file.ID 
-                        join users on file.User_ID = users.ID
-                        where print_request.Status = '2' and users.ID = '$student_id' order by perform.End_Time desc;");
-                        }
+                    if (isset($_GET['id'])) {
+                        $_SESSION['student_id'] = $_GET['id'];
                     }
-                    if(empty($data)) {
+                    if (isset($_POST['startday']) && isset($_POST['endday'])) {
+                        list($start_Year, $start_Month, $start_Day) = handle_date($_POST['startday']);
+                        list($end_Year, $end_Month, $end_Day) = handle_date($_POST['endday']);
+                        $result = mysqli_query($conn, "select perform.End_Time as endtime, print_request.Status as state_requestprint, 
+                        print_request.Total_Sheet, file.Name as filename, users.Fname as student_name, printer_list.printer_name as printer_model, print_request.Total_Sheet as total_sheet
+                        from perform join print_request on perform.Request_ID = print_request.ID
+                        join printer_list on perform.Printer_ID = printer_list.printer_id 
+                        join file on print_request.File_ID = file.ID 
+                        join users on file.User_ID = users.ID
+                                where perform.End_Time between '$start_Year-$start_Month-$start_Day 00:00:00' and '$end_Year-$end_Month-$end_Day 23:59:00' and print_request.Status = '2' and users.ID = '" . $_SESSION['student_id'] . "' order by perform.End_Time desc;");
+                    } else {
+                        $result = mysqli_query($conn, "select perform.End_Time as endtime, print_request.Status as state_requestprint, 
+                        print_request.Total_Sheet, file.Name as filename, users.Fname as student_name, printer_list.printer_name as printer_model, print_request.Total_Sheet as total_sheet
+                        from perform join print_request on perform.Request_ID = print_request.ID
+                        join printer_list on perform.Printer_ID = printer_list.printer_id 
+                        join file on print_request.File_ID = file.ID 
+                        join users on file.User_ID = users.ID
+                        where print_request.Status = '2' and users.ID = '" . $_SESSION['student_id'] . "' order by perform.End_Time desc;");
+                    }
+
+                    $data = $result->fetch_all(MYSQLI_ASSOC);
+                    if (empty($data)) {
                         echo "<p style='border:None; color:var(--text-color); font-weight:500; font-size:17px;'>Nhật ký của sinh viên này hiện đang trống!</p>";
                     } else
-                        foreach($data as $row) {
+                        foreach ($data as $row) {
                             echo '
                         <tr>
                             <td>
-                                '.$row['filename'].'
+                                ' . $row['filename'] . '
                             </td>
                             <td>
-                                '.$row['total_sheet'].'
+                                ' . $row['total_sheet'] . '
                             </td>
                             <td>
-                                '.$row['endtime'].'
+                                ' . $row['endtime'] . '
                             </td>
                             <td> ';
-                            if($row['state_requestprint'] == '0')
+                            if ($row['state_requestprint'] == '0')
                                 $state = '<a  class="payment_link_text">Đã lưu</a>';
-                            else if($row['state_requestprint'] == '1')
+                            else if ($row['state_requestprint'] == '1')
                                 $state = 'Đã hoàn thành';
                             else
                                 $state = 'Đã gửi in';
