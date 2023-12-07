@@ -6,7 +6,7 @@ include 'database.php';
 $id = $_POST['id'];
 
 // Prepare your SQL statement
-$sql = "SELECT * FROM PRINTERS_LIST WHERE PRINTERS_ID = ?";
+$sql = "SELECT * FROM printer_list WHERE printer_id = ?";
 
 // Create a prepared statement
 $stmt = $conn->prepare($sql);

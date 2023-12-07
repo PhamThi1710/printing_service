@@ -1,6 +1,6 @@
-<!-- <?php
+<?php
 // Include your database connection file
-include 'database.php';
+@include 'database.php';
 
 // Get the campus number from the POST data
 // $campusNumber = $_POST['campus'];
@@ -10,7 +10,7 @@ $id = $_POST['id'];
 
 // Prepare your SQL statement
 
-$sql = "SELECT * FROM PRINTERS_LIST WHERE PRINTERS_ID = ?";
+$sql = "SELECT * FROM printer_list WHERE printer_id = ?";
 
 // Create a prepared statement
 $stmt = $conn->prepare($sql);
@@ -36,4 +36,4 @@ else {
 // Close the statement and the connection
 $stmt->close();
 $conn->close();
-?> -->
+?>
