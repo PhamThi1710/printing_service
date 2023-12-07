@@ -3,13 +3,13 @@
 
 if(isset($_POST['campus'])) {
     $selectedCampus = $_POST['campus'];
-    $query = "SELECT * FROM CAMPUS_BUILDING WHERE PRINTERS_CAMPUSLOC = '$selectedCampus'";
+    $query = "SELECT * FROM campus_building WHERE printer_campusloc = '$selectedCampus'";
     $result = $conn->query($query);
 
     if ($result) {
         $buildings = array();
         while ($row = $result->fetch_assoc()) {
-            $buildings[] = $row['PRINTERS_BUILDINGLOC'];
+            $buildings[] = $row['printer_buildingloc'];
         }
         echo json_encode($buildings);
     } else {

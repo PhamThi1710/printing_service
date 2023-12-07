@@ -146,7 +146,7 @@ if (isset($_POST['campus'])) {
     <section class="header">
         <div class="logo">
             <a href="#">
-                <img src="/image/logo.png" alt="logo" />
+                <img src="/images/logo.png" alt="logo" />
                 <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
             </a>
         </div>
@@ -183,14 +183,14 @@ if (isset($_POST['campus'])) {
                             $selectedCampus = $_POST['campus'];
 
                             if ($selectedCampus != null) {
-                                $query = "SELECT * FROM PRINTERS_LIST WHERE PRINTERS_CAMPUSLOC = '$selectedCampus'";
+                                $query = "SELECT * FROM `printer_list` WHERE `printer_campusloc` = '$selectedCampus'";
                                 $result = $conn->query($query);
                             }
                             if ($result) {
                                 // Process the query result
                                 while ($row = $result->fetch_assoc()) {
                                     // Access the data from the row
-                                    $columnValue = $row['PRINTERS_BUILDINGLOC'];
+                                    $columnValue = $row['printer_buildingloc'];
                                     // Generate the HTML code for each building option
                                     echo '<option class="embed" value="' . $columnValue . '">' . $columnValue . '</option>';
                                 }
@@ -218,12 +218,12 @@ if (isset($_POST['campus'])) {
                 <div class="printer-state-box">
                     <div class="flex">
                         <button class="printer-short-desc" onclick="openFileInput()">
-                            <img src=" print-icon" alt="" src="/image/upload.svg" />
+                            <img src=" print-icon" alt="" src="/images/upload.svg" />
                             <p>Chọn tập tin</p>
                             <input type="file" id="fileInput" class="file-input">
                         </button>
                         <button class="printer-short-desc" onclick="openAttributesForm()">
-                            <img class="print-icon" alt="" src="/image/printer-icon.svg" />
+                            <img class="print-icon" alt="" src="/images/printer-icon.svg" />
                             <p>Tùy chọn thuộc tính</p>
                         </button>
                     </div>
@@ -232,10 +232,10 @@ if (isset($_POST['campus'])) {
                     </div>
                 </div>
             </div>
-            <button class="printer-short-desc confirm-button">
+            <!-- <button class="printer-short-desc confirm-button">
                 <p>Xac nhan</p>
                 <a href="sendRequest/php"></a>
-            </button>
+            </button> -->
         </div>
     </section>
     <!-- main section ends -->
@@ -246,7 +246,7 @@ if (isset($_POST['campus'])) {
             <div class="box-container">
                 <div class="box">
                     <h3>student smart printing service</h3>
-                    <img src="/image/logo.png" alt="logo" />
+                    <img src="/images/logo.png" alt="logo" />
                 </div>
 
                 <div class="box">
@@ -281,10 +281,6 @@ if (isset($_POST['campus'])) {
         function openFileInput() {
             document.getElementById("fileInput").click();
         }
-        // document.getElementById("fileInput").addEventListener("change", function () {
-        //     var fileName = this.files[0].name;
-        //     document.getElementById("uploadedFileName").textContent = fileName;
-        // });
         document.getElementById("fileInput").addEventListener("change", function () {
             var fileInput = this;
             if (fileInput.files.length > 0) {
@@ -380,6 +376,8 @@ if (isset($_POST['campus'])) {
                 } else {
                     var fileName = fileInput.files[0].name;
                     document.getElementById("uploadedFileName").textContent = fileName;
+
+                    localStorage.setItem('uploadedFileName', fileName);
 
                     // Get the number of pages for PDF and PPTX files
                     if (fileType === 'application/pdf') {
