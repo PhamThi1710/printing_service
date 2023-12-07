@@ -84,7 +84,7 @@
         <div class="service-list">
             <div><a href="">đăng kí in tài liệu</a></div>
             <div><a href="">mua thêm trang in</a></div>
-            <div class="last-service"><a href="">nhật kí sử dụng dịch vụ in</a></div>
+            <div class="last-service"><a href="../ActivityLog/activitylog.php">nhật kí sử dụng dịch vụ in</a></div>
         </div>
     </div>
 
