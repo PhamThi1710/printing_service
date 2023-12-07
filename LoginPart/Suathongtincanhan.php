@@ -1,5 +1,5 @@
 <?php 
-    @include 'database.php';
+@include '../ConnectDB.php';
 
     session_start();
     
