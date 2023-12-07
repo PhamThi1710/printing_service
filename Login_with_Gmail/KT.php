@@ -3,15 +3,22 @@ ob_start();
 session_start();
 
 require_once 'vendor/autoload.php';
-require 'database.php';
+@include 'database.php';
 require 'function.php';
 
-function insertUser($Fname, $Lname, $Email, $Role, $Sex, $Date_of_Birth, $Balance)
+function insertUser($name_first, $Lname, $Email, $Role, $Sex, $Date_of_Birth, $Balance)
 {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "ssps";
 
-    $insert = 'INSERT INTO `users`("Fname","Lname","Email","Role","Sex","Date_Of_Birth","Balance")VALUES(?, ?, ?, ?, ?, ?, ?)';
-
-    mysqli_query($conn, $insert);
+    $conn = new mysqli($servername, $username, $password, $database);
+    if (!$conn) {
+        echo ("Can't connect");
+    } else {
+        mysqli_query($conn, "INSERT INTO users(Fname,Lname,Email,Role,Sex,Date_Of_Birth,Balance) VALUES('$name_first','$Lname', '$Email', '$Role', '$Sex', '$Date_of_Birth', '$Balance')");
+    }
 }
 
 $client = clientGoogle();
@@ -28,7 +35,7 @@ if (isset($_GET['code'])) {
 
         $_SESSION['user_info'] = [
             'email' => $user->email,
-            'name' => $user->name,
+            'name' => htmlspecialchars($user->name),
             'id' => $user->id,
             'picture' => $user->picture,
             'gender' => $user->gender,
@@ -37,11 +44,11 @@ if (isset($_GET['code'])) {
         ];
 
         $email = mysqli_real_escape_string($conn, $user->email);
-        $check = "SELECT Count(*) FROM Users WHERE Email = '$email'";
+        $check = "SELECT id FROM users WHERE Email = '$email'";
         $result = mysqli_query($conn, $check);
         $data = $result->fetch_all(MYSQLI_ASSOC);
-        var_dump($email);
-        echo $email;
+        var_dump($data);
+        //echo $email;
         if (!empty($data)) { //Nếu có email xuất hiện
             $email_gg = $user->email;
             $domain = "@hcmut.edu.vn";
@@ -66,7 +73,10 @@ if (isset($_GET['code'])) {
                 exit();
             }
         } else {
-            insertUser($_SESSION['user_info']['name'], '', $_SESSION['user_info']['email'], 'Student', $_SESSION['user_info']['gender'], $_SESSION['user_info']['birthday'], '0');
+            $separate = explode(' ', $_SESSION['user_info']['name']);
+            $Fname = $separate[0];
+            $Lname = substr($_SESSION['user_info']['name'], strlen($Fname) + 1);
+            insertUser($Fname, $Lname, $_SESSION['user_info']['email'], 'Student', $_SESSION['user_info']['gender'], $_SESSION['user_info']['birthday'], '0');
         }
     }
 }
