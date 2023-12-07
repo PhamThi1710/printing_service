@@ -279,7 +279,7 @@
     <div class="body-side">
         <h1>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN</h1>
         <section>
-            <input type="text" id="searchInput" onkeyup="search()" placeholder="Search for file name..">
+            <input type="text" id="searchInput" onkeyup="search(2,'user_table')" placeholder="Search for file name..">
             <table border="1" id="user_table">
                 <colgroup>
                     <col span="3" style="width: 280px">
@@ -422,7 +422,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <!-- custom js file link -->
-    <script src="../ActivityLog/script.js"></script>
+    <script src="../ActivityLog/actscript.js"></script>
     <!--jquery cdn link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 

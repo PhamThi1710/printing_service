@@ -18,20 +18,49 @@
 
 /* button design */
 .button {
-    border: 2px solid #03023179;
-    background-color: rgba(42, 130, 165, 0.662);
-    color: var(--text-color);
+    background-color: #e1ecf4;
+    border-radius: 3px;
+    border: 1px solid #7aa7c7;
+    box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+    box-sizing: border-box;
+    color: #156CC0;
     cursor: pointer;
-    border-radius: 15px;
-    padding: 1%;
-    box-shadow: #121212 2px 2px 0 0;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.15385;
+    margin: 0;
+    outline: none;
+    padding: 8px .8em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    white-space: nowrap;
 }
 
-.button:hover {
-    background-color: var(--fontColor);
+.button:hover,
+.button:focus {
+    background-color: #b3d3ea;
+    color: #2c5777;
+}
+
+.button:focus {
+    box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+}
+
+.button:active {
+    background-color: #a0c7e4;
+    box-shadow: none;
+    color: #2c5777;
 }
 
 /* end button design*/
+
 /* popup design*/
 @keyframes scale {
     0% {
@@ -111,8 +140,9 @@
     display: block;
 }
 
-section {
+.body-side section {
     padding: 2rem 5%;
+    background-color: rgba(253, 232, 232, 0.165)
 }
 
 .body-side {
@@ -148,6 +178,7 @@ td {
 tr:hover {
     background-color: rgba(134, 130, 129, 0.221);
 }
+
 #searchInput {
     background-image: url('../images/searchicon.png');
     background-size: 30px 30px;
@@ -159,6 +190,7 @@ tr:hover {
     border: 1px solid #ddd;
     margin-bottom: 8px;
 }
+
 /*.body-side section table thead tr th {
     padding: 0.5%;
     color: var(--blue);
@@ -435,4 +467,71 @@ td {
 
 .days li:not(.active):hover::before {
     background: rgba(75, 93, 125, 0.308);
+}
+
+/*spso log*/
+
+
+#spso_log_table {
+    table-layout: fixed;
+    overflow-y: scroll;
+    height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#spso_log_table col {
+    width: 600px;
+}
+
+#spso_log_table thead tr th {
+    padding: 10px;
+    font-size: 17px;
+}
+
+#spso_log_table tbody tr td {
+    padding: 14px;
+}
+
+#wrap-selectDate {
+    width: 800px;
+    height: 30px;
+    padding: 2rem 5%;
+    display: inline-flex;
+    width: 100%;
+}
+
+.wrapper-selectDate {
+    width: 100%;
+    text-align: center;
+}
+
+.wrapper-selectDate p,
+.wrapper-selectDate input {
+    margin-right: 1%;
+    display: inline-block;
+}
+
+.wrapper-selectDate p {
+    font-weight: 600;
+    margin-top: 0.5rem;
+    font-size: 15px;
+    color: #156CC0;
+
+}
+
+.nameClick {
+    color: #156CC0;
+    text-decoration: underline;
+}
+
+.nameClick:active {
+    color: #156CC0;
+}
+
+.displayName {
+    font-family: 'Hedvig Letters Serif', serif;
+    font-size: 25px;
+    font-weight: 600;
 }
