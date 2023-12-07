@@ -78,7 +78,6 @@ session_start();
             <?php
             if (isset($_GET['nameStudent'])) {
                 $_SESSION['getName'] = $_GET['nameStudent'];
-
             }
             echo '<h2 class="displayName">' . $_SESSION['getName'] . '</h2>';
             ?>

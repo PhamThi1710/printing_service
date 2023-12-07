@@ -136,7 +136,7 @@ section {
     min-height: 582px;
 }
 
-/*.body h1 {
+.body h1 {
     font-size: 26px;
     color: var(--fontColor);
     text-transform: uppercase;
@@ -164,7 +164,7 @@ section {
 
 .body .service-list .last-service {
     border-bottom: 1px solid var(--line-color);
-}*/
+}
 
 
 

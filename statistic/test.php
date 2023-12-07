@@ -1,5 +1,20 @@
+<?php
+@include '../ConnectDB.php';
+$sql = mysqli_query($conn, "SELECT MONTHNAME(Creation_Date) as Date_, SUM(Total_Sheet) as sum
+FROM print_request
+where File_ID in (select id from file where file.User_ID = '1')
+GROUP BY MONTHNAME(Creation_Date)");
+$dataPoints = array();
+
+while ($row = mysqli_fetch_assoc($sql)) {
+    array_push($dataPoints, array("y" => $row['sum'], "label" => $row['Date_']));
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,12 +22,29 @@
     <title>Dịch vụ sinh viên</title>
 
     <!-- custom css file link -->
-    <link rel="stylesheet" type="text/css" href="../style.css" >
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <script>
+        window.onload = function () {
 
+            var chart = new CanvasJS.Chart("chartContainer", {
+                title: {
+                    text: "Thống kê số page Sinh viên Dương đã in"
+                },
+                axisY: {
+                    title: "Tổng số page"
+                },
+                data: [{
+                    type: "line",
+                    dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+                }]
+            });
+            chart.render();
+
+        }
+    </script>
 </head>
-<body>
-    <!-- header section starts -->
 
+<body>
     <section class="header">
         <div class="left-side">
             <div class="logo">
@@ -24,10 +56,10 @@
 
             <div class="menu-bar">
                 <div class="first-option"><a href="">trang chủ</a></div>
-                <div class="second-option"><a href="" >dịch vụ của tôi</a></div>
+                <div class="second-option"><a href="">dịch vụ của tôi</a></div>
             </div>
         </div>
-        
+
         <div class="right-side">
             <div class="username">Username</div>
             <div class="seperator">|</div>
@@ -36,36 +68,18 @@
             </div>
         </div>
     </section>
-
-    <!-- header section ends -->
-
-
-
-
-    <!-- body section starts -->
-
     <div class="body">
-        <h1 class="title">dịch vụ của tôi</h1>
 
-        <div class="service-list">
-            <div><a href="">đăng kí in tài liệu</a></div>
-            <div><a href="">mua thêm trang in</a></div>
-            <div class="last-service"><a href="">nhật kí sử dụng dịch vụ in</a></div>
-        </div>
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
     </div>
 
-    <!-- body section ends -->
-
-
-
-
-    <!-- footer section starts -->
     <div class="footer-container">
         <section class="footer">
             <div class="box-container">
                 <div class="box">
                     <h3>student smart printing service</h3>
-                    <img src="../images/logo.png" alt="logo" />
+                    <img src="images/logo.png" alt="logo" />
                 </div>
 
                 <div class="box">
@@ -77,9 +91,16 @@
 
                 <div class="box">
                     <h3>liên hệ</h3>
-                    <a href="#"> <div class="location-icon"></div>268 Ly Thuong Kiet Street Ward 14, District 10, Ho Chi Minh City, Vietnam </a>
-                    <a href="#"> <div class="phone-icon"></div>(028) 38 651 670 - (028) 38 647 256 (Ext: 5258, 5234) </a>
-                    <a href="mailto:elearning@hcmut.edu.vn" class="email"> <div class="email-icon"></div>elearning@hcmut.edu.vn </a>
+                    <a href="#">
+                        <div class="location-icon"></div>268 Ly Thuong Kiet Street Ward 14, District 10, Ho Chi Minh
+                        City, Vietnam
+                    </a>
+                    <a href="#">
+                        <div class="phone-icon"></div>(028) 38 651 670 - (028) 38 647 256 (Ext: 5258, 5234)
+                    </a>
+                    <a href="mailto:elearning@hcmut.edu.vn" class="email">
+                        <div class="email-icon"></div>elearning@hcmut.edu.vn
+                    </a>
                 </div>
             </div>
         </section>
@@ -94,13 +115,7 @@
 
 
 
-
-
-
-    <!-- swiper js link -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-
-    <!-- custom js file link -->
-    <script src="script.js"></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 </body>
+
 </html>

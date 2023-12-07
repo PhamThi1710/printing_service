@@ -57,10 +57,10 @@
     <!-- Send print request POP UP  -->
     <?php
 
-    if(isset($_GET['send_id'])) {
+    if (isset($_GET['send_id'])) {
         $send_id = $_GET['send_id'];
         $getInfoToSend = mysqli_query($conn, "SELECT * FROM `requested_page_numbers` join print_request on 
-        requested_page_numbers.Request_ID = print_request.id join file on print_request.File_ID = file.id join users on file.User_ID = users.ID where Request_ID=$send_id;");
+        requested_page_numbers.Request_ID = print_request.id join file on print_request.File_ID = file.id join users on file.User_ID = users.ID where Request_ID='$send_id';");
         $getdata = $getInfoToSend->fetch_all(MYSQLI_ASSOC);
         $Now = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
         //  <!--End get data task -->
@@ -74,7 +74,7 @@
                         <th class="title_"><i class="ri-timer-fill"></i>Thời gian hiện tại:</th>
                         </td>
                         <td>
-                          '.$Now->format('Y-m-d H:i:s').'
+                          ' . $Now->format('Y-m-d H:i:s') . '
                         </td>
                     </tr>
                     <tr>
@@ -82,7 +82,7 @@
                         <th class="title_"><i class="ri-user-fill"></i>Tên người dùng:</th>
                         </td>
                         <td>
-                           '.$getdata[0]['Lname'].$getdata[0]['Fname'].'
+                           ' . $getdata[0]['Lname'] . $getdata[0]['Fname'] . '
                         </td>
                     </tr>
                     <tr>
@@ -90,7 +90,7 @@
                         <th class="title_"><i class="ri-file-fill"></i>Tập tin đã chọn:</th>
                         </td>
                         <td>
-                           '.$getdata[0]["Name"].'
+                           ' . $getdata[0]["Name"] . '
                         </td>
                     </tr>
                     <tr>
@@ -98,7 +98,7 @@
                         <th class="title_"><i class="ri-file-paper-2-fill"></i>Số mặt in:</th>
                         </td>
                         <td>
-                            '.$getdata[0]["One/Doubled_Sided"].' 
+                            ' . $getdata[0]["One/Doubled_Sided"] . ' 
                         </td>
                     </tr>
                     <tr>
@@ -106,7 +106,7 @@
                         <th class="title_"><i class="ri-file-copy-fill"></i>Số bản copy:</th>
                         </td>
                         <td>
-                            '.$getdata[0]["Number_Of_Copies"].'
+                            ' . $getdata[0]["Number_Of_Copies"] . '
                         </td>
                     </tr>
                     <tr>
@@ -114,7 +114,7 @@
                         <th class="title_"><i class="ri-file-list-3-fill"></i>Số trang trên một tờ giấy in:</th>
                         </td>
                         <td>
-                            '.$getdata[0]["Pages_Per_Sheet"].'
+                            ' . $getdata[0]["Pages_Per_Sheet"] . '
                         </td>
                     </tr>
                     <tr>
@@ -122,14 +122,14 @@
                         <th class="title_"><i class="ri-file-paper-fill"></i>Khổ giấy:</th>
                         </td>
                         <td>
-                            '.$getdata[0]["Page_Size"].'
+                            ' . $getdata[0]["Page_Size"] . '
                         </td>
                     </tr>
                         <td>
                         <th class="title_"><i class="ri-money-dollar-circle-fill"></i>Số page bị trừ vào ví:</th>
                         </td>
                         <td>
-                            '.$getdata[0]["Total_Sheet"].'
+                            ' . $getdata[0]["Total_Sheet"] . '
                         </td>
                     <tr>
                         <td>
@@ -137,9 +137,9 @@
                         </td>
                         <td>';
         $display = "";
-        for($i = 0; $i < count($getdata); $i++) {
-            if($getdata[$i]['Start_Page'] != $getdata[$i]['End_Page']) {
-                $display .= $getdata[$i]['Start_Page']."-".$getdata[$i]['End_Page'];
+        for ($i = 0; $i < count($getdata); $i++) {
+            if ($getdata[$i]['Start_Page'] != $getdata[$i]['End_Page']) {
+                $display .= $getdata[$i]['Start_Page'] . "-" . $getdata[$i]['End_Page'];
             } else {
                 $display .= $getdata[$i]['Start_Page'];
             }
@@ -154,7 +154,7 @@
         <div class="button-group">
             <button onclick="ClosePopup(\'sendprint_popup\', \'activitylog.php\')" class="button" type="button">Thoát</button>
             <a href="#" type="button" class="button">Chỉnh sửa</a>
-            <a class="button" href="send_activitylog.php?send_confirm_id='.$send_id.'" type="button">Xác nhận</a>
+            <a class="button" href="send_activitylog.php?send_confirm_id=' . $send_id . '" type="button">Xác nhận</a>
         </div>
         </div>
     </div>';
@@ -163,7 +163,7 @@
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <!-- Confirm delete request POP UP -->
     <?php
-    if(isset($_GET['delete_id'])) {
+    if (isset($_GET['delete_id'])) {
         $delete_id = $_GET['delete_id'];
         echo ' <div class="popup" id="DELETE_popup">
             <img src="../images/message.jpg" width="50px" height="50px">
@@ -173,7 +173,7 @@
             </div>
             <div class="button-group">
                 <button onclick="ClosePopup(\'DELETE_popup\',\'activitylog.php\')" class="button" type="button">Thoát</button>
-                <a class="button" href="delete_activitylog.php?id='.$delete_id.'">Xóa</a>
+                <a class="button" href="delete_activitylog.php?id=' . $delete_id . '">Xóa</a>
             </div>
         </div>';
     } ?>
@@ -181,7 +181,7 @@
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <!-- Delete multiple request POP UP -->
     <?php
-    if(isset($_GET['DELETE_range'])) {
+    if (isset($_GET['DELETE_range'])) {
         echo ' <div class="popup" id="DELETE_range">
         <img src="/printing_service/image/message.jpg" width="50px" height="50px">
         <div class="popup_text">
@@ -216,7 +216,7 @@
     </div>';
     }
     ;
-    if(isset($_GET['DELETE_particularDay'])) {
+    if (isset($_GET['DELETE_particularDay'])) {
         echo '<div class="popup" id="DELETE_particularDay">
         <img src="../images/message.jpg" width="50px" height="50px">
         <div class="popup_text">
@@ -304,68 +304,79 @@
                 </thead>
                 <tbody>
                     <?php /*if(empty($data)) {
-                        echo "<p style='border:None; color:var(--text-color); font-weight:500; font-size:17px;'>Nhật ký của bạn hiện đang trống!</p>";
-                    } else*/
-                        foreach($data as $row): ?>
-                            <tr>
-                                <td>
-                                    <?= $row['starttime'] ?>
-                                </td>
-                                <td>
-                                    <?= $row['endtime'] ?>
-                                </td>
-                                <td>
-                                    <?= $row['filename'] ?>
-                                </td>
-                                <td>
-                                    <?= $row['totalpage'] ?>
-                                </td>
-                                <td>
-                                    <?= $row["numbersides"] ?>
-                                </td>
-                                <td>
-                                    <?= $row["numbercopies"] ?>
-                                </td>
-                                <td>
-                                    <?= $row["paper_per_sheet"] ?>
-                                </td>
-                                <td>
-                                    <?= $row["papersize"] ?>
-                                </td>
-                                <td>
-                                    <?= $row["total_sheet"] ?>
-                                </td>
+echo "<p style='border:None; color:var(--text-color); font-weight:500; font-size:17px;'>Nhật ký của bạn hiện đang trống!</p>";
+} else*/
+                    foreach ($data as $row): ?>
+                        <tr>
+                            <td>
+                                <?= $row['starttime'] ?>
+                            </td>
+                            <td>
+                                <?= $row['endtime'] ?>
+                            </td>
+                            <td>
+                                <?= $row['filename'] ?>
+                            </td>
+                            <td>
+                                <?= $row['totalpage'] ?>
+                            </td>
+                            <td>
+                                <?= $row["numbersides"] ?>
+                            </td>
+                            <td>
+                                <?= $row["numbercopies"] ?>
+                            </td>
+                            <td>
+                                <?= $row["paper_per_sheet"] ?>
+                            </td>
+                            <td>
+                                <?= $row["papersize"] ?>
+                            </td>
+                            <td>
+                                <?= $row["total_sheet"] ?>
+                            </td>
 
-                                <td>
-                                    <?= $row['printer_model'] ?>
-                                </td>
-                                <td>
-                                    <?php
-                                    if($row['state_requestprint'] == '0')
-                                        $state = '<a  class="payment_link_text">Đã lưu</a>';
-                                    else if($row['state_requestprint'] == '2')
-                                        $state = 'Đã hoàn thành';
-                                    else if($row['state_requestprint'] == '1')
-                                        $state = 'Đã gửi in';
-                                    else
-                                        $state = 'Lỗi';
-                                    ?>
-                                    <?= $state ?>
-                                </td>
-                                <td>
+                            <td>
+                                <?= $row['printer_model'] ?>
+                            </td>
+                            <td>
+                                <?php
+                                if ($row['state_requestprint'] == '0')
+                                    $state = '<a  class="payment_link_text">Đã lưu</a>';
+                                else if ($row['state_requestprint'] == '2')
+                                    $state = 'Đã hoàn thành';
+                                else if ($row['state_requestprint'] == '1')
+                                    $state = 'Đã gửi in';
+                                else
+                                    $state = 'Lỗi';
+                                ?>
+                                <?= $state ?>
+                            </td>
+                            <td>
+                                <?php
+                                if ($row['state_requestprint'] == '0' || $row['state_requestprint'] == '2') {
+                                    echo '
                                     <div class="dropdown" style="float:right;">
-                                        <i style="font-size:25px" class="ri-arrow-down-s-fill dropbtn"></i>
-                                        <div class="dropdown-content">
-                                            <a href="activitylog.php?send_id=<?= $row['requestid'] ?>">Send</a>
-                                            <?php
-                                            if($row['state_requestprint'] == '0' || $row['state_requestprint'] == '1')
-                                                echo '<a href="activitylog.php?delete_id='.$row['requestid'].'">Delete</a>';
-                                            ?>
-                                        </div>
+                                    <i style="font-size:25px" class="ri-arrow-down-s-fill dropbtn"></i>
+                                    <div class="dropdown-content">
+                                        <a href="activitylog.php?send_id=' . $row['requestid'] . '">Send</a>
+                                        <a href="activitylog.php?delete_id=' . $row['requestid'] . '">Delete</a>
                                     </div>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
+                                </div>';
+                                } else {
+                                    echo '<div style="pointer-events: none; " class="dropdown" style="float:right;">
+                                    <i style="font-size:25px;margin-left: 12rem;" class="ri-arrow-down-s-fill dropbtn"></i>
+                                    <div class="dropdown-content">
+                                        <a href="activitylog.php?send_id=' . $row['requestid'] . '">Send</a>
+                                        <a href="activitylog.php?delete_id=' . $row['requestid'] . '">Delete</a>
+                                    </div>
+                                </div>';
+                                }
+                                ?>
+
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
                 </tbody>
             </table>
             <div class="dropdown" style="float:right; margin: 1%; padding:0.3%; display:none;">
