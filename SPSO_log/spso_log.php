@@ -1,5 +1,6 @@
 <?php
-@include '../local/database.php';
+@include '../ConnectDB.php';
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,90 +20,87 @@
     <!-- remix icon link -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!-- custom css file link -->
-    <link rel="stylesheet" type="text/css" href="../local/style.css">
+    <link rel="stylesheet" type="text/css" href="../ActivityLog/actstyle.css">
+    <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 
 <body>
     <!-- header section starts -->
 
     <section class="header">
-        <div class="logo">
-            <a href="#">
-                <img src="/printing_service/image/logo.png" alt="logo" />
-                <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
-            </a>
+        <div class="left-side">
+            <div class="logo">
+                <a href="#">
+                    <img src="../images/logo.png" alt="logo" />
+                    <p>ĐẠI HỌC QUỐC GIA TP.HCM<br>TRƯỜNG ĐẠI HỌC BÁCH KHOA</p>
+                </a>
+            </div>
+
+            <div class="menu-bar">
+                <div class="first-option"><a href="">trang chủ</a></div>
+                <div class="second-option"><a href="">dịch vụ của tôi</a></div>
+            </div>
         </div>
 
-        <a href="login.php" class="login">Đăng nhập</a>
+        <div class="right-side">
+            <div class="username">Username</div>
+            <div class="seperator">|</div>
+            <div>
+                <a href="login.php" class="login">Đăng xuất</a>
+            </div>
+        </div>
     </section>
     <!-- header section ends -->
 
     <div class="body-side">
-        <h2>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h2>
-        <div style="width:800px;height:30px; ">
-            <div>
-                <form id="wrapper-selectDate" action="../SPSO_log/spso_log.php" method="post">
-                    <p style="font-size:15px">Chọn ngày bắt đầu:</p>
-                    <input type="date" id="selectedDate" name="startday" />
-                    <p style="font-size:15px">Chọn ngày kết thúc:</p>
-                    <input type="date" id="selectedDate" name="endday" />
-                    <p><button class="button" type="submit">Submit</button></p>
-                </form>
-                <form action="../SPSO_log/spso_log.php" method="post">
-                    <input class="button" type="submit" name="all" value="Xem tất cả" />
-                </form>
-            </div>
+        <h1>NHẬT KÝ SỬ DỤNG DỊCH VỤ IN CỦA SINH VIÊN</h1>
+        <div id="wrap-selectDate">
+            <form class="wrapper-selectDate" action="../SPSO_log/spso_log.php" method="post">
+                <p>Chọn ngày bắt đầu:</p>
+                <input type="date" class="selectedDate" name="startday" />
+                <p>Chọn ngày kết thúc:</p>
+                <input type="date" class="selectedDate" name="endday" />
+                <script>
+                    var list = document.querySelectorAll('.selectedDate')
+                    for (var i = 0; i < list.length; i++) {
+                        list[i].max = new Date().toISOString().slice(0, -14);
+
+                    }
+                </script>
+                <p><button class="button" type="submit">Submit</button></p>
+            </form>
+            <form class="wrapper-selectDate" action="../SPSO_log/spso_log.php" method="post">
+                <input class="button" type="submit" name="all" value="Xem tất cả" />
+            </form>
         </div>
-        <style>
-            #spso_log_table {
-                table-layout: fixed;
-            }
 
-            #spso_log_table col {
-                width: 240px;
-            }
-
-            #spso_log_table thead th {
-                padding: 10px;
-            }
-
-            #spso_log_table tbody tr td {
-                padding: 10px;
-            }
-
-            #wrapper-selectDate {
-                display: flex;
-            }
-
-            #wrapper-selectDate p,
-            #wrapper-selectDate input {
-                margin-right: 1%;
-            }
-
-            #wrapper-selectDate p {
-                color: var(--main-color);
-                font-weight: 600;
-            }
-        </style>
         <section>
+            <?php
+            if (isset($_GET['nameStudent'])) {
+                $_SESSION['getName'] = $_GET['nameStudent'];
 
-            <table border="1" id="spso_log_table" style="overflow-y:scroll;height:300px;display:block;">
+            }
+            echo '<h2 class="displayName">' . $_SESSION['getName'] . '</h2>';
+            ?>
+            <table border="1" id="spso_log_table">
                 <colgroup>
-                    <col span="6">
+                    <col>
+                    <col>
+                    <col>
+                    <col>
                 </colgroup>
 
                 <thead>
                     <tr>
-                        <th>Tên sinh viên</th>
                         <th>Nội dung đăng ký in</th>
                         <th>Số giấy đã trả</th>
-                        <th>Thời gian bắt đầu in</th>
-                        <th>Thời gian kết thúc in</th>
+                        <th>Thời gian in</th>
                         <th>Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
+                    $student_id = "";
                     function changeNumForm($date)
                     {
                         if ($date / 10 == 0)
@@ -120,31 +118,36 @@
                         return array($getYear, $getMonth, $getDay);
 
                     }
+                    if (isset($_GET['id'])) {
+                        $_SESSION['student_id'] = $_GET['id'];
+                    }
                     if (isset($_POST['startday']) && isset($_POST['endday'])) {
                         list($start_Year, $start_Month, $start_Day) = handle_date($_POST['startday']);
                         list($end_Year, $end_Month, $end_Day) = handle_date($_POST['endday']);
-                        $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
-                            requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
-                            from perform join requestprint on perform.requestid = requestprint.id 
-                            join printer on perform.printerId = printer.id 
-                            join file on requestprint.fileid = file.id 
-                            join user on requestprint.userid = user.id
-                                where starttime between '$start_Year-$start_Month-$start_Day 00:00:00' and '$end_Year-$end_Month-$end_Day 23:59:00' order by starttime desc;");
+                        $result = mysqli_query($conn, "select perform.End_Time as endtime, print_request.Status as state_requestprint, 
+                        print_request.Total_Sheet, file.Name as filename, users.Fname as student_name, printer_list.printer_name as printer_model, print_request.Total_Sheet as total_sheet
+                        from perform join print_request on perform.Request_ID = print_request.ID
+                        join printer_list on perform.Printer_ID = printer_list.printer_id 
+                        join file on print_request.File_ID = file.ID 
+                        join users on file.User_ID = users.ID
+                                where perform.End_Time between '$start_Year-$start_Month-$start_Day 00:00:00' and '$end_Year-$end_Month-$end_Day 23:59:00' and print_request.Status = '2' and users.ID = '" . $_SESSION['student_id'] . "' order by perform.End_Time desc;");
                     } else {
-                        $result = mysqli_query($conn, "select perform.starttime, perform.endtime, requestprint.state as state_requestprint, 
-                        requestprint.total_sheet, file.name as filename, user.fullname as student_name, printer.model as printer_model
-                        from perform join requestprint on perform.requestid = requestprint.id 
-                        join printer on perform.printerId = printer.id 
-                        join file on requestprint.fileid = file.id 
-                        join user on requestprint.userid = user.id order by starttime desc;");
+                        $result = mysqli_query($conn, "select perform.End_Time as endtime, print_request.Status as state_requestprint, 
+                        print_request.Total_Sheet, file.Name as filename, users.Fname as student_name, printer_list.printer_name as printer_model, print_request.Total_Sheet as total_sheet
+                        from perform join print_request on perform.Request_ID = print_request.ID
+                        join printer_list on perform.Printer_ID = printer_list.printer_id 
+                        join file on print_request.File_ID = file.ID 
+                        join users on file.User_ID = users.ID
+                        where print_request.Status = '2' and users.ID = '" . $_SESSION['student_id'] . "' order by perform.End_Time desc;");
                     }
+
                     $data = $result->fetch_all(MYSQLI_ASSOC);
-                    foreach ($data as $row) {
-                        echo '
+                    if (empty($data)) {
+                        echo "<p style='border:None; color:var(--text-color); font-weight:500; font-size:17px;'>Nhật ký của sinh viên này hiện đang trống!</p>";
+                    } else
+                        foreach ($data as $row) {
+                            echo '
                         <tr>
-                            <td>
-                                ' . $row["student_name"] . '
-                            </td>
                             <td>
                                 ' . $row['filename'] . '
                             </td>
@@ -152,24 +155,21 @@
                                 ' . $row['total_sheet'] . '
                             </td>
                             <td>
-                                ' . $row['starttime'] . '
-                            </td>
-                            <td>
                                 ' . $row['endtime'] . '
                             </td>
                             <td> ';
-                        if ($row['state_requestprint'] == '0')
-                            $state = '<a  class="payment_link_text">Đã lưu</a>';
-                        else if ($row['state_requestprint'] == '1')
-                            $state = 'Đã hoàn thành';
-                        else
-                            $state = 'Đã gửi in';
-                        echo $state;
-                        echo '
+                            if ($row['state_requestprint'] == '0')
+                                $state = '<a  class="payment_link_text">Đã lưu</a>';
+                            else if ($row['state_requestprint'] == '1')
+                                $state = 'Đã hoàn thành';
+                            else
+                                $state = 'Đã gửi in';
+                            echo $state;
+                            echo '
                             </td>
                         </tr> 
                  ';
-                    }
+                        }
                     ?>
                 </tbody>
             </table>
@@ -193,11 +193,11 @@
     </style>
     <!-- footer section starts -->
     <div class="footer-container">
-        <section class="footer">
+        <section class="footer" style="background: url(../images/footer-bg.jpg);">
             <div class="box-container">
                 <div class="box">
                     <h3>STUDENT SMART PRINTING SERVICE</h3>
-                    <img src="/printing_service/image/logo.png" alt="logo" />
+                    <img src="../images/logo.png" alt="logo" />
                 </div>
 
                 <div class="box">
@@ -227,11 +227,13 @@
         </div>
     </div>
     <!-- footer section ends -->
+
+
     <!-- swiper js link -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <!-- custom js file link -->
-    <script src="../local/script.js"></script>
+    <script src="../ActivityLog/actscript.js"></script>
     <!--jquery cdn link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 
