@@ -13,9 +13,9 @@
         // INSERT into DB
         $sql = "INSERT INTO BPP_Order (Order_ID, Order_Creation_Date, Quantity, Payment_Status, Owner_ID)
                 VALUES (NULL, '$date', '$quantity', '0', '1')
-            ";
+                ";
 
-        $conn->query($sql) or die("". $conn->error);
+        $conn->query($sql);
     }
 
     // Return

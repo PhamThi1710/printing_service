@@ -55,8 +55,8 @@
 
                 // Get Balance
                 $sql = "SELECT Balance 
-                    FROM Student
-                    WHERE Student_ID = 1
+                    FROM Users
+                    WHERE ID = 1
                     ";
                 $result = $conn->query($sql);
             
@@ -99,7 +99,6 @@
             // Get Paper_Price
             $sql = "SELECT Paper_Price 
             FROM Configuration
-            WHERE Role = 'Student'
             ";
             $result = $conn->query($sql);
 

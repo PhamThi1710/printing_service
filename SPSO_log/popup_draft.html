@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../local/style.css">
-    <link rel="stylesheet" href="../SPSO_log/spsolog_style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 
@@ -15,46 +14,31 @@
         <!--POP UP -->
         <!--End get data task -->
         <div class="body">
-            <!--
-                <div class="delete_range1" style="float: right;width: 30%;"><a
-                        href="spso_log.php?popup_calendar=true"><i class="ri-calendar-2-fill"></i></a>
-                </div>-->
-                <?php
-                /*if (isset($_GET['popup_calendar'])) {
-                    echo '<div class="popup" id="popup_calendar-start">
-                    <img src="/printing_service/image/message.jpg" width="50px" height="50px">
-                    <div class="popup_text">
-                        <div class="wrapper" id="calendar-start">
-                            <div class="header-calendar">
-                                <p class="current-date"></p>
-                                <div class="icons">
-                                    <i id="prev" class="ri-arrow-left-line"></i>
-                                    <i id="next" class="ri-arrow-right-line"></i>
-                                </div>
-                            </div>
-                            <div class="calendar">
-                                <ul class="weeks">
-                                    <li>Sun</li>
-                                    <li>Mon</li>
-                                    <li>Tue</li>
-                                    <li>Wed</li>
-                                    <li>Thu</li>
-                                    <li>Fri</li>
-                                    <li>Sat</li>
-                                </ul>
-                                <ul class="days"></ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="button-group">
-                        <button onclick="ClosePopup(\'popup_calendar-start\');" class="button" type="button">Thoát</button>
-                        <a class="button" onclick="DisplayActiveDay()" href="">Xác nhận</a>
-                    </div>
-                </div>'
-                    ;
-                }*/
-                ?>
+            <div style="width:800px;height:30px; ">
+                <div>
+                    <form id="wrapper-selectDate" action="../SPSO_log/spso_log.php" method="post">
+                        <p style="font-size:15px">Chọn ngày bắt đầu:</p>
+                        <input type="date" id="selectedDate" name="startday" />
+                        <p style="font-size:15px">Chọn ngày kết thúc:</p>
+                        <input type="date" id="selectedDate" name="endday" />
+                        <p><button class="button" type="submit">Submit</button></p>
+                    </form>
+                    <form action="../SPSO_log/spso_log.php" method="post">
+                        <input class="button" type="submit" name="all" value="Xem tất cả" />
+                    </form>
+                </div>
+            </div>
         </div>
+        <style>
+            #wrapper-selectDate {
+                display: flex;
+            }
+
+            #wrapper-selectDate p,
+            #wrapper-selectDate input {
+                margin-right: 1%;
+            }
+        </style>
     </div>
     <script src="../local/script.js"></script>
     <!--jquery cdn link-->

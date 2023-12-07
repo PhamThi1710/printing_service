@@ -50,7 +50,7 @@
 
     <div class="body">
         <h1 class="title">cấu hình hệ thống</h1>
-        <form method="POST" action="UpdateConfiguration.php" id="configure-system-form" onsubmit="return validateInputs()">
+        <form class="configure-system-form">
             <div class="default-number-of-pages input-control">
                 <label for="number-of-pages">Số trang in mặc định:</label>
                 <input type="number" id="number-of-pages" name="number-of-pages" placeholder="Số lượng trang (Khổ A4)" min="0">
@@ -61,9 +61,17 @@
                 <input type="number" id="paper-price" name="paper-price" placeholder="Giá một trang (Khổ A4)" min="0">
             </div>
 
-            <div class="refill-date-container input-control">
-                <label for="refill-date">Ngày cung cấp trang in:</label>
+            <div class="refill-date-container">
+                <label for="refill-date">Ngày cung cấp trang in :</label>
                 <input type="datetime-local" step="1" id="refill-date" name="refill-date">
+                <button type="button" class="add-refill-date">Thêm</button>
+            </div>
+
+            <div class="refill-date-list">
+                <div class='refill-date-item'>
+                    <button type='button' class='delete-btn delete-refill-date' value='2023-12-06 14:07:31'>&times;</button>
+                    <p>2023-12-06 14:07:31</p>
+                </div>  
             </div>
 
             <div class="accepted-file-type-container">
@@ -73,26 +81,10 @@
             </div>
 
             <div class="accepted-file-type-list">
-                <?php
-                @include_once("../ConnectDB.php");
-
-                $sql = "SELECT File_Type
-                        FROM Accepted_File_Types
-                        ";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "
-                        <div class='file-type-item'>
-                            <button type='button' class='delete-btn delete-file-type' value='".$row["File_Type"]."'>&times;</button>
-                            <p>".$row['File_Type']."</p>
-                        </div>
-                        ";
-                    }
-                }
-                ?>
-                
+                <div class='file-type-item'>
+                    <button type='button' class='delete-btn delete-file-type' value='.pdf'>&times;</button>
+                    <p>.pdf</p>
+                </div>  
             </div>
 
             <button type="submit" name="submit-configuration" class="save-btn">Lưu</button>
