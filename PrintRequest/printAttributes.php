@@ -78,8 +78,8 @@
             <button class="duplex-box"></button>
             <div class="duplex-text">Quay lại</div>
         </div>
-        <div class="rectangle-group">
-            <button class="duplex-box"></button>
+        <div class="rectangle-group "onclick="executeQuery(event)">
+            <button class="duplex-box" ></button></button>
             <div class="duplex-text-confirm">Xác nhận</div>
         </div>
         <div class="page-layout-parent">
@@ -178,38 +178,57 @@
             });
         });
 
+        function executeQuery(event) {
+            var uploadedFileName = localStorage.getItem('uploadedFileName');
+            var duplexOption = '1'; //dummy data
+            // var orientationOption = $('.group-parent .button-selected').text();
+            var orientationOption = 'Portrait';
+            var pageLayoutOption = $('.page-layout .size-selected').text();
+            var numOfCopiesOption = $('#copy-input').val();
+            // var printerId = $('#printer-select').val();
+            var printerId = '1A33052'; //dummy data
+            // var pagesToPrintOption = $('#pages-input').val();
+            var pagesToPrintOption = 1;
 
-        $(document).ready(function () {
+            var fileId = btoa(uploadedFileName);
 
+            console.log(duplexOption);
+            console.log(orientationOption);
+            console.log(pageLayoutOption);
+            console.log(numOfCopiesOption);
+            console.log(printerId);
+            console.log(pagesToPrintOption);
+            
             // Event handler for the "Xác nhận" button
             $('.duplex-text-confirm').click(function () {
                 // Retrieve the selected options
-                var duplexOption = $('.duplex-yes').hasClass('button-selected') ? 'Yes' : 'No';
-                var orientationOption = $('.group-parent .button-selected').text();
-                var pageLayoutOption = $('.page-layout .size-selected').text();
-                var numOfCopiesOption = $('#copy-input').val();
-                var printerId = $('#printer-select').val();
-                var pagesToPrintOption = $('#pages-input').val();
+                // var duplexOption = $('.duplex-yes').hasClass('button-selected') ? 'Yes' : 'No';
+                // var duplexOption = 'Yes'; //dummy data
+                // var orientationOption = $('.group-parent .button-selected').text();
+                // var pageLayoutOption = $('.page-layout .size-selected').text();
+                // var numOfCopiesOption = $('#copy-input').val();
+                // var printerId = $('#printer-select').val();
+                // var pagesToPrintOption = $('#pages-input').val();
 
-                var fileId = btoa(uploadedFileName);
+                // var fileId = btoa(uploadedFileName);
 
-                // Decode the entered pages
-                var pagesToPrintOption = $('#pages-input').val();
-                var pagesArray = pagesToPrintOption.split(',');
-                var pagesQueryArray = [];
+                // // Decode the entered pages
+                // var pagesToPrintOption = $('#pages-input').val();
+                // var pagesArray = pagesToPrintOption.split(',');
+                // var pagesQueryArray = [];
 
-                for (var i = 0; i < pagesArray.length; i++) {
-                    var pageRange = pagesArray[i].trim().split('-');
-                    if (pageRange.length === 1) {
-                        pagesQueryArray.push('page ' + pageRange[0]);
-                    } else if (pageRange.length === 2) {
-                        pagesQueryArray.push('page ' + pageRange[0] + ' to ' + pageRange[1]);
-                    }
-                }
+                // for (var i = 0; i < pagesArray.length; i++) {
+                //     var pageRange = pagesArray[i].trim().split('-');
+                //     if (pageRange.length === 1) {
+                //         pagesQueryArray.push('page ' + pageRange[0]);
+                //     } else if (pageRange.length === 2) {
+                //         pagesQueryArray.push('page ' + pageRange[0] + ' to ' + pageRange[1]);
+                //     }
+                // }
 
                 // Send each page query as a separate request
-                for (var j = 0; j < pagesQueryArray.length; j++) {
-                    var pageQuery = pagesQueryArray[j];
+                // for (var j = 0; j < pagesQueryArray.length; j++) {
+                //     var pageQuery = pagesQueryArray[j];
 
                     // Send the print attributes to the server-side script
                     $.ajax({
@@ -233,9 +252,9 @@
                             console.error(error);
                         }
                     });
-                }
+                // }
             });
-        });
+        }
     </script>
 </body>
 
