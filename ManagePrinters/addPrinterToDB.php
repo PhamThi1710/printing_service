@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $building = $_POST['building'];
 
     //default setting when add is printer turn OFF
-    $query = "INSERT INTO PRINTERS_LIST (PRINTERS_ID, PRINTERS_NAME, PRINTERS_DESC, PRINTERS_AVAI, PRINTERS_CAMPUSLOC, PRINTERS_BUILDINGLOC) VALUES (?, ?, ?, 'N', ?, ?)";
+    $query = "INSERT INTO printer_list (printer_id, printer_name, printer_desc, printer_avai, printer_campusloc, printer_buildingloc) VALUES (?, ?, ?, 'N', ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("sssss", $printerId, $printerName, $printerDesc, $campus, $building);
 
